@@ -12,6 +12,8 @@ public abstract class Parser<T> {
 	protected String projectPath;
 	protected String sourcePath;
 	protected String jrePath;
+
+	// 
 	protected T parserType; 
 
 
