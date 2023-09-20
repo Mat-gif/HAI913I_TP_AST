@@ -10,6 +10,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+
+
+
 import org.apache.commons.io.FileUtils;
 
 public class EclipseJDTParser extends Parser<ASTParser>{
@@ -29,12 +32,13 @@ public class EclipseJDTParser extends Parser<ASTParser>{
 		parserType.setResolveBindings(resolveBindings);
 		parserType.setBindingsRecovery(bindingsRecovery);
 	}
-	
+	// 
 	@Override
 	public void configure() {
 		defaultSetterParser(AST.JLS4, ASTParser.K_COMPILATION_UNIT, true, true, jrePath);
 	}
 	
+	// 
 	protected CompilationUnit parse(File file) throws IOException {
 		parserType.setSource(FileUtils.readFileToString(file, Charset.defaultCharset()).toCharArray());
 		return (CompilationUnit) parserType.createAST(null);
@@ -49,6 +53,8 @@ public class EclipseJDTParser extends Parser<ASTParser>{
 		
 		return cUnits;
 	}
+
+	
 	
 
 }
