@@ -6,8 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-//import java.io.File;
-//import java.util.Scanner;
+import Exception.JRENotFoundException;
 
 public abstract class Parser<T> {
 
@@ -25,7 +24,7 @@ public abstract class Parser<T> {
 	 * 
 	 * */
 
-	public Parser(String projectPath) {
+	public Parser(String projectPath) throws JRENotFoundException {
 		this.setProjectPath(projectPath);
 		this.setJrePath();
 		this.configure();
@@ -50,72 +49,47 @@ public abstract class Parser<T> {
 	 * 
 	 * */
 	public void setProjectPath(String projectPath) {
-		/*Scanner inputScanner = new Scanner(System.in); 
-
-		do {
-			System.out.print("Enter a valid project Path directory: ");
-			String sourcePath = inputScanner.nextLine();
-
-			if (verifyIfDirectoryExist(sourcePath)) { 
-		*/
-				this.projectPath = projectPath;
-		/*
-				break; // Exit the loop when a valid directory is entered
-			} else {
-				System.out.println("Please enter an existing project Path directory.");
-			}
-		} while (true);
-
-		inputScanner.close();
-		 */
+		if(this.getProjectPath().endsWith(sourcePathForJava)) {
+			this.projectPath = projectPath; 
+		}else if (verifyIfDirectoryExist(getProjectPath()+sourcePathForJava) == true) {
+			this.setProjectPath(getProjectPath()+sourcePathForJava);
+		}else {
+			throw new NullPointerException("NullPointerException, le dossier ne contient pas de fichier source");
+		}
 	}
-
-	/**
-	 * Définit le chemin d'accès source (dernier path) du projet manuellement 
-	 * à l'aide d'un objet scanner. 
-	 * Vérification de la validité du chemin à l'aide de {@link #verifyIfDirectoryExist(String)}.
-	 * en concaténant avec la {@value projectPath}, si le path exist il est assignée. 
-	 * à la variable. si non l'utilisateur doit à nouveau saisir le répertoire existant.
-	 * 
-	 * */
-
 
 	/** 
 	 * Initialise le path de la Java Runtime Environment (JRE) 
 	 * en fonction du java.home du système utilisateur  * 
 	 * 
-	 * Si la propriété existe sur le système on l'assigne sinon 
-	 * un message d'erreur est print.
+	 * Si la propriété existe sur le système on assigne le path
+	 * Sinon * @throws JRENotFoundException 
 	 * 
 	 * */
-	public void setJrePath() {
+	public void setJrePath() throws JRENotFoundException {
 		String jrePath = System.getProperty("java.home");
 
 		if (jrePath != null) {
 			this.jrePath = jrePath;
 		}else {
-			System.err.println("Attention la variable system 'java.home' "
-					+ "n'est pas correctement initialisée sur votre system ou est null");
+			throw new JRENotFoundException();
 		}
 	} 
-	
+
 	public List<File> listJavaFiles(String filePath){
 		File folder = new File(filePath);
 		List<File> javaFiles = new ArrayList<>();
-		String fileName = "";
-		
+
 		for (File file: folder.listFiles()) {
-			fileName = file.getName();
-			
 			if (file.isDirectory())
 				javaFiles.addAll(listJavaFiles(file.getAbsolutePath()));
-			else if (fileName.endsWith(".java"))
+			else if (file.getName().endsWith(".java"))
 				javaFiles.add(file);
 		}
-		
+
 		return javaFiles;
 	}
-	
+
 	public List<File> listJavaProjectFiles(){
 		return listJavaFiles(getProjectPath());
 	}
@@ -132,31 +106,12 @@ public abstract class Parser<T> {
 			File directory = new File(path);
 			return directory.exists() && directory.isDirectory();
 		} catch (NullPointerException e) {
-			System.err.println("Null Pointer Exception, le dossier  n'existe pas");
+			//System.err.println("Null Pointer Exception, le dossier  n'existe pas");
 			return false; 
 		}
 
 	}
 
-	/**
-	 * 
-	 * Verify if the selected Path Have SRC if it has one you can get it 
-	 * otherwise it return null
-	 * 
-	 * @return the path
-	 */
-	private String verifyIfThePathHaveSrc() {
-		if(this.getProjectPath().endsWith(sourcePathForJava)) {
-			return getProjectPath(); 
-		}else {
-			if (verifyIfDirectoryExist(getProjectPath()+sourcePathForJava) == true) {
-				this.setProjectPath(getProjectPath()+sourcePathForJava);
-				return getProjectPath(); 
-			}
-		}
-		throw new NullPointerException("Aucun path finissant par src n'a été trouvé.");
-	}
-	
 	public abstract void configure(); 
 
 }

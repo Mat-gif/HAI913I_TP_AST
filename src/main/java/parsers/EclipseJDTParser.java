@@ -10,11 +10,14 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+
+import Exception.JRENotFoundException;
+
 import org.apache.commons.io.FileUtils;
 
 public class EclipseJDTParser extends Parser<ASTParser>{
 
-	public EclipseJDTParser(String projectPath) {
+	public EclipseJDTParser(String projectPath) throws JRENotFoundException {
 		super(projectPath);
 	}
 	
