@@ -5,13 +5,19 @@ import java.io.IOException;
 public abstract class Processor<T> {
 
     private T parser;
-    private String projectPath ;
-    private String sourcePath ;
+    private String projectPath;
+    private String sourcePath;
 
     // constructeur de la classe Processor
     public Processor(T parser, String projectPath) {
         this.parser = parser;
         this.projectPath = projectPath;
+    }
+
+    // constructeur de la classe Processor
+    public Processor(T parser) {
+        this.parser = parser;
+
     }
 
     // getters et setters

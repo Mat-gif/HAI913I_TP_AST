@@ -3,15 +3,12 @@ package processor;
 import parsers.EclipseJDTParser;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.List;
 import java.util.ArrayList;
-import visitor.ClassVisitor;
 
 public class MyProcessor extends Processor<EclipseJDTParser> {
 
-    public MyProcessor(EclipseJDTParser parser, String projectPath) {
-        super(parser, projectPath);
+    public MyProcessor(EclipseJDTParser parser) {
+        super(parser);
     }
 
     public String getProjectPath() {
@@ -28,18 +25,11 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
 
     @Override
     public void process() throws IOException {
-        EclipseJDTParser parser = new EclipseJDTParser(getProjectPath());
-        parser.parseProject();
-        // // TODO : vérifier si le chemin du projet est valide
-        // try {
-         
-        // } catch (Exception e) {
-        // throw new RuntimeException("Le chemin du projet n'est pas valide");
-        // }
-
+        EclipseJDTParser parser = new EclipseJDTParser(
+                "");
         // parser.configure();
-        // System.out.println("le processus est lancé et le parser est configuré");
-
+        parser.parseProject();
+        // System.out.println(parser.parseProject());
     }
 
     public int getNumberOfClasses() {
