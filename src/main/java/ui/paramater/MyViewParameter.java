@@ -12,14 +12,16 @@ public class MyViewParameter {
 	}
 	
 
-	private static final int size_Font = 30;
+	private static final int size_Font = 18;
 	private static final String style_Font = "Arial";
 	private static final Font my_Font_Style = new Font(style_Font, Font.PLAIN, size_Font);
+	private static final Font my_Font_Style_Title = new Font(style_Font, Font.PLAIN, 24);
+
 	
     
  // Définissez les pourcentages de taille relatifs
-	private double pourcentageLargeur = 0.5;  // 50 % de la largeur de l'écran
-	private double pourcentageHauteur = 0.6;  // 40 % de la hauteur de l'écran
+	private double pourcentageLargeur = 0.6;  // 50 % de la largeur de l'écran
+	private double pourcentageHauteur = 0.8;  // 40 % de la hauteur de l'écran
 
     // Obtenez les dimensions de l'écran
     Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
@@ -139,6 +141,9 @@ public class MyViewParameter {
 	}
 	public static Font getMyFontStyle() {
 		return my_Font_Style;
+	}
+	public static Font getMyFontStyleTitle() {
+		return my_Font_Style_Title;
 	}
     
     
