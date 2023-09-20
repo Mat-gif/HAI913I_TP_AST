@@ -1,7 +1,10 @@
 package parsers;
 
+
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 //import java.io.File;
 //import java.util.Scanner;
@@ -9,9 +12,11 @@ import java.util.ArrayList;
 public abstract class Parser<T> {
 
 	//Attributes 
+	private static final String sourcePathForJava = "/src";
 	protected String projectPath;
-	protected String sourcePath;
 	protected String jrePath;
+
+	// 
 	protected T parserType; 
 
 
@@ -22,9 +27,8 @@ public abstract class Parser<T> {
 	 * 
 	 * */
 
-	public Parser(String projectPath, String sourcePath) {
+	public Parser(String projectPath) {
 		this.setProjectPath(projectPath);
-		this.setSourcePath(sourcePath);
 		this.setJrePath();
 		this.configure();
 	}
@@ -32,11 +36,6 @@ public abstract class Parser<T> {
 
 	public String getProjectPath() {
 		return projectPath;
-	}
-
-
-	public String getSourcePath() {
-		return sourcePath;
 	}
 
 	public String getJrePath() {
@@ -52,7 +51,7 @@ public abstract class Parser<T> {
 	 * Si non l'utilisateur doit à nouveau saisir le répertoire existant
 	 * 
 	 * */
-	public void setProjectPath(String sourcePath) {
+	public void setProjectPath(String projectPath) {
 		/*Scanner inputScanner = new Scanner(System.in); 
 
 		do {
@@ -61,7 +60,7 @@ public abstract class Parser<T> {
 
 			if (verifyIfDirectoryExist(sourcePath)) { 
 		*/
-				this.sourcePath = sourcePath;
+				this.projectPath = projectPath;
 		/*
 				break; // Exit the loop when a valid directory is entered
 			} else {
@@ -81,30 +80,7 @@ public abstract class Parser<T> {
 	 * à la variable. si non l'utilisateur doit à nouveau saisir le répertoire existant.
 	 * 
 	 * */
-	public void setSourcePath(String sourcePath) {
-		
-		/* Scanner inputScanner = new Scanner(System.in); 
 
-		do {
-			System.out.print("Enter a valid source directory: ");
-			String sourcePath = inputScanner.nextLine();
-			//Appel de la focntion getProjectPath pour respecter les principes solid
-			// Si question de performances préférer appel sur this
-			 
-			if (verifyIfDirectoryExist(getProjectPath()+sourcePath)) {*/
-				this.sourcePath = sourcePath;
-				
-				
-			/*	break; // Exit the loop when a valid directory is entered
-			} else {
-				System.out.println("Please enter an existing source directory.");
-			}
-		} while (true);
-
-		inputScanner.close();
-		*/
-		 
-	}
 
 	/** 
 	 * Initialise le path de la Java Runtime Environment (JRE) 
@@ -120,10 +96,31 @@ public abstract class Parser<T> {
 		if (jrePath != null) {
 			this.jrePath = jrePath;
 		}else {
-			System.err.println("Warning the system variable 'java.home' "
-					+ "variable is not set correctly or is null");
+			System.err.println("Attention la variable system 'java.home' "
+					+ "n'est pas correctement initialisée sur votre system ou est null");
 		}
 	} 
+	
+	public List<File> listJavaFiles(String filePath){
+		File folder = new File(filePath);
+		List<File> javaFiles = new ArrayList<>();
+		String fileName = "";
+		
+		for (File file: folder.listFiles()) {
+			fileName = file.getName();
+			
+			if (file.isDirectory())
+				javaFiles.addAll(listJavaFiles(file.getAbsolutePath()));
+			else if (fileName.endsWith(".java"))
+				javaFiles.add(file);
+		}
+		
+		return javaFiles;
+	}
+	
+	public List<File> listJavaProjectFiles(){
+		return listJavaFiles(getProjectPath());
+	}
 
 	/**
 	 * Vérifie si un répertoire ou fichier existe à l'emplacement spécifié.
@@ -132,33 +129,35 @@ public abstract class Parser<T> {
 	 * @return {@code true} si le répertoire ou fichier existe, sinon {@code false}.
 	 *         Un {@link NullPointerException} peut être levé si le chemin est nul.
 	 * */
-	/*private boolean verifyIfDirectoryExist(String path) {
+	protected boolean verifyIfDirectoryExist(String path) {
 		try {
 			File directory = new File(path);
 			return directory.exists() && directory.isDirectory();
 		} catch (NullPointerException e) {
-			System.err.println("Null Pointer Exception, le fichier n'existe pas");
+			System.err.println("Null Pointer Exception, le dossier  n'existe pas");
 			return false; 
 		}
 
-	}*/
-	
-	
-	// read all java files from specific folder
-	public static ArrayList<File> listJavaFilesForFolder(final File folder) {
-		ArrayList<File> javaFiles = new ArrayList<File>();
-		for (File fileEntry : folder.listFiles()) {
-			if (fileEntry.isDirectory()) {
-				javaFiles.addAll(listJavaFilesForFolder(fileEntry));
-			} else if (fileEntry.getName().contains(".java")) {
-				// System.out.println(fileEntry.getName());
-				javaFiles.add(fileEntry);
-			}
-		}
-
-		return javaFiles;
 	}
 
+	/**
+	 * 
+	 * Verify if the selected Path Have SRC if it has one you can get it 
+	 * otherwise it return null
+	 * 
+	 * @return the path
+	 */
+	private String verifyIfThePathHaveSrc() {
+		if(this.getProjectPath().endsWith(sourcePathForJava)) {
+			return getProjectPath(); 
+		}else {
+			if (verifyIfDirectoryExist(getProjectPath()+sourcePathForJava) == true) {
+				this.setProjectPath(getProjectPath()+sourcePathForJava);
+				return getProjectPath(); 
+			}
+		}
+		throw new NullPointerException("Aucun path finissant par src n'a été trouvé.");
+	}
 	
 	public abstract void configure(); 
 
