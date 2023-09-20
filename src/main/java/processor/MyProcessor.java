@@ -7,8 +7,12 @@ import java.util.ArrayList;
 
 public class MyProcessor extends Processor<EclipseJDTParser> {
 
-    public MyProcessor(EclipseJDTParser parser) {
-        super(parser);
+	
+	
+	
+	
+    public MyProcessor(String path) {
+        super(path);
     }
 
     public String getProjectPath() {
@@ -91,4 +95,10 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         // TODO: le
         return 0;
     }
+
+	@Override
+	public void setParser(String projectPath) {
+		parser = new EclipseJDTParser(projectPath);
+		
+	}
 }

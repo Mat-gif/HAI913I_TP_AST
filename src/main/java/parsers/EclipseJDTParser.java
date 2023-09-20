@@ -50,7 +50,7 @@ public class EclipseJDTParser extends Parser<ASTParser>{
 		
 		for (File sourceFile: listJavaProjectFiles())
 			cUnits.add(parse(sourceFile));
-		
+		System.out.println(this.getProjectPath());
 		return cUnits;
 	}
 
