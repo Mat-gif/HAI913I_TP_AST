@@ -92,3 +92,4 @@ MANIFEST.MF
 
 #Classpath
 .classpath
+/target/
