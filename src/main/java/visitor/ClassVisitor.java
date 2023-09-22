@@ -57,4 +57,5 @@ public class ClassVisitor extends ASTVisitor {
 	public String printClassName() {
 		return getClassName();
 	}
+
 }
