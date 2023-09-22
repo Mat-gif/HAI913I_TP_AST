@@ -3,15 +3,15 @@ package parsers;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Exception.JRENotFoundException;
 
 public abstract class Parser<T> {
 
 	//Attributes 
-	private static final String sourcePathForJava = "/src";
+	private static final String sourcePathForJava = File.separator + "src";
 	protected String projectPath;
 	protected String jrePath;
 	protected T parserType; 
@@ -24,7 +24,7 @@ public abstract class Parser<T> {
 	 * 
 	 * */
 
-	public Parser(String projectPath) throws JRENotFoundException {
+	public Parser(String projectPath) throws NullPointerException, FileNotFoundException {
 		this.setProjectPath(projectPath);
 		this.setJrePath();
 		this.configure();
@@ -46,15 +46,19 @@ public abstract class Parser<T> {
 	 * Vérification de la validité du chemin à l'aide de {@link #verifyIfDirectoryExist(String)}.
 	 * Si oui il est assignée à la variable
 	 * Si non l'utilisateur doit à nouveau saisir le répertoire existant
+	 * @throws FileNotFoundException 
 	 * 
 	 * */
-	public void setProjectPath(String projectPath) {
-		if(this.getProjectPath().endsWith(sourcePathForJava)) {
-			this.projectPath = projectPath; 
-		}else if (verifyIfDirectoryExist(getProjectPath()+sourcePathForJava) == true) {
-			this.setProjectPath(getProjectPath()+sourcePathForJava);
+	public void setProjectPath(String projectPath) throws FileNotFoundException {
+		if (projectPath.endsWith(sourcePathForJava))
+		{
+			if(verifyIfDirectoryExist(projectPath)) {
+				this.projectPath = projectPath;
+			}else {throw new FileNotFoundException("NullPointerException, le dossier ne contient pas de fichier source");}
 		}else {
-			throw new NullPointerException("NullPointerException, le dossier ne contient pas de fichier source");
+			if(verifyIfDirectoryExist(projectPath+sourcePathForJava)) {
+				this.projectPath = projectPath+sourcePathForJava;
+			}else {throw new FileNotFoundException("File not found, le dossier ne contient pas de fichier source");}
 		}
 	}
 
@@ -66,17 +70,18 @@ public abstract class Parser<T> {
 	 * Sinon * @throws JRENotFoundException 
 	 * 
 	 * */
-	public void setJrePath() throws JRENotFoundException {
+	public void setJrePath() throws NullPointerException {
 		String jrePath = System.getProperty("java.home");
 
 		if (jrePath != null) {
 			this.jrePath = jrePath;
 		}else {
-			throw new JRENotFoundException();
+			throw new NullPointerException("Attention la variable system 'java.home' "
+					+ "n'est pas correctement initialisée sur votre system ou est null");
 		}
 	} 
 
-	public List<File> listJavaFiles(String filePath){
+	private List<File> listJavaFiles(String filePath){
 		File folder = new File(filePath);
 		List<File> javaFiles = new ArrayList<>();
 
@@ -90,7 +95,11 @@ public abstract class Parser<T> {
 		return javaFiles;
 	}
 
-	public List<File> listJavaProjectFiles(){
+	public List<File> listJavaProjectFiles() throws FileNotFoundException{
+		List<File> listJavaFiles =  listJavaFiles(getProjectPath());
+		if (listJavaFiles.isEmpty()) {
+			throw new FileNotFoundException("Il n'existe aucun fichier java dans le répertoire source spécifiée"); 
+		}
 		return listJavaFiles(getProjectPath());
 	}
 
@@ -100,16 +109,14 @@ public abstract class Parser<T> {
 	 * @param path Le chemin d'accès au répertoire ou fichier à vérifier.
 	 * @return {@code true} si le répertoire ou fichier existe, sinon {@code false}.
 	 *         Un {@link NullPointerException} peut être levé si le chemin est nul.
+	 * @throws FileNotFoundException 
 	 * */
 	protected boolean verifyIfDirectoryExist(String path) {
-		try {
-			File directory = new File(path);
-			return directory.exists() && directory.isDirectory();
-		} catch (NullPointerException e) {
-			//System.err.println("Null Pointer Exception, le dossier  n'existe pas");
-			return false; 
-		}
-
+		File directory = new File(path);
+		if (directory.exists() && directory.isDirectory())
+		{
+			return true;
+		}else {return false;}
 	}
 
 	public abstract void configure(); 

@@ -1,6 +1,7 @@
 package parsers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -11,13 +12,12 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import Exception.JRENotFoundException;
 
 import org.apache.commons.io.FileUtils;
 
 public class EclipseJDTParser extends Parser<ASTParser>{
 
-	public EclipseJDTParser(String projectPath) throws JRENotFoundException {
+	public EclipseJDTParser(String projectPath) throws NullPointerException, FileNotFoundException {
 		super(projectPath);
 	}
 	
@@ -43,7 +43,7 @@ public class EclipseJDTParser extends Parser<ASTParser>{
 		return (CompilationUnit) parserType.createAST(null);
 	}
 	
-	public List<CompilationUnit> parseProject() throws IOException {
+	public List<CompilationUnit> parseProject() throws IOException, FileNotFoundException {
 		
 		List<CompilationUnit> cUnits = new ArrayList<>();
 		
