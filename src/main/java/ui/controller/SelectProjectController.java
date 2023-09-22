@@ -3,6 +3,10 @@ package ui.controller;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,6 +30,7 @@ public class SelectProjectController  {
 	private MyProcessor myProcessor;
 	private CardLayout cardLayout;
 	private LabelMap labels = new LabelMap();
+	HashSet<String> methodsForProcessor = new HashSet<>();
 
 	public SelectProjectController(JFrame frame, InitialPanel panel1,ResultsPanel panel2,CardLayout cardLayout,JPanel cardPanel) 
 	{
@@ -79,9 +84,10 @@ public class SelectProjectController  {
     {
         public void actionPerformed(ActionEvent e) 
         {
+        	if(!checkBoxPanelBasique.getMethodsForProcessor().isEmpty()) methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
+        	else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
         	 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
         	 if(my_path != "" ) {
-                System.out.println("chemin : " + my_path + " ; analyse : "+my_analyse);
                 myProcessor= new MyProcessor( my_path);
                /* try {
 					myProcessor.getParser().parseProject();
