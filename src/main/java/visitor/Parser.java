@@ -28,6 +28,7 @@ public class Parser {
 	public static final String projectSourcePath = projectPath + "\\src";
 	public static final String jrePath = "C:\\Program Files\\Java\\jre1.8.0_51\\lib\\rt.jar";
 	public static int classCount = 0;
+	public static int appLineCount = 0;
 	
 	public static void main(String[] args) throws IOException {
 
@@ -39,7 +40,7 @@ public class Parser {
 		
 		for (File fileEntry : javaFiles) {
 			String content = FileUtils.readFileToString(fileEntry);
-			// System.out.println(content);
+//			System.out.println(content);
 
 			CompilationUnit parse = parse(content.toCharArray());
 			String currentPackageName = parse.getPackage().getName().getFullyQualifiedName();
@@ -48,13 +49,14 @@ public class Parser {
 			if (!currentPackageName.equals(previousPackageName)) {
 				printPackageInfo(parse);
 				previousPackageName = currentPackageName;
+				System.out.println("Classes :\n");
 			}
 			
-			// print class info
-			printClassInfo(parse);
+			// print class & interface info
+			printClassInterfaceInfo(parse);
 			
 			// print methods info
-			//printMethodInfo(parse);
+//			printMethodInfo(parse);
 
 			// print variables info
 			//printVariableInfo(parse);
@@ -64,6 +66,7 @@ public class Parser {
 						
 		}
 		System.out.println("nb de classe au total : " + classCount);
+		System.out.println("nb de ligne de l'app : " + appLineCount);
 
 	}
 
@@ -88,10 +91,13 @@ public class Parser {
 		ASTParser parser = ASTParser.newParser(AST.JLS4); // java +1.6
 		parser.setResolveBindings(true);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		
+		
  
 		parser.setBindingsRecovery(true);
  
 		Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
 		parser.setCompilerOptions(options);
  
 		parser.setUnitName("");
@@ -113,21 +119,37 @@ public class Parser {
 		visitor.printPackageName();
 	}
 	
-	// class information
-	public static void printClassInfo(CompilationUnit parse) {
-		ClassVisitor visitor = new ClassVisitor();
+	// class & interface information
+	public static void printClassInterfaceInfo(CompilationUnit parse) {
+		ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
 		parse.accept(visitor);
 				
 		if (visitor.isClass) {
-			System.out.println("NOM | line count | attr count");
-			System.out.println(visitor.printClassName() +" | "
-					+ visitor.getLinesOfCode() + " | "
-					+ visitor.getAttributeCount()
-					+ "\n");
+			System.out.println("nom : " + visitor.getClassName());
+			System.out.println("line count : " + visitor.getLinesOfCode());
+			System.out.println("attr count  : " + visitor.getAttributeCount());
+			System.out.println("\n");
 			classCount++;
 		}
+		if (visitor.isInterface) {
+			System.out.println("INTERFACE : " + visitor.getClassName());
+			System.out.println("line count : " + visitor.getLinesOfCode());
+//			System.out.println("code : " + visitor.javaCode);
+			System.out.println("\n");
+		}
+		
+		appLineCount += visitor.linesOfCode;
 		
 	}
+	
+	// enum information
+	public static void printEnumInfo(CompilationUnit parse) {
+		EnumVisitor visitor = new EnumVisitor();
+		parse.accept(visitor);
+		
+		System.out.println("nom : " + visitor.getEnumName());
+		System.out.println("line count : " + visitor.getLinesOfCode());
+		System.out.println("\n");	}
 	
 	// navigate method information
 	public static void printMethodInfo(CompilationUnit parse) {
