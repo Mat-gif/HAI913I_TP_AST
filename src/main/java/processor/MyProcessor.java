@@ -49,9 +49,11 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         HashSet<String> classSet = new HashSet<>();
         for (CompilationUnit cu : parser.parseProject()) {
             ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
-            cu.accept(visitor);
-            classSet.add(visitor.getClassName());
-
+            cu.accept(visitor);	
+            System.out.println(visitor.getClassName());
+            if(visitor.getClassName()!=null) {
+            	classSet.add(visitor.getClassName());
+            }
         }
         return classSet.size();
 

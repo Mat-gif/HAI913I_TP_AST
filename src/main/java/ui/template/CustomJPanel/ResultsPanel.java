@@ -55,7 +55,7 @@ public class ResultsPanel extends JPanel{
 	    	   
 	    	   
 	           JLabel keyLabel = new JLabel(labels.get(myType).get(entry.getKey())+ " : ");
-	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i), myParam.getLargeurBouton(), myParam.getHauteurBouton());
+	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
 	           
 	        // Calcul de la position x pour valueLabel en fonction de keyLabel

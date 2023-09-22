@@ -4,7 +4,7 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class ClassInterfaceVisitor extends ASTVisitor {
-	String className = "";
+	String className = null;
 	int linesOfCode = 0;
 	int attributeCount = 0;
 	String javaCode = "";
@@ -19,7 +19,6 @@ public class ClassInterfaceVisitor extends ASTVisitor {
         	isClass = true;
         }
         if(node.isInterface()) {
-        	className = node.getName().getFullyQualifiedName();
         	javaCode = node.toString();
         	linesOfCode = countLinesOfCode(javaCode);
         	isInterface = true;
