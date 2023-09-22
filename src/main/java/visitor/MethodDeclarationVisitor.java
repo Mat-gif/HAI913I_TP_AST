@@ -21,10 +21,12 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 	}
 	
 	public void printMethodsNames( ) {
-		System.out.println("NOM | TYPE RETOUR | NB LINE");
+		System.out.println("NOM | NB PARAM| TYPE RETOUR | NB LINE");
 		for (MethodDeclaration method : getMethods()) {
 			System.out.println(method.getName()
-					+ " | " + method.getReturnType2() + " | " + countLinesOfMethod(method.toString()));
+					+ " | " + method.parameters().size()
+					+ " | " + method.getReturnType2()
+					+ " | " + countLinesOfMethod(method.toString()));
 		}
 	}
 	
