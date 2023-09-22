@@ -19,6 +19,7 @@ import processor.MyProcessor;
 import ui.template.CheckBoxPanelTemplate;
 import ui.template.FolderChooserTemplate;
 import ui.template.CustomJPanel.InitialPanel;
+import ui.template.CustomJPanel.Results2Panel;
 import ui.template.CustomJPanel.ResultsPanel;
 
 public class SelectProjectController  {
@@ -28,6 +29,7 @@ public class SelectProjectController  {
 	private JFrame frame;
 	private InitialPanel panel1;
 	private ResultsPanel panel2;
+	private  Results2Panel  panel3;
 	private JPanel cardPanel;
 	private CheckBoxPanelTemplate checkBoxPanelBasique;
 	private CheckBoxPanelTemplate checkBoxPanelComplementaire;
@@ -44,7 +46,6 @@ public class SelectProjectController  {
 		super();
 		this.frame = frame;
 		this.panel1 = panel1;
-		this.panel2 = panel2;
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
 	    checkBoxPanelBasique = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseDeBase(),"Analyse de base");
@@ -113,10 +114,20 @@ public class SelectProjectController  {
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
              			// analyse top 10%
-             			if (methodsForProcessor.contains("8")||methodsForProcessor.contains("9") ||methodsForProcessor.contains("9"))
+             			if (methodsForProcessor.contains("8")||methodsForProcessor.contains("9") ||methodsForProcessor.contains("12"))
              			{
 	               			 results2 = menuProcessor.selectGetTopClasses(methodsForProcessor);
 	               			
+	               			 Results2Panel  panel3 = new Results2Panel(frame);
+	               			 cardPanel.add(panel3, "Panel3");
+	               			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
+	               			 
+	               			
+	               			panel3.printResults(results2, "Analyse complémentaire");
+	               			
+	            			 
+	            			
+	            			 cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
                			 
              			}
              			else if (methodsForProcessor.contains("10")||methodsForProcessor.contains("11"))

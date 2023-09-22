@@ -15,11 +15,13 @@ import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 
 
-public class ResultsPanel extends JPanel{
+public class Results2Panel extends JPanel{
 	   private MyViewParameter myParam = new MyViewParameter();
-	   private static  Map<String, Integer> results;
 	   private JButton btnTerminer;
 	   private LabelMap labels = new LabelMap();
+	   private int i = 2;
+	   private int j = 0;
+	   private int l = 0;
 	   
 	public JButton getBtnTerminer() {
 		return btnTerminer;
@@ -31,11 +33,10 @@ public class ResultsPanel extends JPanel{
 	}
 
 
-	public ResultsPanel( JFrame frame, Map<String, Integer> results , String myType) {
+	public Results2Panel( JFrame frame ) {
 		
 		frame.getContentPane().add(this, BorderLayout.CENTER);
 		this.setLayout(null);
-		this.results=results;
 	    
 
 
@@ -50,27 +51,47 @@ public class ResultsPanel extends JPanel{
 	       btnTerminer.setBackground(Color.lightGray);
 	       this.add(btnTerminer);
 	       
-	       int i =2;
-	       for (Map.Entry<String, Integer> entry : results.entrySet()) {
-	    	   
-	    	   
-	           JLabel keyLabel = new JLabel(labels.get(myType).get(entry.getKey())+ " : ");
-	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
+
+
+	}
+	
+	public void printResults(Map<String,Map<String, Integer>> results, String myType)
+	{
+
+	       
+		
+	       results.forEach((k,v) ->{
+	    	   JLabel keyLabel = new JLabel(labels.get(myType).get(k)+ " : ");
+	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i)+l*40, myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
 	           
 	        // Calcul de la position x pour valueLabel en fonction de keyLabel
 	           int valueLabelX = keyLabel.getX() + keyLabel.getWidth();
 
-	           JLabel valueLabel = new JLabel(entry.getValue() + "");
-	           valueLabel.setBounds(valueLabelX, keyLabel.getY(), myParam.getLargeurBouton(), myParam.getHauteurBouton());
-	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
-	           this.add(keyLabel);
-	           this.add(valueLabel);
+	           l=0;
+	    	   v.forEach((kk,vv)->{
+	    		   System.out.println(kk);
+	    		   JLabel valueLabel = new JLabel(kk + " -> " + vv);
+		           valueLabel.setBounds(valueLabelX, keyLabel.getY()+j, myParam.getLargeurBouton(), myParam.getHauteurBouton());
+		           keyLabel.setFont(MyViewParameter.getMyFontStyle());
+		           this.add(keyLabel);
+		           this.add(valueLabel);
+	    		   
+		           j+=40;
+		           l++;
+	    	   });
+	    	  
+	           
+	           j=0;
 	           i++;
+	       });
+	    	   
+	    	   
+	
 	       }
-
-
-	}
+		
+	
+	
 	
    	
    	public void addAllListener(SelectProjectController myController) {
