@@ -58,11 +58,11 @@ public class MainFrame {
         JPanel cardPanel = new JPanel(new CardLayout());
         
         InitialPanel  panel1 = new InitialPanel(frame);
-        ResultsPanel  panel2 = new ResultsPanel(frame);
+        
        
         //Ajoutez les panneaux au conteneur principal avec des noms d'identification
         cardPanel.add(panel1, "Panel1");
-        cardPanel.add(panel2, "Panel2");
+      
 
         // Ajoutez le conteneur principal au frame
         frame.add(cardPanel);
@@ -72,9 +72,9 @@ public class MainFrame {
         CardLayout cardLayout = (CardLayout) cardPanel.getLayout();
         cardLayout.show(cardPanel, "Panel1"); // Affichez initialement le panel1
         
-        controller = new SelectProjectController(frame,panel1,panel2,cardLayout,cardPanel);
+        controller = new SelectProjectController(frame,panel1,cardLayout,cardPanel);
         panel1.addAllListener(controller);
-        panel2.addAllListener(controller);
+       
 
     }
 }
