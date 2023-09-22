@@ -3,12 +3,13 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-public class ClassVisitor extends ASTVisitor {
+public class ClassInterfaceVisitor extends ASTVisitor {
 	String className = "";
 	int linesOfCode = 0;
 	int attributeCount = 0;
 	String javaCode = "";
 	boolean isClass = false;
+	boolean isInterface = false;
 	
 	public boolean visit(TypeDeclaration node) {
         if(!node.isInterface()){
@@ -16,6 +17,12 @@ public class ClassVisitor extends ASTVisitor {
         	javaCode = node.toString();
         	linesOfCode = countLinesOfCode(javaCode);
         	isClass = true;
+        }
+        if(node.isInterface()) {
+        	className = node.getName().getFullyQualifiedName();
+        	javaCode = node.toString();
+        	linesOfCode = countLinesOfCode(javaCode);
+        	isInterface = true;
         }
 		return super.visit(node);
 	}

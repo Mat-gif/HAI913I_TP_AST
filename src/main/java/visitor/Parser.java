@@ -41,25 +41,22 @@ public class Parser {
 		final File folder = new File(projectSourcePath); // il est fait avec le parser
 		ArrayList<File> javaFiles = listJavaFilesForFolder(folder); // le parser a un attribut de liste de javaFiles
 		String previousPackageName = "";
-		int packageCount = 0;
+		
 
 		for (File fileEntry : javaFiles) {
 			String content = FileUtils.readFileToString(fileEntry);
 			// System.out.println(content);
 
-			CompilationUnit parse = parse(content.toCharArray()); //parse  le 
+			CompilationUnit parse = parse(content.toCharArray()); // parse le
 
 			//
 			String currentPackageName = parse.getPackage().getName().getFullyQualifiedName();
 
 			// print package info
 			if (!currentPackageName.equals(previousPackageName)) {
-				packageCount++;
+			
 				printPackageInfo(parse);
 				previousPackageName = currentPackageName;
-				// Set<String> packageSet = new HashSet<>();
-				// packageSet.add(previousPackageName);
-
 			}
 
 			// print class info
@@ -76,7 +73,7 @@ public class Parser {
 
 		}
 		System.out.println("nb de classe au total : " + classCount);
-		System.out.println("le nombre de package de l'application est : " + packageCount);
+
 	}
 
 	// read all java files from specific folder
@@ -104,6 +101,7 @@ public class Parser {
 		parser.setBindingsRecovery(true);
 
 		Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
 		parser.setCompilerOptions(options);
 
 		parser.setUnitName("");
@@ -128,16 +126,11 @@ public class Parser {
 
 	// le nombre de package in projet
 
-	public static void countPackage(CompilationUnit parse) {
-		PackageDeclarationVisitor visitor = new PackageDeclarationVisitor();
-		parse.accept(visitor);
 
-		System.out.println("le nombre de package de l'app est:  " + visitor.countPackagesInProject());
-	}
 
 	// class information
 	public static void printClassInfo(CompilationUnit parse) {
-		ClassVisitor visitor = new ClassVisitor();
+		ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
 		parse.accept(visitor);
 
 		if (visitor.isClass) {
