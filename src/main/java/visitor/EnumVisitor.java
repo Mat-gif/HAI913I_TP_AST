@@ -7,12 +7,12 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 public class EnumVisitor extends ASTVisitor {
 	int linesOfCode = 0;
 	String javaCode = "";
-	String enumName = "";
+	String enumName = null;
 	
 	public boolean visit(EnumDeclaration node) {
     	javaCode = node.toString();
     	linesOfCode = countLinesOfCode(javaCode);
-    	enumName = node.getName().getFullyQualifiedName();
+    	enumName = node.getName().toString();
 		return super.visit(node);
 	}
 	
