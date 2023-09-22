@@ -16,9 +16,9 @@ import beforeExecution.TempDirectoryExtension;
 class TestParser {
 	
 	@RegisterExtension
-	TempDirectoryExtension tempDirectoryExtension = new TempDirectoryExtension("C:/Users/33683/Desktop/M2/S9/EvoLogiciel/TP_NOTE/HAI913I_TP_AST/src/test/resources");
+	TempDirectoryExtension tempDirectoryExtension = new TempDirectoryExtension("C:/Users/33683/Desktop/M2/S9/EvoLogiciel/TP_NOTE/HAI913I_TP_AST/src/test/resources/testParserFile");
 		
-	public static final String TEMP_DIRECTORY_PATH = System.getProperty("java.io.tmpdir")+ "AST_TU"+ File.separator + "testParserFile"; 
+	public static final String TEMP_DIRECTORY_PATH = System.getProperty("java.io.tmpdir")+ "AST_TU"+ File.separator;
 	
 	@Test
 	void projectPathEndWithSourcePathTest() {
