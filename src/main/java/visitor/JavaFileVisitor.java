@@ -5,35 +5,18 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-public class ClassVisitor extends ASTVisitor {
-	String className = "";
+public class JavaFileVisitor extends ASTVisitor {
 	int linesOfCode = 0;
-	int attributeCount = 0;
 	String javaCode = "";
 	boolean isClass = false;
 	
 	public boolean visit(TypeDeclaration node) {
+    	javaCode = node.toString();
+    	linesOfCode = countLinesOfCode(javaCode);
         if(!node.isInterface()){
-        	className = node.getName().getFullyQualifiedName();
-        	javaCode = node.toString();
-        	linesOfCode = countLinesOfCode(javaCode);
         	isClass = true;
         }
 		return super.visit(node);
-	}
-	
-	public boolean visit(FieldDeclaration node) {
-        // Comptez chaque déclaration de champ comme un attribut
-        attributeCount++;
-        return super.visit(node);
-    }
-
-    public int getAttributeCount() {
-        return attributeCount;
-    }
-	
-	public String getClassName() {
-		return className;
 	}
 	
     public int getLinesOfCode() {
@@ -53,8 +36,4 @@ public class ClassVisitor extends ASTVisitor {
         }
         return lineCount;
     }
-    
-	public String printClassName() {
-		return getClassName();
-	}
 }
