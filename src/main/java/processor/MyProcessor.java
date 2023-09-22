@@ -1,7 +1,7 @@
 package processor;
 
 import parsers.EclipseJDTParser;
-import visitor.ClassVisitor;
+import visitor.ClassInterfaceVisitor;
 import visitor.MethodDeclarationVisitor;
 import visitor.PackageDeclarationVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -18,18 +18,6 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
 
     public MyProcessor(String path) {
         super(path);
-    }
-
-    public String getProjectPath() {
-
-        // récupère le chemin du projet provenant de Mathieu pour le moment null
-        return null;
-    }
-
-    public String getSourcePath() {
-
-        // récupère le chemin du projet provenant de Mathieu pour le moment null
-        return null;
     }
 
     @Override
@@ -57,10 +45,16 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         return packageSet.size();
     }
 
-    public int countClassesInProject() {
+    public int countClassesInProject() throws IOException {
+        HashSet<String> classSet = new HashSet<>();
+        for (CompilationUnit cu : parser.parseProject()) {
+            ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
+            cu.accept(visitor);
+            classSet.add(visitor.getClassName());
 
-        // TODO: à compléter
-        return 0;
+        }
+        return classSet.size();
+
     }
 
     public int countMethodInProject() throws IOException {
@@ -78,15 +72,25 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         return countMethodInProject() / countClassesInProject();
     }
 
-    public int countLinesCodeInProject() {
-        // TODO : à compléter
-        return 0;
+    public int countLinesCodeInProject() throws IOException {
+        int val = 0;
+        for (CompilationUnit cu : parser.parseProject()) {
+            ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
+            cu.accept(visitor);
+            val += visitor.getLinesOfCode();
+
+        }
+        return val;
     }
 
     public int meanFieldPerClass() throws IOException {
 
         int field = 0;
-        // TODO: à compléter
+        for (CompilationUnit cu : parser.parseProject()) {
+            ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
+            cu.accept(visitor);
+            field += visitor.getAttributeCount();
+        }
         return field / countClassesInProject();
     }
 
@@ -94,12 +98,15 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         return countLinesCodeInProject() / countMethodInProject();
     }
 
-    public Map<String, Integer> getTopClassesByMethodsCount() {
+    public Map<String, Integer> getTopClassesByMethodsCount() throws IOException {
         Map<String, Integer> myMap = new HashMap<>();
         for (CompilationUnit cu : parser.parseProject()) {
-            ClassVisitor visitor = new ClassVisitor();
+            ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
+            MethodDeclarationVisitor visitor2 = new MethodDeclarationVisitor();
+
             cu.accept(visitor);
-            myMap.put(visitor.getClassName(), visitor.getMethods.size());//
+            cu.accept(visitor2);
+            myMap.put(visitor.getClassName(), visitor2.getMethods().size());//
 
         }
         Map<String, Integer> sortedMap = myMap.entrySet()
@@ -128,7 +135,7 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
     public Map<String, Integer> getTopClassesByFieldsCount() throws IOException {
         Map<String, Integer> myMap = new HashMap<>();
         for (CompilationUnit cu : parser.parseProject()) {
-            ClassVisitor visitor = new ClassVisitor();
+            ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
             cu.accept(visitor);
             myMap.put(visitor.getClassName(), visitor.getAttributeCount());//
 
@@ -153,5 +160,43 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         return firstNElements;
 
     }
+
+    // Question 10
+
+    public HashSet<String> getTopClassByMethodsAndField() throws IOException {
+        HashSet<String> mySet = new HashSet<>();
+        getTopClassesByMethodsCount().keySet().forEach(e -> {
+            try {
+                if (getTopClassesByFieldsCount().keySet().contains(e)) {
+                    mySet.add(e);
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+        });
+        return mySet;
+
+    }
+
+    // Queston 11 hashset
+
+    public HashSet<String> getTopClassWithXGivenMethods(int x) throws IOException {
+        HashSet<String> mySet = new HashSet<>();
+        for (CompilationUnit cu : parser.parseProject()) {
+            ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
+            MethodDeclarationVisitor visitor2 = new MethodDeclarationVisitor();
+            cu.accept(visitor);
+            cu.accept(visitor2);
+            if (visitor2.getMethods().size() > x) {
+                mySet.add(visitor.getClassName());
+            }
+        }
+        return mySet;
+
+    }
+
+    // 12 Map<String, Integer>
+    // 13 probablement un int
 
 }
