@@ -92,7 +92,7 @@ public class SelectProjectController  {
         public void actionPerformed(ActionEvent e) 
         {
         	
-        	 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
+        	
         	 if(my_path != "" ) {
         		 MenuProcessor menuProcessor = new MenuProcessor(my_path);
         		 
@@ -101,6 +101,14 @@ public class SelectProjectController  {
         			 methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
         			 results = menuProcessor.selectBasicAnalytics(methodsForProcessor);
         			 
+        			 
+           			 ResultsPanel  panel2 = new ResultsPanel(frame,results,"Analyse de base");
+           			 cardPanel.add(panel2, "Panel2");
+           			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
+        			 
+        			
+        			 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
+        			 
         		 }
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
@@ -108,9 +116,7 @@ public class SelectProjectController  {
              			if (methodsForProcessor.contains("8")||methodsForProcessor.contains("9") ||methodsForProcessor.contains("9"))
              			{
 	               			 results2 = menuProcessor.selectGetTopClasses(methodsForProcessor);
-	               			 ResultsPanel  panel2 = new ResultsPanel(frame);
-	               			 cardPanel.add(panel2, "Panel2");
-	               			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
+	               			
                			 
              			}
              			else if (methodsForProcessor.contains("10")||methodsForProcessor.contains("11"))

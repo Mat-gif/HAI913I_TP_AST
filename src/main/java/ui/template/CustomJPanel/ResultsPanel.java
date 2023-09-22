@@ -10,15 +10,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import ui.controller.LabelMap;
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 
 
 public class ResultsPanel extends JPanel{
 	   private MyViewParameter myParam = new MyViewParameter();
-	   private static  Map<String, Integer> results = new HashMap<>();
+	   private static  Map<String, Integer> results;
 	   private JButton btnTerminer;
-	
+	   private LabelMap labels = new LabelMap();
+	   
 	public JButton getBtnTerminer() {
 		return btnTerminer;
 	}
@@ -29,19 +31,13 @@ public class ResultsPanel extends JPanel{
 	}
 
 
-	public ResultsPanel( JFrame frame) {
+	public ResultsPanel( JFrame frame, Map<String, Integer> results , String myType) {
 		
 		frame.getContentPane().add(this, BorderLayout.CENTER);
 		this.setLayout(null);
+		this.results=results;
 	    
-		   results.put("Alice", 25);
-		   results.put("Bob", 30);
-		   results.put("Charlie", 28);
-		   results.put("David", 22);
-		   results.put("Alice1", 25);
-		   results.put("Bob1", 30);
-		   results.put("Charlie1", 28);
-	       
+
 
 	       JLabel titleLabel = new JLabel( "--> Resultats :");
 	       titleLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()/2)), myParam.getLargeurBouton(), myParam.getHauteurBouton());
@@ -56,12 +52,17 @@ public class ResultsPanel extends JPanel{
 	       
 	       int i =2;
 	       for (Map.Entry<String, Integer> entry : results.entrySet()) {
-	    	 
-	           JLabel keyLabel = new JLabel( entry.getKey() + " : ");
+	    	   
+	    	   
+	           JLabel keyLabel = new JLabel(labels.get(myType).get(entry.getKey())+ " : ");
 	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i), myParam.getLargeurBouton(), myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
-	           JLabel valueLabel = new JLabel( entry.getValue()+ "");
-	           valueLabel.setBounds(myParam.getxBouton()*2, (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i), myParam.getLargeurBouton(), myParam.getHauteurBouton());
+	           
+	        // Calcul de la position x pour valueLabel en fonction de keyLabel
+	           int valueLabelX = keyLabel.getX() + keyLabel.getWidth();
+
+	           JLabel valueLabel = new JLabel(entry.getValue() + "");
+	           valueLabel.setBounds(valueLabelX, keyLabel.getY(), myParam.getLargeurBouton(), myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
 	           this.add(keyLabel);
 	           this.add(valueLabel);
