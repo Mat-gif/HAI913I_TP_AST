@@ -81,18 +81,45 @@ public class MenuProcessor {
 	};
 	
 	
-	public HashSet<String> selectOther(HashSet<String> methodsForProcessor)
+	public Map<String,HashSet<String>> selectOther(HashSet<String> methodsForProcessor, int n)
 	{
-		HashSet<String> results = new HashSet<>();
+		Map<String,HashSet<String>>  results = new HashMap<>();
 		
 		methodsForProcessor.forEach(a->{
+			try {
 				switch (a) {
 				case "10":
+						results.put(a, myProcessor.getTopClassByMethodsAndField());
 					break;
 				case "11":
+					results.put(a, myProcessor.getTopClassWithXGivenMethods(n));
 					break;
 		
 				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		return results;
+	}
+
+	public Map<String,HashSet<String>> selectOther(HashSet<String> methodsForProcessor)
+	{
+		Map<String,HashSet<String>>  results = new HashMap<>();
+		
+		methodsForProcessor.forEach(a->{
+			try {
+				switch (a) {
+				case "10":
+						results.put(a, myProcessor.getTopClassByMethodsAndField());
+					break;
+		
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});
 		return results;
 	}
