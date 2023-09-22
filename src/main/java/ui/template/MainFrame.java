@@ -25,8 +25,6 @@ import ui.paramater.MyViewParameter;
 import ui.template.CustomJPanel.InitialPanel;
 import ui.template.CustomJPanel.ResultsPanel;
 
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 
 public class MainFrame {
 	

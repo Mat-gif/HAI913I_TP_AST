@@ -1,6 +1,4 @@
 package visitor;
-
-
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -64,4 +62,5 @@ public class ClassInterfaceVisitor extends ASTVisitor {
 	public String printClassName() {
 		return getClassName();
 	}
+
 }
