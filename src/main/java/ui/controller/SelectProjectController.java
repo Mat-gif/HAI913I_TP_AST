@@ -4,13 +4,17 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
+import processor.MenuProcessor;
 import processor.MyProcessor;
 import ui.template.CheckBoxPanelTemplate;
 import ui.template.FolderChooserTemplate;
@@ -27,12 +31,15 @@ public class SelectProjectController  {
 	private JPanel cardPanel;
 	private CheckBoxPanelTemplate checkBoxPanelBasique;
 	private CheckBoxPanelTemplate checkBoxPanelComplementaire;
-	private MyProcessor myProcessor;
+	
 	private CardLayout cardLayout;
 	private LabelMap labels = new LabelMap();
-	HashSet<String> methodsForProcessor = new HashSet<>();
+	private HashSet<String> methodsForProcessor = new HashSet<>();
+	private Map<String,Integer> results;
+	private  Map<String,Map<String, Integer>> results2;
+	private  HashSet<String> results3;
 
-	public SelectProjectController(JFrame frame, InitialPanel panel1,ResultsPanel panel2,CardLayout cardLayout,JPanel cardPanel) 
+	public SelectProjectController(JFrame frame, InitialPanel panel1,CardLayout cardLayout,JPanel cardPanel) 
 	{
 		super();
 		this.frame = frame;
@@ -84,11 +91,38 @@ public class SelectProjectController  {
     {
         public void actionPerformed(ActionEvent e) 
         {
-        	if(!checkBoxPanelBasique.getMethodsForProcessor().isEmpty()) methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
-        	else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
+        	
         	 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
         	 if(my_path != "" ) {
-                myProcessor= new MyProcessor( my_path);
+        		 MenuProcessor menuProcessor = new MenuProcessor(my_path);
+        		 
+        		 if(!checkBoxPanelBasique.getMethodsForProcessor().isEmpty()) 
+        		 {
+        			 methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
+        			 results = menuProcessor.selectBasicAnalytics(methodsForProcessor);
+        			 
+        		 }
+             	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
+             			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
+             			// analyse top 10%
+             			if (methodsForProcessor.contains("8")||methodsForProcessor.contains("9") ||methodsForProcessor.contains("9"))
+             			{
+	               			 results2 = menuProcessor.selectGetTopClasses(methodsForProcessor);
+	               			 ResultsPanel  panel2 = new ResultsPanel(frame);
+	               			 cardPanel.add(panel2, "Panel2");
+	               			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
+               			 
+             			}
+             			else if (methodsForProcessor.contains("10")||methodsForProcessor.contains("11"))
+             			{
+             				
+             			}
+             			else if (methodsForProcessor.contains("13")) {
+             				// derrier analyse
+             			}
+             	 }
+        		 
+        		 
                /* try {
 					myProcessor.getParser().parseProject();
 				} catch (IOException e1) {

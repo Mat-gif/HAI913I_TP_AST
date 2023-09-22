@@ -19,6 +19,16 @@ public class ResultsPanel extends JPanel{
 	   private static  Map<String, Integer> results = new HashMap<>();
 	   private JButton btnTerminer;
 	
+	public JButton getBtnTerminer() {
+		return btnTerminer;
+	}
+
+
+	public void setBtnTerminer(JButton btnTerminer) {
+		this.btnTerminer = btnTerminer;
+	}
+
+
 	public ResultsPanel( JFrame frame) {
 		
 		frame.getContentPane().add(this, BorderLayout.CENTER);
