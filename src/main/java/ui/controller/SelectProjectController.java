@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -39,7 +40,7 @@ public class SelectProjectController  {
 	private HashSet<String> methodsForProcessor = new HashSet<>();
 	private Map<String,Integer> results;
 	private  Map<String,Map<String, Integer>> results2;
-	private  HashSet<String> results3;
+	private   Map<String,HashSet<String>> results3;
 
 	public SelectProjectController(JFrame frame, InitialPanel panel1,CardLayout cardLayout,JPanel cardPanel) 
 	{
@@ -48,8 +49,12 @@ public class SelectProjectController  {
 		this.panel1 = panel1;
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
+
 	    checkBoxPanelBasique = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseDeBase(),"Analyse de base");
 	    checkBoxPanelComplementaire = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseComplementaire(),"Analyse complémentaire");
+		
+
+
 	}
 
 
@@ -63,18 +68,18 @@ public class SelectProjectController  {
                 switch (selectedRadioButton.getText()) 
                 {
 	                case "Analyse de base":
-	                	checkBoxPanelBasique.showButtonGroup(panel1,true);
-	                	checkBoxPanelComplementaire.showButtonGroup(panel1,false);
+	                	checkBoxPanelBasique.showButtonGroup(panel1,true,false);
+	                	checkBoxPanelComplementaire.showButtonGroup(panel1,false,true);
 	                	my_analyse= selectedRadioButton.getText();	                    
 	                	break; 
 	                case "Analyse complémentaire":
-	                	checkBoxPanelComplementaire.showButtonGroup(panel1,true);
-	                	checkBoxPanelBasique.showButtonGroup(panel1,false);
+	                	checkBoxPanelComplementaire.showButtonGroup(panel1,true,true);
+	                	checkBoxPanelBasique.showButtonGroup(panel1,false,false);
 	                	my_analyse= selectedRadioButton.getText();	                    
 	                	break;
 	                default:
-	                	checkBoxPanelBasique.showButtonGroup(panel1,false);
-	                	checkBoxPanelComplementaire.showButtonGroup(panel1,false);                
+	                	checkBoxPanelBasique.showButtonGroup(panel1,false,false);
+	                	checkBoxPanelComplementaire.showButtonGroup(panel1,false,true);                
                 }
             }        
         }
@@ -101,7 +106,8 @@ public class SelectProjectController  {
         		 {
         			 methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
         			 results = menuProcessor.selectBasicAnalytics(methodsForProcessor);
-        			 
+        			// Récupérer la valeur actuelle du Spinner
+                     
         			 
            			 ResultsPanel  panel2 = new ResultsPanel(frame,results,"Analyse de base");
            			 cardPanel.add(panel2, "Panel2");
@@ -113,30 +119,43 @@ public class SelectProjectController  {
         		 }
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
+             			 Results2Panel  panel3 = new Results2Panel(frame);
+             		     cardPanel.add(panel3, "Panel3");
+             			
+             			
              			// analyse top 10%
              			if (methodsForProcessor.contains("8")||methodsForProcessor.contains("9") ||methodsForProcessor.contains("12"))
              			{
 	               			 results2 = menuProcessor.selectGetTopClasses(methodsForProcessor);
 	               			
-	               			 Results2Panel  panel3 = new Results2Panel(frame);
-	               			 cardPanel.add(panel3, "Panel3");
-	               			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
+	               	
 	               			 
-	               			
-	               			panel3.printResults(results2, "Analyse complémentaire");
-	               			
+	             				panel3.printResults(results2, "Analyse complémentaire");
+
 	            			 
 	            			
-	            			 cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
+	            		
                			 
              			}
              			else if (methodsForProcessor.contains("10")||methodsForProcessor.contains("11"))
              			{
-             				// avec param n 
+             				if(methodsForProcessor.contains("11")) {
+             					results3=menuProcessor.selectOther(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
+             				}else {
+             					results3=menuProcessor.selectOther(methodsForProcessor);
+             				}
+	               			 
+             				panel3.printResults2(results3, "Analyse complémentaire");
+	               		
+	               			
+	            			 
+
              			}
              			else if (methodsForProcessor.contains("13")) {
              				// derrier analyse
              			}
+             			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
+             			 cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
              	 }
         		 
         		 
@@ -147,6 +166,9 @@ public class SelectProjectController  {
 					e1.printStackTrace();
 				}*/
         	}
+        	 else {
+        		 JOptionPane.showMessageDialog(frame, "Vous n'avez pas selectioné de projet");
+        	 }
         }
     };
     
@@ -180,4 +202,7 @@ public class SelectProjectController  {
         }
     };
 
+   
+    
+    
 }

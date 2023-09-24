@@ -3,6 +3,7 @@ package ui.template.CustomJPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -89,6 +90,43 @@ public class Results2Panel extends JPanel{
 	    	   
 	
 	       }
+	
+
+	public void printResults2(Map<String,HashSet<String>> results, String myType)
+	{
+
+	       
+		
+	       results.forEach((k,v) ->{
+	    	   JLabel keyLabel = new JLabel(labels.get(myType).get(k)+ " : ");
+	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i)+l*40, myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
+	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
+	           
+	        // Calcul de la position x pour valueLabel en fonction de keyLabel
+	           int valueLabelX = keyLabel.getX() + keyLabel.getWidth();
+
+	           l=0;
+	    	   v.forEach((kk)->{
+	    		   System.out.println(kk);
+	    		   JLabel valueLabel = new JLabel(kk+"");
+		           valueLabel.setBounds(valueLabelX, keyLabel.getY()+j, myParam.getLargeurBouton(), myParam.getHauteurBouton());
+		           keyLabel.setFont(MyViewParameter.getMyFontStyle());
+		           this.add(keyLabel);
+		           this.add(valueLabel);
+	    		   
+		           j+=40;
+		           l++;
+	    	   });
+	    	  
+	           
+	           j=0;
+	           i++;
+	       });
+	    	   
+	    	   
+	
+	       }
+		
 		
 	
 	
