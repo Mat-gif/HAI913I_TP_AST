@@ -2,6 +2,7 @@ package ui.template.CustomJPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 import ui.controller.LabelMap;
 import ui.controller.SelectProjectController;
@@ -66,7 +69,10 @@ public class BasicResultsPanel extends JPanel{
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
 	           this.add(keyLabel);
 	           this.add(valueLabel);
+
 	           i++;
+	           
+	           
 	       }
 
 

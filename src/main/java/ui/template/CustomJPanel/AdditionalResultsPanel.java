@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import ui.controller.LabelMap;
+import ui.controller.Resultat;
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 
@@ -57,12 +58,12 @@ public class AdditionalResultsPanel extends JPanel{
 
 	}
 	
-	public void printResults(Map<String,Map<String, Integer>> results, String myType, int n)
+	public void printResults(Map<String,Resultat> results, String myType, int n)
 	{
 		
 	       labels.setAdditionalAnalysis11(n);
 
-	       results.forEach((k,v) ->{
+	       results.forEach((k,res) ->{
 	    	   JLabel keyLabel = new JLabel(labels.getAdditionalAnalysisByID(k)+ " : ");
 	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round(myY), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
@@ -72,9 +73,9 @@ public class AdditionalResultsPanel extends JPanel{
 
 	           
 	           j=0;
-	    	   v.forEach((kk,vv)->{
+	    	   res.getResultats().forEach((kk,vv)->{
 	    		   System.out.println(kk);
-	    		   if(vv!=null)  {valueLabel = new JLabel(kk + " -> " + vv);}
+	    		   if(vv!=0)  {valueLabel = new JLabel(kk + " -> " + vv);}
 	    		   else  {valueLabel = new JLabel(kk);}
 	    		   
 		           valueLabel.setBounds(valueLabelX, keyLabel.getY()+j, myParam.getLargeurBouton(), myParam.getHauteurBouton());
