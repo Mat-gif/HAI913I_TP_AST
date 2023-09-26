@@ -9,13 +9,13 @@ public class TestProcessor {
                 MyProcessor processor = new MyProcessor(
                                 "");
                 processor.setParser(
-                                "C:\\\\\\\\Users\\\\\\\\manil\\\\\\\\Desktop\\\\\\\\Master_ico\\\\\\\\Master__2\\\\\\\\HAI925I - Programmation avancée Java EE\\\\\\\\Beginning\\\\\\\\loum-maven-backend\\\\\\");
+                                "C:\\Users\\manil\\Desktop\\Master_ico\\Master__2\\HAI913I - Evolution et restructuration des logiciels\\Dev\\org.anonbnr.design_patterns");
                 System.out.println(
                                 "Le nombre de package de l'application est : " + processor.countPackagesInProject()
                                                 + " packages.");
 
                 System.out.println("Le nombre de méthodes est de : " + processor.countMethodInProject() + " méthodes.");
-                System.out.println("Le nombre de classe est de : " + processor.countClassesInProject() + " classes.");
+                // System.out.println("Le nombre de classe est de : " + processor.countClassesInProject() + " classes.");
 
                 System.out.println("Le nombre de Méthodes en moyenne  : " + processor.meanMethodsPerClass() + " .");
 
