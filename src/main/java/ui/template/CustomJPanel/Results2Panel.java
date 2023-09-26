@@ -92,12 +92,18 @@ public class Results2Panel extends JPanel{
 	       }
 	
 
-	public void printResults2(Map<String,HashSet<String>> results, String myType)
+	public void printResults2(Map<String,HashSet<String>> results, String myType,int n)
 	{
 
 	       
 		
 	       results.forEach((k,v) ->{
+	    	   
+	    	   if(k.equals("11")) {
+	    		   ///
+	    		   labels.setXmethode11(n);
+	    	   }
+	    	   
 	    	   JLabel keyLabel = new JLabel(labels.get(myType).get(k)+ " : ");
 	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i)+l*40, myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());

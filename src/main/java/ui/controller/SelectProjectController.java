@@ -113,7 +113,7 @@ public class SelectProjectController  {
            			 cardPanel.add(panel2, "Panel2");
            			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
         			 
-        			
+        
         			 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
         			 
         		 }
@@ -145,7 +145,7 @@ public class SelectProjectController  {
              					results3=menuProcessor.selectOther(methodsForProcessor);
              				}
 	               			 
-             				panel3.printResults2(results3, "Analyse complémentaire");
+             				panel3.printResults2(results3, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
 	               		
 	               			
 	            			 
