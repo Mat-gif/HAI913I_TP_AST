@@ -104,6 +104,7 @@ public class SelectProjectController  {
            			 ResultsPanel  panel2 = new ResultsPanel(frame,results,"Analyse de base");
            			 cardPanel.add(panel2, "Panel2");
            			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
+
         			 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
         			 
         		 }

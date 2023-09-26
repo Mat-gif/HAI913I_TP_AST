@@ -92,9 +92,6 @@ public class Results2Panel extends JPanel{
 	
 	       }
 	
-
-
-		
 	
 	
 	

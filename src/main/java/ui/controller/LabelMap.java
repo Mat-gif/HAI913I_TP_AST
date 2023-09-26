@@ -71,4 +71,10 @@ public class LabelMap extends HashMap<String,Map<String,String>>
 		return getAnalyseComplementaire().size();
 	}
 	
+	public void setXmethode11(int i) {
+		
+		this.get("Analyse complémentaire").put("11", "Les classes qui possèdent plus de "+i+" méthodes");
+		
+	}
+	
 }
