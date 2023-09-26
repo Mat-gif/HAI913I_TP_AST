@@ -14,6 +14,8 @@ public abstract class Parser<T> {
 	private static final String sourcePathForJava = File.separator + "src";
 	protected String projectPath;
 	protected String jrePath;
+
+	// 
 	protected T parserType; 
 
 
