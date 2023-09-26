@@ -30,7 +30,7 @@ public class SelectProjectController  {
 	private JFrame frame;
 	private InitialPanel panel1;
 	private ResultsPanel panel2;
-	private  Results2Panel  panel3;
+	private Results2Panel  panel3;
 	private JPanel cardPanel;
 	private CheckBoxPanelTemplate checkBoxPanelBasique;
 	private CheckBoxPanelTemplate checkBoxPanelComplementaire;
