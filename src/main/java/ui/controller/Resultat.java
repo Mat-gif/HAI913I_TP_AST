@@ -1,26 +1,40 @@
 package ui.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class Resultat {
-	private final String  name;
-	private final int value;
+	private Map<String, Integer> resultats = new HashMap<>();
 	
-	public Resultat(String name, int value) {
+	public Resultat() {
 		super();
-		this.name = name;
-		this.value = value;
 	}
 
-	public String getName() {
-		return name;
+	public Map<String, Integer> getResultats() {
+		return resultats;
 	}
 
-	public int getValue() {
-		return value;
+	public void addResultat(String key, int val) {
+
+		 this.resultats.put(key, val);
 	}
 	
-	
-	
+	public void addAllResultat(Map<String, Integer> res) {
+		this.resultats.putAll(res);;
+	}
 
+
+	
+	public int getResultatByKey(String key) {
+		return resultats.get(key);
+	}
+
+	
+	
+	public Set<String> getKeys() {
+		return resultats.keySet();
+	}
 	
 
 }

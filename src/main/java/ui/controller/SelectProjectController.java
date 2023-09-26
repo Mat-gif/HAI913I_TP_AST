@@ -24,11 +24,8 @@ import ui.template.CustomJPanel.BasicResultsPanel;
 public class SelectProjectController  {
 	
 	private String my_path = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
-	private String my_analyse = "";
 	private JFrame frame;
 	private MainPanel panel1;
-	private BasicResultsPanel panel2;
-	private  AdditionalResultsPanel  panel3;
 	private JPanel cardPanel;
 	private CheckBoxPanelTemplate checkBoxPanelBasique;
 	private CheckBoxPanelTemplate checkBoxPanelComplementaire;
@@ -36,8 +33,8 @@ public class SelectProjectController  {
 	private LabelMap labels = new LabelMap();
 	private HashSet<String> methodsForProcessor = new HashSet<>();
 	private Map<String,Integer> results;
-	private  Map<String,Map<String, Integer>> results2;
-	private   Map<String,HashSet<String>> results3;
+	private  Map<String,Resultat> results2;
+
 
 	public SelectProjectController(JFrame frame, MainPanel panel1,CardLayout cardLayout,JPanel cardPanel) 
 	{
@@ -63,12 +60,12 @@ public class SelectProjectController  {
 	                case "Analyse de base":
 	                	checkBoxPanelBasique.showButtonGroup(panel1,true,false);
 	                	checkBoxPanelComplementaire.showButtonGroup(panel1,false,true);
-	                	my_analyse= selectedRadioButton.getText();	                    
+					selectedRadioButton.getText();	                    
 	                	break; 
 	                case "Analyse complémentaire":
 	                	checkBoxPanelComplementaire.showButtonGroup(panel1,true,true);
 	                	checkBoxPanelBasique.showButtonGroup(panel1,false,false);
-	                	my_analyse= selectedRadioButton.getText();	                    
+					selectedRadioButton.getText();	                    
 	                	break;
 	                default:
 	                	checkBoxPanelBasique.showButtonGroup(panel1,false,false);
@@ -108,6 +105,7 @@ public class SelectProjectController  {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
              			AdditionalResultsPanel  panel3 = new AdditionalResultsPanel(frame);
              		    cardPanel.add(panel3, "Panel3");
+             		    
              		    results2 = menuProcessor.selectComplAnalytics(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
              		    panel3.printResults(results2, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);

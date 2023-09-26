@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import ui.controller.Resultat;
+
 public class MenuProcessor {
 	
 	private MyProcessor myProcessor;
@@ -55,9 +57,9 @@ public class MenuProcessor {
 	
 	
 
-	public Map<String,Map<String, Integer>>  selectComplAnalytics(HashSet<String> methodsForProcessor,int n)
+	public Map<String,Resultat>  selectComplAnalytics(HashSet<String> methodsForProcessor,int n)
 	{		
-		 Map<String,Map<String, Integer>> results = new HashMap<>();
+		 Map<String,Resultat> results = new HashMap<>();
 		 methodsForProcessor.forEach(a->{
 			try {
 				switch (a) {

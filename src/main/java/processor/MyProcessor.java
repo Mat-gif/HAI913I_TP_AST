@@ -1,6 +1,7 @@
 package processor;
 
 import parsers.EclipseJDTParser;
+import ui.controller.Resultat;
 import visitor.ClassInterfaceVisitor;
 import visitor.MethodDeclarationVisitor;
 import visitor.PackageDeclarationVisitor;
@@ -100,18 +101,20 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         return countLinesCodeInProject() / countMethodInProject();
     }
 
-    public Map<String, Integer> getTopClassesByMethodsCount() throws IOException {
-        Map<String, Integer> myMap = new HashMap<>();
+    
+    
+    public Resultat getTopClassesByMethodsCount() throws IOException {
+    	Resultat resultat = new Resultat();
         for (CompilationUnit cu : parser.parseProject()) {
             ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
             MethodDeclarationVisitor visitor2 = new MethodDeclarationVisitor();
 
             cu.accept(visitor);
             cu.accept(visitor2);
-            myMap.put(visitor.getClassName(), visitor2.getMethods().size());//
+            resultat.addResultat(visitor.getClassName(), visitor2.getMethods().size());//
 
         }
-        Map<String, Integer> sortedMap = myMap.entrySet()
+        Map<String, Integer> sortedMap = resultat.getResultats().entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toMap(
@@ -130,19 +133,22 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
                         Map.Entry::getValue,
                         (e1, e2) -> e1,
                         LinkedHashMap::new));
-        return firstNElements;
+        
+        Resultat resultatFinal = new Resultat();
+        resultatFinal.addAllResultat(firstNElements);
+        return resultatFinal;
 
     }
 
-    public Map<String, Integer> getTopClassesByFieldsCount() throws IOException {
-        Map<String, Integer> myMap = new HashMap<>();
-        for (CompilationUnit cu : parser.parseProject()) {
+    public Resultat getTopClassesByFieldsCount() throws IOException {
+    	Resultat resultat = new Resultat();
+    	for (CompilationUnit cu : parser.parseProject()) {
             ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
             cu.accept(visitor);
-            myMap.put(visitor.getClassName(), visitor.getAttributeCount());//
+            resultat.addResultat(visitor.getClassName(), visitor.getAttributeCount());//
 
         }
-        Map<String, Integer> sortedMap = myMap.entrySet()
+        Map<String, Integer> sortedMap = resultat.getResultats().entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toMap(
@@ -159,54 +165,57 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
                         Map.Entry::getValue,
                         (e1, e2) -> e1,
                         LinkedHashMap::new));
-        return firstNElements;
+        
+        Resultat resultatFinal = new Resultat();
+        resultatFinal.addAllResultat(firstNElements);
+        return resultatFinal;
 
     }
 
     // Question 10
 
-    public Map<String, Integer> getTopClassByMethodsAndField() throws IOException {
-    	Map<String, Integer> myResults = new HashMap<>();
-        getTopClassesByMethodsCount().keySet().forEach(e -> {
+    public Resultat getTopClassByMethodsAndField() throws IOException {
+    	Resultat resultat = new Resultat();
+        getTopClassesByMethodsCount().getKeys().forEach(e -> {
             try {
-                if (getTopClassesByFieldsCount().keySet().contains(e)) {
-                	myResults.put(e,null);
+                if (getTopClassesByFieldsCount().getKeys().contains(e)) {
+                	resultat.addResultat(e, 0);
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         });
-        return myResults;
+        return resultat;
     }
 
     // Queston 11 hashset
 
-    public Map<String, Integer> getTopClassWithXGivenMethods(int x) throws IOException {
-    	Map<String, Integer> myResults = new HashMap<>();
+    public Resultat getTopClassWithXGivenMethods(int x) throws IOException {
+    	Resultat resultat = new Resultat();
         for (CompilationUnit cu : parser.parseProject()) {
             ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
             MethodDeclarationVisitor visitor2 = new MethodDeclarationVisitor();
             cu.accept(visitor);
             cu.accept(visitor2);
             if (visitor2.getMethods().size() > x) {
-            	myResults.put(visitor.getClassName(),null);
+            	resultat.addResultat(visitor.getClassName(), 0);
             }
         }	
-        return myResults;
+        return resultat;
     }
 
     // 12 Map<String, Integer>
     // Question 12 : 10% methodes avec le plus de lignes de code
     
-    public Map<String, Integer> getTopMethodsByLinesCode() throws IOException {
-    	Map<String,Integer> myMap = new HashMap<>();
+    public Resultat getTopMethodsByLinesCode() throws IOException {
+    	Resultat resultat = new Resultat();
     	for (CompilationUnit cu : parser.parseProject()) {
             MethodDeclarationVisitor visitor = new MethodDeclarationVisitor();
             cu.accept(visitor);
-            myMap.putAll(visitor.getMethodsLines());
+            resultat.addAllResultat(visitor.getMethodsLines());
         }
     	
-        Map<String, Integer> sortedMap = myMap.entrySet()
+        Map<String, Integer> sortedMap = resultat.getResultats().entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toMap(
@@ -226,21 +235,23 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
                         LinkedHashMap::new));
         
     	
-    	return firstNElements;
+        Resultat resultatFinal = new Resultat();
+        resultatFinal.addAllResultat(firstNElements);
+        return resultatFinal;
     }
     
     
     // 13 probablement un Map<String, Integer>
     
-    public Map<String, Integer> getTopMethodsByParameters() throws IOException {
-    	Map<String,Integer> myMap = new HashMap<>();
+    public Resultat getTopMethodsByParameters() throws IOException {
+    	Resultat resultat = new Resultat();
     	for (CompilationUnit cu : parser.parseProject()) {
             MethodDeclarationVisitor visitor = new MethodDeclarationVisitor();
             cu.accept(visitor);
-            myMap.putAll(visitor.getMethodsParameters());
+            resultat.addAllResultat(visitor.getMethodsParameters());
         }
     	
-        Map<String, Integer> sortedMap = myMap.entrySet()
+    	 Map<String, Integer> sortedMap = resultat.getResultats().entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toMap(
@@ -250,7 +261,7 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
                         LinkedHashMap::new));
         System.out.println("SORTED" + sortedMap.toString());
 
-        Map<String, Integer> myResult = sortedMap.entrySet()
+        Map<String, Integer> firstNElements = sortedMap.entrySet()
                 .stream()
                 .filter(entry -> entry.getValue().equals(sortedMap.values().iterator().next()))
                 .collect(Collectors.toMap(
@@ -258,8 +269,10 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
                         Map.Entry::getValue,
                         (e1, e2) -> e1,
                         LinkedHashMap::new));
-        System.out.println("RES" + myResult.toString());
-    	return myResult;
+        System.out.println("RES" + firstNElements.toString());
+        Resultat resultatFinal = new Resultat();
+        resultatFinal.addAllResultat(firstNElements);
+        return resultatFinal;
     }
     public void testmethod(int a, int b, int c, int d, int e) {
     	
