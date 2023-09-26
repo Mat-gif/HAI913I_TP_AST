@@ -74,8 +74,10 @@ public class MenuProcessor {
 					results.put(a, myProcessor.getTopClassWithXGivenMethods(n));
 					break;
 				case "12":
+					results.put(a, myProcessor.getTopMethodsByLinesCode());
 					break;
 				case "13":
+					results.put(a, myProcessor.getTopMethodsByParameters());
 					break;					
 				}
 			} catch (IOException e) {

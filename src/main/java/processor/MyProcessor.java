@@ -191,11 +191,78 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
             if (visitor2.getMethods().size() > x) {
             	myResults.put(visitor.getClassName(),null);
             }
-        }
+        }	
         return myResults;
     }
 
     // 12 Map<String, Integer>
+    // Question 12 : 10% methodes avec le plus de lignes de code
+    
+    public Map<String, Integer> getTopMethodsByLinesCode() throws IOException {
+    	Map<String,Integer> myMap = new HashMap<>();
+    	for (CompilationUnit cu : parser.parseProject()) {
+            MethodDeclarationVisitor visitor = new MethodDeclarationVisitor();
+            cu.accept(visitor);
+            myMap.putAll(visitor.getMethodsLines());
+        }
+    	
+        Map<String, Integer> sortedMap = myMap.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+        
+        Long N = Math.round(0.1 * countMethodInProject());
+        Map<String, Integer> firstNElements = sortedMap.entrySet()
+                .stream()
+                .limit(N)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+        
+    	
+    	return firstNElements;
+    }
+    
+    
     // 13 probablement un Map<String, Integer>
+    
+    public Map<String, Integer> getTopMethodsByParameters() throws IOException {
+    	Map<String,Integer> myMap = new HashMap<>();
+    	for (CompilationUnit cu : parser.parseProject()) {
+            MethodDeclarationVisitor visitor = new MethodDeclarationVisitor();
+            cu.accept(visitor);
+            myMap.putAll(visitor.getMethodsParameters());
+        }
+    	
+        Map<String, Integer> sortedMap = myMap.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+        System.out.println("SORTED" + sortedMap.toString());
 
+        Map<String, Integer> myResult = sortedMap.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().equals(sortedMap.values().iterator().next()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+        System.out.println("RES" + myResult.toString());
+    	return myResult;
+    }
+    public void testmethod(int a, int b, int c, int d, int e) {
+    	
+    }
+    	
 }
