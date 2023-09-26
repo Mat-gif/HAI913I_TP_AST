@@ -13,7 +13,7 @@ import javax.swing.JRadioButton;
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 
-public class InitialPanel extends JPanel{
+public class MainPanel extends JPanel{
 	private ButtonGroup buttonGroup = new ButtonGroup(); // Créez un groupe de boutons radio
 	private MyViewParameter myParam = new MyViewParameter();
 	
@@ -24,7 +24,7 @@ public class InitialPanel extends JPanel{
 	private JRadioButton rdbtnAnalyse_3;
 	private  JButton btnValider;
 	
-	public InitialPanel( JFrame frame) {
+	public MainPanel( JFrame frame) {
 		
 		frame.getContentPane().add(this, BorderLayout.CENTER);
 		this.setLayout(null);
