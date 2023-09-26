@@ -45,7 +45,7 @@ public class SelectProjectController  {
 		this.frame = frame;
 		this.panel1 = panel1;
 		this.cardLayout = cardLayout;
-		this.cardPanel = cardPanel;
+		this.cardPanel = cardPanel; 
 	    checkBoxPanelBasique = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseDeBase(),"Analyse de base");
 	    checkBoxPanelComplementaire = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseComplementaire(),"Analyse complémentaire");
 	}
