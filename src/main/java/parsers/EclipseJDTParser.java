@@ -35,7 +35,7 @@ public class EclipseJDTParser extends Parser<ASTParser>{
 	
 	@Override
 	public void configure() {
-		defaultSetterParser(AST.JLS4, ASTParser.K_COMPILATION_UNIT, true, true, jrePath);
+		defaultSetterParser(AST.JLS4, ASTParser.K_COMPILATION_UNIT, true, true, "UTF-8");
 	}
 	
 	protected CompilationUnit parse(File file) throws IOException {
