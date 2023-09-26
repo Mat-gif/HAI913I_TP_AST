@@ -23,7 +23,7 @@ import ui.template.CustomJPanel.ResultsPanel;
 
 public class SelectProjectController  {
 	
-	private String my_path = "";
+	private String my_path = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
 	private String my_analyse = "";
 	private JFrame frame;
 	private InitialPanel panel1;

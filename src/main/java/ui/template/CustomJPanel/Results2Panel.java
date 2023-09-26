@@ -23,8 +23,8 @@ public class Results2Panel extends JPanel{
 	   private LabelMap labels = new LabelMap();
 	   private JLabel valueLabel;
 	   private int i = 2;
-	   private int j = 40;
-	   private int l = 1;
+	   private int j = 0;
+	   private int myY =myParam.getyBouton()*i;
 	   
 	public JButton getBtnTerminer() {
 		return btnTerminer;
@@ -64,28 +64,28 @@ public class Results2Panel extends JPanel{
 		
 	       results.forEach((k,v) ->{
 	    	   JLabel keyLabel = new JLabel(labels.get(myType).get(k)+ " : ");
-	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25)))+(j), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
+	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round(myY), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
 	           
 	        // Calcul de la position x pour valueLabel en fonction de keyLabel
 	           int valueLabelX = keyLabel.getX() + keyLabel.getWidth();
 
 	           
-	           j=40;
+	           j=0;
 	    	   v.forEach((kk,vv)->{
 	    		   System.out.println(kk);
 	    		   if(vv!=null)  {valueLabel = new JLabel(kk + " -> " + vv);}
 	    		   else  {valueLabel = new JLabel(kk);}
 	    		   
 		           valueLabel.setBounds(valueLabelX, keyLabel.getY()+j, myParam.getLargeurBouton(), myParam.getHauteurBouton());
-		           keyLabel.setFont(MyViewParameter.getMyFontStyle());
-		           this.add(keyLabel);
+		           //valueLabel.setFont(MyViewParameter.getMyFontStyle());
+		           
 		           this.add(valueLabel);
-	    		   
+	    		   myY=valueLabel.getY()+40;
 		           j+=20;
 	    	   });
-	    	  
-
+	    	   this.add(keyLabel);
+	    	   i++;
 	       });
 	    	   
 	    	   
