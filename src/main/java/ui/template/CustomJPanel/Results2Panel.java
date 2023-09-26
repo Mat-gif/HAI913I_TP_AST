@@ -57,11 +57,11 @@ public class Results2Panel extends JPanel{
 
 	}
 	
-	public void printResults(Map<String,Map<String, Integer>> results, String myType)
+	public void printResults(Map<String,Map<String, Integer>> results, String myType, int n)
 	{
-
-	       
 		
+	       labels.setXmethode11(n);
+
 	       results.forEach((k,v) ->{
 	    	   JLabel keyLabel = new JLabel(labels.get(myType).get(k)+ " : ");
 	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round(myY), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());

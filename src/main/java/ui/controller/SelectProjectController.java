@@ -46,12 +46,8 @@ public class SelectProjectController  {
 		this.panel1 = panel1;
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel;
-
 	    checkBoxPanelBasique = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseDeBase(),"Analyse de base");
 	    checkBoxPanelComplementaire = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseComplementaire(),"Analyse complémentaire");
-		
-
-
 	}
 
 
@@ -113,7 +109,7 @@ public class SelectProjectController  {
              			Results2Panel  panel3 = new Results2Panel(frame);
              		    cardPanel.add(panel3, "Panel3");
              		    results2 = menuProcessor.selectComplAnalytics(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
-             		    panel3.printResults(results2, "Analyse complémentaire");
+             		    panel3.printResults(results2, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
              			cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
              	 } 
