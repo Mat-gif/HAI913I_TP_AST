@@ -20,8 +20,8 @@ public class MyViewParameter {
 	
     
  // Définissez les pourcentages de taille relatifs
-	private double pourcentageLargeur = 0.6;  // 50 % de la largeur de l'écran
-	private double pourcentageHauteur = 0.8;  // 40 % de la hauteur de l'écran
+	private double pourcentageLargeur = 0.8;  // 50 % de la largeur de l'écran
+	private double pourcentageHauteur = 0.9;  // 40 % de la hauteur de l'écran
 
     // Obtenez les dimensions de l'écran
     Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();

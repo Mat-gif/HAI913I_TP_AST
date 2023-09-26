@@ -165,40 +165,37 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
 
     // Question 10
 
-    public HashSet<String> getTopClassByMethodsAndField() throws IOException {
-        HashSet<String> mySet = new HashSet<>();
+    public Map<String, Integer> getTopClassByMethodsAndField() throws IOException {
+    	Map<String, Integer> myResults = new HashMap<>();
         getTopClassesByMethodsCount().keySet().forEach(e -> {
             try {
                 if (getTopClassesByFieldsCount().keySet().contains(e)) {
-                    mySet.add(e);
+                	myResults.put(e,null);
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-
         });
-        return mySet;
-
+        return myResults;
     }
 
     // Queston 11 hashset
 
-    public HashSet<String> getTopClassWithXGivenMethods(int x) throws IOException {
-        HashSet<String> mySet = new HashSet<>();
+    public Map<String, Integer> getTopClassWithXGivenMethods(int x) throws IOException {
+    	Map<String, Integer> myResults = new HashMap<>();
         for (CompilationUnit cu : parser.parseProject()) {
             ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
             MethodDeclarationVisitor visitor2 = new MethodDeclarationVisitor();
             cu.accept(visitor);
             cu.accept(visitor2);
             if (visitor2.getMethods().size() > x) {
-                mySet.add(visitor.getClassName());
+            	myResults.put(visitor.getClassName(),null);
             }
         }
-        return mySet;
-
+        return myResults;
     }
 
     // 12 Map<String, Integer>
-    // 13 probablement un int
+    // 13 probablement un Map<String, Integer>
 
 }
