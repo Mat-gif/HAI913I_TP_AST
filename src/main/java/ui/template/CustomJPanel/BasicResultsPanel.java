@@ -15,7 +15,7 @@ import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 
 
-public class ResultsPanel extends JPanel{
+public class BasicResultsPanel extends JPanel{
 	   private MyViewParameter myParam = new MyViewParameter();
 	   private static  Map<String, Integer> results;
 	   private JButton btnTerminer;
@@ -31,7 +31,7 @@ public class ResultsPanel extends JPanel{
 	}
 
 
-	public ResultsPanel( JFrame frame, Map<String, Integer> results , String myType) {
+	public BasicResultsPanel( JFrame frame, Map<String, Integer> results , String myType) {
 		
 		frame.getContentPane().add(this, BorderLayout.CENTER);
 		this.setLayout(null);
@@ -54,7 +54,7 @@ public class ResultsPanel extends JPanel{
 	       for (Map.Entry<String, Integer> entry : results.entrySet()) {
 	    	   
 	    	   
-	           JLabel keyLabel = new JLabel(labels.get(myType).get(entry.getKey())+ " : ");
+	           JLabel keyLabel = new JLabel(labels.getBasicAnalysisByID(entry.getKey())+ " : ");
 	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()-(myParam.getyBouton()*0.25))*i), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
 	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
 	           

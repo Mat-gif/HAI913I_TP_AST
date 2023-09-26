@@ -22,8 +22,8 @@ import javax.swing.UIManager;
 
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
-import ui.template.CustomJPanel.InitialPanel;
-import ui.template.CustomJPanel.ResultsPanel;
+import ui.template.CustomJPanel.MainPanel;
+import ui.template.CustomJPanel.BasicResultsPanel;
 
 
 public class MainFrame {
@@ -57,7 +57,7 @@ public class MainFrame {
         // Créez un JPanel contenant un CardLayout
         JPanel cardPanel = new JPanel(new CardLayout());
         
-        InitialPanel  panel1 = new InitialPanel(frame);
+        MainPanel  panel1 = new MainPanel(frame);
         
        
         //Ajoutez les panneaux au conteneur principal avec des noms d'identification

@@ -17,18 +17,18 @@ import processor.MenuProcessor;
 import processor.MyProcessor;
 import ui.template.CheckBoxPanelTemplate;
 import ui.template.FolderChooserTemplate;
-import ui.template.CustomJPanel.InitialPanel;
-import ui.template.CustomJPanel.Results2Panel;
-import ui.template.CustomJPanel.ResultsPanel;
+import ui.template.CustomJPanel.MainPanel;
+import ui.template.CustomJPanel.AdditionalResultsPanel;
+import ui.template.CustomJPanel.BasicResultsPanel;
 
 public class SelectProjectController  {
 	
 	private String my_path = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
 	private String my_analyse = "";
 	private JFrame frame;
-	private InitialPanel panel1;
-	private ResultsPanel panel2;
-	private  Results2Panel  panel3;
+	private MainPanel panel1;
+	private BasicResultsPanel panel2;
+	private  AdditionalResultsPanel  panel3;
 	private JPanel cardPanel;
 	private CheckBoxPanelTemplate checkBoxPanelBasique;
 	private CheckBoxPanelTemplate checkBoxPanelComplementaire;
@@ -39,15 +39,15 @@ public class SelectProjectController  {
 	private  Map<String,Map<String, Integer>> results2;
 	private   Map<String,HashSet<String>> results3;
 
-	public SelectProjectController(JFrame frame, InitialPanel panel1,CardLayout cardLayout,JPanel cardPanel) 
+	public SelectProjectController(JFrame frame, MainPanel panel1,CardLayout cardLayout,JPanel cardPanel) 
 	{
 		super();
 		this.frame = frame;
 		this.panel1 = panel1;
 		this.cardLayout = cardLayout;
 		this.cardPanel = cardPanel; 
-	    checkBoxPanelBasique = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseDeBase(),"Analyse de base");
-	    checkBoxPanelComplementaire = new CheckBoxPanelTemplate(frame,panel1,labels.getAnalyseComplementaire(),"Analyse complémentaire");
+	    checkBoxPanelBasique = new CheckBoxPanelTemplate(frame,panel1,labels.getBasicAnalysisMap(),"Analyse de base");
+	    checkBoxPanelComplementaire = new CheckBoxPanelTemplate(frame,panel1,labels.getAdditionalAnalysisMap(),"Analyse complémentaire");
 	}
 
 
@@ -97,7 +97,7 @@ public class SelectProjectController  {
         			 methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
         			 results = menuProcessor.selectBasicAnalytics(methodsForProcessor);
         			// Récupérer la valeur actuelle du Spinner 
-           			 ResultsPanel  panel2 = new ResultsPanel(frame,results,"Analyse de base");
+           			 BasicResultsPanel  panel2 = new BasicResultsPanel(frame,results,"Analyse de base");
            			 cardPanel.add(panel2, "Panel2");
            			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
 
@@ -106,7 +106,7 @@ public class SelectProjectController  {
         		 }
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
-             			Results2Panel  panel3 = new Results2Panel(frame);
+             			AdditionalResultsPanel  panel3 = new AdditionalResultsPanel(frame);
              		    cardPanel.add(panel3, "Panel3");
              		    results2 = menuProcessor.selectComplAnalytics(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
              		    panel3.printResults(results2, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
