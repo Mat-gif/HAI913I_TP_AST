@@ -2,17 +2,24 @@ package parsers;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -78,20 +85,35 @@ class TestEclipseJDTParser {
 		try {
 			parser = new EclipseJDTParser(SRC_TEMP_DIRECT_PATH);
 			parser.configure();
+			String contentAJava = FileUtils.readFileToString(new File(SRC_TEMP_DIRECT_PATH + File.separator +"A.java"),Charset.defaultCharset());
+			String contentBJava = FileUtils.readFileToString(new File(SRC_TEMP_DIRECT_PATH + File.separator +"B.java"),Charset.defaultCharset());
 			
 			try {
-				parser.parseProject();
-				
+				List<CompilationUnit> cu = parser.parseProject();
+				assertEquals(2, cu.size());
+				String cuContent0 = cu.get(0).toString();
+				String cuContent1 = cu.get(1).toString();
+				// Supprimez les espaces inutiles et normalisez le formatage
+				contentAJava = contentAJava.replaceAll("\\s+", "");
+				cuContent0 = cuContent0.replaceAll("\\s+", "");
+				assertEquals(contentAJava, cuContent0);
+				contentBJava = contentBJava.replaceAll("\\s+", "");
+				cuContent1 = cuContent1.replaceAll("\\s+", "");
+				assertEquals(contentAJava, cuContent0);
+
 			} catch (IOException e) {
 				fail("Une erreur est survenue lors du parsing du Projet \n" + e.getMessage());
 				e.printStackTrace();
 			}
 			
-		} catch (NullPointerException | FileNotFoundException e) {
-			fail("Une exception est survenue lors de l'initialisation de l'AST : \n" + e.getMessage());
-			e.printStackTrace();
+		} catch (NullPointerException | IOException e) {
+			if (e instanceof IOException) {
+				e.printStackTrace();
+			}else {
+				fail("Une exception est survenue lors de l'initialisation de l'AST : \n" + e.getMessage());
+				e.printStackTrace();
+			}
 		} 
-
     	
     }
 
@@ -106,6 +128,4 @@ class TestEclipseJDTParser {
         }
     }
 	
-
-
 }
