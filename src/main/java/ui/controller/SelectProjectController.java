@@ -8,13 +8,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
 import processor.MenuProcessor;
 import processor.MyProcessor;
 import ui.template.CheckBoxPanelTemplate;
@@ -34,7 +32,6 @@ public class SelectProjectController  {
 	private JPanel cardPanel;
 	private CheckBoxPanelTemplate checkBoxPanelBasique;
 	private CheckBoxPanelTemplate checkBoxPanelComplementaire;
-	
 	private CardLayout cardLayout;
 	private LabelMap labels = new LabelMap();
 	private HashSet<String> methodsForProcessor = new HashSet<>();
@@ -97,74 +94,29 @@ public class SelectProjectController  {
     {
         public void actionPerformed(ActionEvent e) 
         {
-        	
-        	
         	 if(my_path != "" ) {
         		 MenuProcessor menuProcessor = new MenuProcessor(my_path);
-        		 
         		 if(!checkBoxPanelBasique.getMethodsForProcessor().isEmpty()) 
         		 {
         			 methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
         			 results = menuProcessor.selectBasicAnalytics(methodsForProcessor);
-        			// Récupérer la valeur actuelle du Spinner
-                     
-        			 
+        			// Récupérer la valeur actuelle du Spinner 
            			 ResultsPanel  panel2 = new ResultsPanel(frame,results,"Analyse de base");
            			 cardPanel.add(panel2, "Panel2");
            			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
-        			 
-        
+
         			 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
         			 
         		 }
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
-             			 Results2Panel  panel3 = new Results2Panel(frame);
-             		     cardPanel.add(panel3, "Panel3");
-             			
-             			
-             			// analyse top 10%
-             			if (methodsForProcessor.contains("8")||methodsForProcessor.contains("9") ||methodsForProcessor.contains("12"))
-             			{
-	               			 results2 = menuProcessor.selectGetTopClasses(methodsForProcessor);
-	               			
-	               	
-	               			 
-	             				panel3.printResults(results2, "Analyse complémentaire");
-
-	            			 
-	            			
-	            		
-               			 
-             			}
-             			else if (methodsForProcessor.contains("10")||methodsForProcessor.contains("11"))
-             			{
-             				if(methodsForProcessor.contains("11")) {
-             					results3=menuProcessor.selectOther(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
-             				}else {
-             					results3=menuProcessor.selectOther(methodsForProcessor);
-             				}
-	               			 
-             				panel3.printResults2(results3, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
-	               		
-	               			
-	            			 
-
-             			}
-             			else if (methodsForProcessor.contains("13")) {
-             				// derrier analyse
-             			}
+             			Results2Panel  panel3 = new Results2Panel(frame);
+             		    cardPanel.add(panel3, "Panel3");
+             		    results2 = menuProcessor.selectComplAnalytics(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
+             		    panel3.printResults(results2, "Analyse complémentaire");
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
-             			 cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
-             	 }
-        		 
-        		 
-               /* try {
-					myProcessor.getParser().parseProject();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
+             			cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
+             	 } 
         	}
         	 else {
         		 JOptionPane.showMessageDialog(frame, "Vous n'avez pas selectioné de projet");
@@ -181,6 +133,7 @@ public class SelectProjectController  {
         	cardLayout.show(cardPanel, "Panel1");
         }
     };
+    
     
     /**
      * Gestinnaire d'évévements 

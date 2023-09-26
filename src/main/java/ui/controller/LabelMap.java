@@ -18,9 +18,9 @@ public class LabelMap extends HashMap<String,Map<String,String>>
 		labels1.put("6", "Nombre moyen de lignes de code par méthode");
 		labels1.put("7", "Nombre moyen d’attributs par classe");
 		Map<String, String> labels2 = new HashMap<>();
-		labels2.put("8", "Les 10% des classes avec le plus méthodes");
-		labels2.put("9", "Les 10% des classes avec le plus d’attribut");
-		labels2.put("10", "Les classes des 	deux catégories	précédentes");
+		labels2.put("8", " Les 10% des classes avec le plus méthodes (a)");
+		labels2.put("9", "Les 10% des classes avec le plus d’attribut (b)");
+		labels2.put("10", "Les classes des 	deux catégories précédentes (a, b)");
 		labels2.put("11", "Les classes qui possèdent plus de X méthodes");
 		labels2.put("12", "Les 10%	des	méthodes avec le plus de lignes par classe");
 		labels2.put("13", "Le nombre maximal de	paramètres");
