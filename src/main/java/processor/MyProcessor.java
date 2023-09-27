@@ -6,6 +6,10 @@ import visitor.ClassInterfaceVisitor;
 import visitor.MethodDeclarationVisitor;
 import visitor.PackageDeclarationVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+
+import graph.Graphe;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +36,13 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
 
     @Override
     public void setParser(String projectPath) {
-        parser = new EclipseJDTParser(projectPath);
+        try {
+			parser = new EclipseJDTParser(projectPath);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
     }
 
     public int countPackagesInProject() throws IOException {
@@ -274,6 +284,12 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
         resultatFinal.addAllResultat(firstNElements);
         return resultatFinal;
     }
+    
+    public void showAbre() {
+    	Graphe graphe = new Graphe();
+    	
+    }
+    
     public void testmethod(int a, int b, int c, int d, int e) {
     	
     }

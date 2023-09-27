@@ -18,6 +18,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -25,9 +27,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 public class Parser {
 	
 //	public static final String projectPath = "C:\\Users\\manil\\Desktop\\Master_ico\\Master__2\\HAI913I - Evolution et restructuration des logiciels\\Dev\\org.anonbnr.design_patterns";
-	public static final String projectPath = "C:\\Users\\victo\\eclipse-workspace\\promotions";
-	public static final String projectSourcePath = projectPath + "\\src";
-	public static final String jrePath = "C:\\Program Files\\Java\\jre1.8.0_51\\lib\\rt.jar";
+	public static final String projectPath = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
+	public static final String projectSourcePath = projectPath + "/src";
+	public static final String jrePath = System.getProperty("java.home");
 	public static int classCount = 0;
 	public static int appLineCount = 0;
 	public static int appMethodCount = 0;
@@ -46,40 +48,42 @@ public class Parser {
 //			System.out.println(content);
 
 			CompilationUnit parse = parse(content.toCharArray());
-			String currentPackageName = parse.getPackage().getName().getFullyQualifiedName();
+			//String currentPackageName = parse.getPackage().getName().getFullyQualifiedName();
 			
 						
 			// print package info
-			if (!currentPackageName.equals(previousPackageName)) {
+			/*if (!currentPackageName.equals(previousPackageName)) {
 				printPackageInfo(parse);
 				previousPackageName = currentPackageName;
 				System.out.println("Classes :\n");
-			}
+			}*/
 			
 			// print class info
-			printClassInfo(parse);
+			//printClassInfo(parse);
 			// print class & interface info
-			printClassInterfaceInfo(parse);
+			//printClassInterfaceInfo(parse);
 			
 			// print enum info
-			printEnumInfo(parse);
+			//printEnumInfo(parse);
 			
 			// print methods info
-			printMethodInfo(parse);
+			//printMethodInfo(parse);
 
 			// print variables info
 			//printVariableInfo(parse);
 			
 			//print method invocations
-			//printMethodInvocationInfo(parse);
+			printMethodInvocationInfo(parse);
 						
 			System.out.println("\n");
+			
+			
 		}
 		
-		System.out.println("nb de ligne de l'app : " + appLineCount);
+		/*System.out.println("nb de ligne de l'app : " + appLineCount);
 		System.out.println("nb de classe de l'app : " + classCount);
 		System.out.println("nb de methode de l'app : " + appMethodCount);
-
+	*/
 	}
 
 	// read all java files from specific folder
@@ -202,7 +206,8 @@ public class Parser {
 				System.out.println("variable name: "
 						+ variableDeclarationFragment.getName()
 						+ " variable Initializer: "
-						+ variableDeclarationFragment.getInitializer());
+						+ variableDeclarationFragment.getInitializer()
+						+ "\n");
 			}
 
 		}
@@ -212,18 +217,34 @@ public class Parser {
 		public static void printMethodInvocationInfo(CompilationUnit parse) {
 
 			MethodDeclarationVisitor visitor1 = new MethodDeclarationVisitor();
-			parse.accept(visitor1);
+			 parse.accept(visitor1);
 			for (MethodDeclaration method : visitor1.getMethods()) {
-
+				
+				System.err.println("----------------"+ method.getName());
 				MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
 				method.accept(visitor2);
 
 				for (MethodInvocation methodInvocation : visitor2.getMethods()) {
-					System.out.println("method " + method.getName() + " invoc method "
-							+ methodInvocation.getName());
+					
+					System.out.println(method.getName()+"---"+method);
+					
+					 /*IMethodBinding methodBinding = methodInvocation.resolveMethodBinding();
+				        if (methodBinding != null) {
+				            ITypeBinding declaringClass = methodBinding.getDeclaringClass();
+				            String className = declaringClass.getQualifiedName();
+				            String packageName = declaringClass.getPackage().getName();
+				            String methodName = methodBinding.getName();
+				            
+				           
+				           // System.out.println("Package: " + packageName);
+				            System.out.println("Class: " + className);
+				            System.out.println("Method: " + methodName);
+				        }*/
+					
+					
+					
 				}
-
 			}
-		}
 
+		}
 }
