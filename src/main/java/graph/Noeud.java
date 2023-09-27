@@ -6,8 +6,7 @@ public class Noeud {
 	private String classeName;
 	private String methodName;
 	
-	public Noeud(String packageName, String classeName, String methodName) {
-		this.packageName = packageName;
+	public Noeud( String classeName, String methodName) {
 		this.classeName = classeName;
 		this.methodName = methodName;
 	}
@@ -32,7 +31,11 @@ public class Noeud {
 
 	
 	public String toStringID() {
-		return packageName + "." + classeName + "." + methodName;
+		return  classeName + "." + methodName;
+	}
+	@Override
+	public String toString() {
+		return "Noeud [classeName=" + classeName + ", methodName=" + methodName + "]";
 	}
 	
 

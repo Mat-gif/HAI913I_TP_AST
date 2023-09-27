@@ -29,6 +29,12 @@ public class PetitArbre {
 	public void addEnfant(Noeud enfant) {
 		getEnfants().add(enfant);
 	}
+
+
+	@Override
+	public String toString() {
+		return "PetitArbre [parent=" + parent + ", enfants=" + enfants + "]";
+	}
 	
 
 	

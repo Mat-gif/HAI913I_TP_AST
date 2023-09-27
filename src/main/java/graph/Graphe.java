@@ -39,4 +39,12 @@ public class Graphe {
 			addSommet(arbre);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Graphe [grapheNonTrie=" + grapheNonTrie + ", listOfMain=" + listOfMain + "]";
+	}
+	
+	
+	
 }

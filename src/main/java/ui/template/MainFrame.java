@@ -20,6 +20,8 @@ import javax.swing.JRadioButton;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
+import org.eclipse.jdt.core.dom.Initializer;
+
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 import ui.template.CustomJPanel.MainPanel;
@@ -38,6 +40,9 @@ public class MainFrame {
                 try {
                     MainFrame window = new MainFrame();
                     window.frame.setVisible(true);
+                
+                    
+                    
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -73,6 +78,9 @@ public class MainFrame {
         cardLayout.show(cardPanel, "Panel1"); // Affichez initialement le panel1
         
         controller = new SelectProjectController(frame,panel1,cardLayout,cardPanel);
+        
+  
+       
         panel1.addAllListener(controller);
        
 

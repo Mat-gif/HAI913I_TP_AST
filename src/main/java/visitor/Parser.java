@@ -1,11 +1,17 @@
 package visitor;
 
+import java.awt.Dimension;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.internal.utils.FileUtil;
@@ -17,6 +23,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -24,15 +31,25 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.view.mxGraph;
+
+import graph.Graphe;
+import graph.Noeud;
+import graph.PetitArbre;
+
+
 public class Parser {
 	
 //	public static final String projectPath = "C:\\Users\\manil\\Desktop\\Master_ico\\Master__2\\HAI913I - Evolution et restructuration des logiciels\\Dev\\org.anonbnr.design_patterns";
-	public static final String projectPath = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
+	public static final String projectPath = "/home/mathieu/Téléchargements/promotions";
 	public static final String projectSourcePath = projectPath + "/src";
 	public static final String jrePath = System.getProperty("java.home");
 	public static int classCount = 0;
 	public static int appLineCount = 0;
 	public static int appMethodCount = 0;
+	
+	private static Graphe myGraph = new Graphe();
 	
 	public static void main(String[] args) throws IOException {
 
@@ -76,9 +93,60 @@ public class Parser {
 			printMethodInvocationInfo(parse);
 						
 			System.out.println("\n");
-			
+	
 			
 		}
+		//System.out.println(myGraph.toString());
+		
+		System.out.println(myGraph.getGrapheNonTrie().get("promotions.Etudiant.statut"));
+
+	
+		
+	      SwingUtilities.invokeLater(() -> {
+	            JFrame frame = new JFrame("AST Graph Viewer");
+	            frame.setBounds(100, 100, 1000, 800);
+	            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	            mxGraph graph = new mxGraph();
+				Object parent = graph.getDefaultParent();
+          
+
+				graph.getModel().beginUpdate();
+
+				try {
+					Object v1 = graph.insertVertex(parent, null, myGraph.getGrapheNonTrie().get("promotions.Etudiant.statut").getParent().toStringID(), 20, 20, 80, 30);
+					myGraph.getGrapheNonTrie().get("promotions.Etudiant.statut").getEnfants().forEach(e->{
+						
+						 Object v2 = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
+				         
+
+				           
+				                graph.insertEdge(parent, null, "", v1, v2);
+				           
+						
+					});
+
+				  
+
+
+				           
+
+				       
+				   
+				} finally {
+				    graph.getModel().endUpdate();
+				}
+
+				mxGraphComponent graphComponent = new mxGraphComponent(graph);
+				graphComponent.setPreferredSize(new Dimension(500, 500)); // Modifiez la taille selon vos besoins
+
+				frame.getContentPane().add(graphComponent); // Ajoutez le composant au contenu de la fenêtre
+
+	            frame.pack(); // Ajustez la taille de la fenêtre pour contenir le composant
+	            frame.setVisible(true);
+	        });
+		
+		
 		
 		/*System.out.println("nb de ligne de l'app : " + appLineCount);
 		System.out.println("nb de classe de l'app : " + classCount);
@@ -213,38 +281,65 @@ public class Parser {
 		}
 	}
 	
+	
+
+	
 	// navigate method invocations inside method
-		public static void printMethodInvocationInfo(CompilationUnit parse) {
+    public static void printMethodInvocationInfo(CompilationUnit parse) {
+    	
+        MethodDeclarationVisitor visitor1 = new MethodDeclarationVisitor();
+        parse.accept(visitor1);
+        
+        
+        ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
+		parse.accept(visitor);
+		PackageDeclarationVisitor vis = new PackageDeclarationVisitor();
+		parse.accept(vis);
+		
+		
+        
+        
+        for (MethodDeclaration method : visitor1.getMethods()) {
+            MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
+            method.accept(visitor2);
+            
+            //ystem.out.println(vis.getPackageName()+"."+visitor.printClassName()+"--------- method " + method.getName());
+            
+            PetitArbre arbre = new PetitArbre(new Noeud(vis.getPackageName()+"."+visitor.printClassName(), method.getName().getFullyQualifiedName()));
 
-			MethodDeclarationVisitor visitor1 = new MethodDeclarationVisitor();
-			parse.accept(visitor1);
-			for (MethodDeclaration method : visitor1.getMethods()) {
-				
-				System.err.println("----------------"+ method.getName());
-				MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
-				method.accept(visitor2);
+            
+            
+            for (MethodInvocation methodInvocation : visitor2.getMethods()) {
+            	
+            	if(!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
+            		//System.out.println("--- invoc method "+ methodInvocation.getName() + " de la classe " + getDeclaringClassName(methodInvocation));}
+            		
+            		arbre.addEnfant(new Noeud(getDeclaringClassName(methodInvocation), methodInvocation.getName().getFullyQualifiedName()));
+            		
+            		
+            	}
+            	
+            	
+            }
+            
+            
+            
+            myGraph.checkMainOrSommet(arbre);
+            	
+        }
+        
 
-				for (MethodInvocation methodInvocation : visitor2.getMethods()) {
-					
-					System.out.println(method.getName()+"---"+method);
-					
-					 /*IMethodBinding methodBinding = methodInvocation.resolveMethodBinding();
-				        if (methodBinding != null) {
-				            ITypeBinding declaringClass = methodBinding.getDeclaringClass();
-				            String className = declaringClass.getQualifiedName();
-				            String packageName = declaringClass.getPackage().getName();
-				            String methodName = methodBinding.getName();
-				            
-				           
-				           // System.out.println("Package: " + packageName);
-				            System.out.println("Class: " + className);
-				            System.out.println("Method: " + methodName);
-				        }*/
-					
-					
-					
-				}
-			}
 
-		}
+    }
+    
+    private static String getDeclaringClassName(MethodInvocation methodInvocation) {
+        IMethodBinding methodBinding = methodInvocation.resolveMethodBinding();
+        if (methodBinding != null) {
+            ITypeBinding typeBinding = methodBinding.getDeclaringClass();
+            if (typeBinding != null) {
+                return typeBinding.getQualifiedName();
+            }
+        }
+        return "UnknownClass";
+    }
 }
