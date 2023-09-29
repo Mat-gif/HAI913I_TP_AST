@@ -5,10 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -24,14 +21,18 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxGraph;
 
 import graph.Graphe;
@@ -76,9 +77,9 @@ public class Parser {
 			}*/
 			
 			// print class info
-			//printClassInfo(parse);
+			printClassInfo(parse);
 			// print class & interface info
-			//printClassInterfaceInfo(parse);
+			printClassInterfaceInfo(parse);
 			
 			// print enum info
 			//printEnumInfo(parse);
@@ -98,7 +99,7 @@ public class Parser {
 		}
 		//System.out.println(myGraph.toString());
 		
-		System.out.println(myGraph.getGrapheNonTrie().get("promotions.Etudiant.statut"));
+		System.out.println(myGraph.getGrapheNonTrie().get("promotions.PromotionArrayList.PromotionArrayList"));
 
 	
 		
@@ -108,6 +109,11 @@ public class Parser {
 	            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	            mxGraph graph = new mxGraph();
+	            graph.setCellsEditable(false); // Désactiver l'édition
+	            graph.setCellsMovable(false); // Désactiver le déplacement
+	            graph.setCellsResizable(false); // Désactiver le redimensionnement
+	            graph.setDropEnabled(false); // Désactiver le glisser-déposer
+	            graph.setSplitEnabled(false); // Désactiver la divisio
 				Object parent = graph.getDefaultParent();
           
 
@@ -115,10 +121,19 @@ public class Parser {
 
 				try {
 					Object v1 = graph.insertVertex(parent, null, myGraph.getGrapheNonTrie().get("promotions.Etudiant.statut").getParent().toStringID(), 20, 20, 80, 30);
+					   // Obtenez les dimensions préférées en fonction du contenu textuel
+				    mxRectangle dimensions = graph.getPreferredSizeForCell(v1);
+
+				    // Mettez à jour les dimensions du vertex
+				    graph.resizeCell(v1, dimensions);
 					myGraph.getGrapheNonTrie().get("promotions.Etudiant.statut").getEnfants().forEach(e->{
 						
 						 Object v2 = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
-				         
+						   // Obtenez les dimensions préférées en fonction du contenu textuel
+						    mxRectangle dimensions2 = graph.getPreferredSizeForCell(v2);
+
+						    // Mettez à jour les dimensions du vertex
+						    graph.resizeCell(v2, dimensions2);
 
 				           
 				                graph.insertEdge(parent, null, "", v1, v2);
@@ -127,7 +142,9 @@ public class Parser {
 					});
 
 				  
-
+					// Utilisez l'algorithme hierarchique pour organiser les vertex
+				    mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
+				    layout.execute(parent);
 
 				           
 
@@ -157,7 +174,7 @@ public class Parser {
 	// read all java files from specific folder
 	public static ArrayList<File> listJavaFilesForFolder(final File folder) {
 		ArrayList<File> javaFiles = new ArrayList<File>();
-		for (File fileEntry : folder.listFiles()) {
+		for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
 			if (fileEntry.isDirectory()) {
 				javaFiles.addAll(listJavaFilesForFolder(fileEntry));
 			} else if (fileEntry.getName().contains(".java")) {
@@ -285,55 +302,92 @@ public class Parser {
 
 	
 	// navigate method invocations inside method
-    public static void printMethodInvocationInfo(CompilationUnit parse) {
-    	
-        MethodDeclarationVisitor visitor1 = new MethodDeclarationVisitor();
-        parse.accept(visitor1);
+    public static void printMethodInvocationInfo(CompilationUnit parse) 
+    {
+    	// Trouver les méthodes déclaré
+        MethodDeclarationVisitor methodDeclarationVisitor = new MethodDeclarationVisitor();
+        parse.accept(methodDeclarationVisitor);
         
-        
-        ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
-		parse.accept(visitor);
-		PackageDeclarationVisitor vis = new PackageDeclarationVisitor();
-		parse.accept(vis);
+        // Trouver la classe courant
+        ClassInterfaceVisitor classInterfaceVisitor = new ClassInterfaceVisitor();
+		parse.accept(classInterfaceVisitor);
 		
+		// Trouver le package courant
+		PackageDeclarationVisitor packageDeclarationVisitor = new PackageDeclarationVisitor();
+		parse.accept(packageDeclarationVisitor);
 		
-        
-        
-        for (MethodDeclaration method : visitor1.getMethods()) {
-            MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
-            method.accept(visitor2);
-            
-            //ystem.out.println(vis.getPackageName()+"."+visitor.printClassName()+"--------- method " + method.getName());
-            
-            PetitArbre arbre = new PetitArbre(new Noeud(vis.getPackageName()+"."+visitor.printClassName(), method.getName().getFullyQualifiedName()));
+		// Pour tout les méthodes déclarées je cherche les méthodes quil invoque
+        for (MethodDeclaration methodDeclaration : methodDeclarationVisitor.getMethods()) 
+        {
+        	// Trouver les méthodes invoqués
+            MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
+            methodDeclaration.accept(methodInvocationVisitor);
+            PetitArbre arbre ;
+            if(!myGraph.isExist(packageDeclarationVisitor.getPackageName()+"."+classInterfaceVisitor.printClassName()+"."+methodDeclaration.getName().getFullyQualifiedName())) {
+                 arbre = new PetitArbre(
+                		new Noeud(
+                				packageDeclarationVisitor.getPackageName()+"."+classInterfaceVisitor.printClassName(), 
+                				methodDeclaration.getName().getFullyQualifiedName()
+                				));
 
-            
-            
-            for (MethodInvocation methodInvocation : visitor2.getMethods()) {
-            	
-            	if(!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
-            		//System.out.println("--- invoc method "+ methodInvocation.getName() + " de la classe " + getDeclaringClassName(methodInvocation));}
-            		
-            		arbre.addEnfant(new Noeud(getDeclaringClassName(methodInvocation), methodInvocation.getName().getFullyQualifiedName()));
-            		
-            		
-            	}
-            	
-            	
+            }else {
+            	 arbre = myGraph.getPetitArbreByKey(packageDeclarationVisitor.getPackageName()+"."+classInterfaceVisitor.printClassName()+"."+methodDeclaration.getName().getFullyQualifiedName());
             }
             
+            if(methodDeclaration.isConstructor()) {
+            	System.out.println(arbre.toString());
+            }
+          
+     
+            // Pour chaque méthodes invoqué je regarde si c'est une class definit dans notre projet
+            for (MethodInvocation methodInvocation : methodInvocationVisitor.getMethods()) 
+            {
+            	if(!getDeclaringClassName(methodInvocation).contains("UnknownClass")) 
+            	{
+            		arbre.addEnfant(
+            				new Noeud(getDeclaringClassName(methodInvocation), 
+            						methodInvocation.getName().getFullyQualifiedName()
+            						));
+            	}
+            }
             
-            
-            myGraph.checkMainOrSommet(arbre);
-            	
-        }
+           	// Trouver les constructors invoqués
+            ConstructorInvocationVisitor constructorInvocationVisitor = new ConstructorInvocationVisitor();
+            methodDeclaration.accept(constructorInvocationVisitor);
         
-
-
+            
+            for (ClassInstanceCreation classInstanceCreation : constructorInvocationVisitor.getMethods()) 
+            {
+            	if(!getDeclaringClassName2(classInstanceCreation).contains("UnknownClass")) 
+            	{        				
+            		arbre.addEnfant(
+            				new Noeud(getDeclaringClassName2(classInstanceCreation), 
+            						classInstanceCreation.getType().toString()
+            						));
+            	}
+            }
+           
+            myGraph.checkMainOrSommet(arbre);	
+        }
     }
+    
+    
+    
+    
     
     private static String getDeclaringClassName(MethodInvocation methodInvocation) {
         IMethodBinding methodBinding = methodInvocation.resolveMethodBinding();
+        if (methodBinding != null) {
+            ITypeBinding typeBinding = methodBinding.getDeclaringClass();
+            if (typeBinding != null) {
+                return typeBinding.getQualifiedName();
+            }
+        }
+        return "UnknownClass";
+    }
+    
+    private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation) {
+        IMethodBinding methodBinding = classInstanceCreation.resolveConstructorBinding();
         if (methodBinding != null) {
             ITypeBinding typeBinding = methodBinding.getDeclaringClass();
             if (typeBinding != null) {

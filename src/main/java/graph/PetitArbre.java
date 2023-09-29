@@ -27,7 +27,10 @@ public class PetitArbre {
 	}
 	
 	public void addEnfant(Noeud enfant) {
-		getEnfants().add(enfant);
+		if(!enfants.contains(enfant)) {
+			getEnfants().add(enfant);
+		}
+		
 	}
 
 

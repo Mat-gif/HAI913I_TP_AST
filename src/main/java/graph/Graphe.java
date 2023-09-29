@@ -39,6 +39,14 @@ public class Graphe {
 			addSommet(arbre);
 		}
 	}
+	
+	public boolean isExist(String val) {
+		return grapheNonTrie.containsKey(val);
+	}
+	
+	public PetitArbre getPetitArbreByKey(String val) {
+		return grapheNonTrie.get(val);
+	}
 
 	@Override
 	public String toString() {

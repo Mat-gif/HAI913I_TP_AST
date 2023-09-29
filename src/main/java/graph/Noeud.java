@@ -5,11 +5,14 @@ public class Noeud {
 	private String packageName;
 	private String classeName;
 	private String methodName;
+
 	
 	public Noeud( String classeName, String methodName) {
 		this.classeName = classeName;
 		this.methodName = methodName;
 	}
+	
+
 	public String getPackageName() {
 		return packageName;
 	}
