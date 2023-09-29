@@ -1,11 +1,14 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class PetitArbre {
 
 	private Noeud parent;
-	private ArrayList<Noeud> enfants = new ArrayList<Noeud>();
+	private Set<Noeud> enfants = new HashSet<Noeud>();
 	
 	
 	public PetitArbre(Noeud parent) {
@@ -19,17 +22,28 @@ public class PetitArbre {
 	public void setParent(Noeud parent) {
 		this.parent = parent;
 	}
-	public ArrayList<Noeud> getEnfants() {
+	public Set<Noeud> getEnfants() {
 		return enfants;
 	}
-	public void setEnfants(ArrayList<Noeud> enfants) {
+	public void setEnfants(Set<Noeud> enfants) {
 		this.enfants = enfants;
 	}
 	
 	public void addEnfant(Noeud enfant) {
-		if(!enfants.contains(enfant)) {
-			getEnfants().add(enfant);
-		}
+		
+			boolean existe = false;
+			for(Noeud e : enfants) {
+				if(e.toStringID().equals(enfant.toStringID())) {
+					existe=true;
+					break;
+				}
+			}
+			if(!existe) {
+				getEnfants().add(enfant);
+			}
+			
+	
+			
 		
 	}
 

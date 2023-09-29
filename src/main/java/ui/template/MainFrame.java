@@ -54,7 +54,7 @@ public class MainFrame {
         initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         
         frame.setBounds(myParam.getxFenetre(), myParam.getyFenetre(), myParam.getLargeurFenetre(), myParam.getHauteurFenetre());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
