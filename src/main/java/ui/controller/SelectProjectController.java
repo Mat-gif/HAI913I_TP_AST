@@ -3,6 +3,8 @@ package ui.controller;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,13 +15,17 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
+import graph.Graphe;
 import processor.MenuProcessor;
 import processor.MyProcessor;
 import ui.template.CheckBoxPanelTemplate;
 import ui.template.FolderChooserTemplate;
 import ui.template.CustomJPanel.MainPanel;
+import visitor.UIParser;
 import ui.template.CustomJPanel.AdditionalResultsPanel;
 import ui.template.CustomJPanel.BasicResultsPanel;
+import ui.template.CustomJPanel.GraphPanel;
 
 public class SelectProjectController  {
 	
@@ -110,7 +116,37 @@ public class SelectProjectController  {
              		    panel3.printResults(results2, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
              			cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
-             	 } 
+             	 } else {
+             		 UIParser graph =  new UIParser();
+             		 try {
+						graph.GraphPanel(my_path);
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+             		 //GraphPanel panel4 = new GraphPanel(frame);
+          		    //cardPanel.add(panel4, "Panel4");
+          		    //try {
+						//Graphe results3 = menuProcessor.graphAnalytics();
+						
+             				 
+						//System.err.println(results3.toString());
+						
+						//panel4.printResults( results3);
+             			//panel4.getBtnTerminer().addActionListener(buttonQuitListener);
+             			//cardLayout.show(cardPanel, "Panel4"); // Affichez  le panel2
+
+						
+						
+					//} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						//e1.printStackTrace();
+					//} 
+             		 
+             	 }
         	}
         	 else {
         		 JOptionPane.showMessageDialog(frame, "Vous n'avez pas selectioné de projet");
