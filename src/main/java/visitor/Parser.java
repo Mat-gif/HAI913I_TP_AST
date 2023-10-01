@@ -43,8 +43,8 @@ import graph.PetitArbre;
 public class Parser {
 
 //	public static final String projectPath = "C:\\Users\\manil\\Desktop\\Master_ico\\Master__2\\HAI913I - Evolution et restructuration des logiciels\\Dev\\org.anonbnr.design_patterns";
-	public static final String projectPath = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
-	//public static final String projectPath = "/home/mathieu/Téléchargements/promotions";
+	//public static final String projectPath = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
+	public static final String projectPath = "C:\\\\Users\\\\victo\\\\Documents\\GitHub\\\\\\HAI913I_TP_AST";
 	
 	public static final String projectSourcePath = projectPath + "/src";
 	public static final String jrePath = System.getProperty("java.home");
