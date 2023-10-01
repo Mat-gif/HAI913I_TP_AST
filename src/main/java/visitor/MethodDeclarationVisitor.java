@@ -20,27 +20,27 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 		setMethodsParameters();
 		return super.visit(node);
 	}
-	
+
 	public List<MethodDeclaration> getMethods() {
 		return methods;
 	}
-	
+
 	public void setMethodsLines() {
 		for (MethodDeclaration method : getMethods()) {
-            methodsLines.put(method.getName().toString(), countLinesOfMethod(method.toString()));//
+			methodsLines.put(method.getName().toString(), countLinesOfMethod(method.toString()));//
 		}
 	}
-	
+
 	public HashMap<String, Integer> getMethodsLines() {
 		return methodsLines;
 	}
-	
+
 	public void setMethodsParameters() {
 		for (MethodDeclaration method : getMethods()) {
-            methodsParamaters.put(method.getName().toString(), method.parameters().size());//
+			methodsParamaters.put(method.getName().toString(), method.parameters().size());//
 		}
 	}
-	
+
 	public HashMap<String, Integer> getMethodsParameters() {
 		return methodsParamaters;
 	}
@@ -55,24 +55,24 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 					+ " | " + countLinesOfMethod(method.toString()));
 		}
 	}
-	
+
 	public void printMethodCount() {
 		System.out.println("- NB OF METHODS : " + getMethods().size());
 	}
-	
-    public int countLinesOfMethod(String methodCode) {
-//    	javaCode = javaCode.replaceAll( "//.*|(\"(?:\\\\[^\"]|\\\\\"|.)*?\")|(?s)/\\*.*?\\*/", "$1 " );
-        String[] lines = methodCode.split("\r\n|\r|\n");
-        int lineCount = 0;
-        for (String line : lines) {
-            // Ignorer les lignes vides et les commentaires
-            String trimmedLine = line.trim();
-            if (!trimmedLine.isEmpty() && !trimmedLine.startsWith("//")) {
-                lineCount++;
-            }
-        }
-        return lineCount;
-    }
+
+	public int countLinesOfMethod(String methodCode) {
+		//    	javaCode = javaCode.replaceAll( "//.*|(\"(?:\\\\[^\"]|\\\\\"|.)*?\")|(?s)/\\*.*?\\*/", "$1 " );
+		String[] lines = methodCode.split("\r\n|\r|\n");
+		int lineCount = 0;
+		for (String line : lines) {
+			// Ignorer les lignes vides et les commentaires
+			String trimmedLine = line.trim();
+			if (!trimmedLine.isEmpty() && !trimmedLine.startsWith("//")) {
+				lineCount++;
+			}
+		}
+		return lineCount;
+	}
 
 	public int getLinesOfMethod() {
 		return countLinesOfMethod(methodCode);

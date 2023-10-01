@@ -5,6 +5,8 @@ import visitor.ClassInterfaceVisitor;
 import visitor.MethodDeclarationVisitor;
 import visitor.PackageDeclarationVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +33,15 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
 
     @Override
     public void setParser(String projectPath) {
-        parser = new EclipseJDTParser(projectPath);
+        try {
+			parser = new EclipseJDTParser(projectPath);
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public int countPackagesInProject() throws IOException {

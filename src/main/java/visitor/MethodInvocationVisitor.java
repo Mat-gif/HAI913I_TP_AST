@@ -1,5 +1,6 @@
 package visitor;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,4 +30,17 @@ public class MethodInvocationVisitor extends ASTVisitor {
 	public List<SuperMethodInvocation> getSuperMethod() {
 		return superMethods;
 	}
+	
+	public Method getMethodFromInvocation(MethodInvocation methodInvocation) {
+        try {
+            // Utilisation de la réflexion pour accéder à la méthode "getMethod" dans MethodInvocation
+            java.lang.reflect.Method getMethodMethod = methodInvocation.getClass().getMethod("getMethod");
+            
+            // Appel de la méthode "getMethod" pour obtenir l'objet Method
+            return (Method) getMethodMethod.invoke(methodInvocation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

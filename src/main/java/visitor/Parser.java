@@ -18,13 +18,15 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+
 public class Parser {
 	
-//	public static final String projectPath = "C:\\Users\\manil\\Desktop\\Master_ico\\Master__2\\HAI913I - Evolution et restructuration des logiciels\\Dev\\org.anonbnr.design_patterns";
 	public static final String projectPath = "C:\\Users\\victo\\eclipse-workspace\\promotions";
 	public static final String projectSourcePath = projectPath + "\\src";
 	public static final String jrePath = "C:\\Program Files\\Java\\jre1.8.0_51\\lib\\rt.jar";
@@ -71,7 +73,7 @@ public class Parser {
 			//printVariableInfo(parse);
 			
 			//print method invocations
-			//printMethodInvocationInfo(parse);
+			printMethodInvocationInfo(parse);
 						
 			System.out.println("\n");
 		}
@@ -214,16 +216,26 @@ public class Parser {
 			MethodDeclarationVisitor visitor1 = new MethodDeclarationVisitor();
 			parse.accept(visitor1);
 			for (MethodDeclaration method : visitor1.getMethods()) {
-
 				MethodInvocationVisitor visitor2 = new MethodInvocationVisitor();
 				method.accept(visitor2);
+				
+				System.out.println("\nmethod " + method.getName());
 
 				for (MethodInvocation methodInvocation : visitor2.getMethods()) {
-					System.out.println("method " + method.getName() + " invoc method "
-							+ methodInvocation.getName());
-				}
-
+					System.out.println("--- invoc method "
+							+ methodInvocation.getName() + " de la classe " + getDeclaringClassName(methodInvocation));}
 			}
-		}
 
+		}
+		
+		private static String getDeclaringClassName(MethodInvocation methodInvocation) {
+		    IMethodBinding methodBinding = methodInvocation.resolveMethodBinding();
+		    if (methodBinding != null) {
+		        ITypeBinding typeBinding = methodBinding.getDeclaringClass();
+		        if (typeBinding != null) {
+		            return typeBinding.getQualifiedName();
+		        }
+		    }
+		    return "UnknownClass";
+		}
 }

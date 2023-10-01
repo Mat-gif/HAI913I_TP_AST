@@ -119,7 +119,7 @@ public class SelectProjectController  {
              	 } 
         	}
         	 else {
-        		 JOptionPane.showMessageDialog(frame, "Vous n'avez pas selectioné de projet");
+        		 JOptionPane.showMessageDialog(frame, "Vous n'avez pas selectionné de projet");
         	 }
         }
     };
