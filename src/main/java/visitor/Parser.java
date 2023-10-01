@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -97,10 +98,22 @@ public class Parser {
 
 		}
 		// System.out.println(myGraph.toString());
+		
+		
+		//System.err.println(myGraph.getGrapheNonTrie().get("SelectProjectController.SelectProjectController").toString());
 
-		myGraph.getListOfMain().forEach(e->System.err.println(e));
+		//myGraph.getListOfMain().forEach(e->System.err.println(e));
 
-		myGraph.getGrapheNonTrie().values().forEach(e->System.out.println(e.toString()));;
+		myGraph.getGrapheNonTrie().values().forEach(e->{
+			if(e.getParent().getClasseName().contains("SelectProjectController")) {
+				System.out.println(e);
+			}
+			
+			
+		}
+		
+		
+				);;
 
 		SwingUtilities.invokeLater(() -> {
 			JFrame frame = new JFrame("AST Graph Viewer");
@@ -126,20 +139,7 @@ public class Parser {
 						// Obtenez les dimensions préférées en fonction du contenu textuel
 						mxRectangle dimensions = graph.getPreferredSizeForCell(v1);
 
-						// Mettez à jour les dimensions du vertex
-						// graph.resizeCell(v1, dimensions);
-						// myGraph.getGrapheNonTrie().get("promotions.Etudiant.statut").getEnfants().forEach(e->{
-
-						// Object v2 = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
-						// Obtenez les dimensions préférées en fonction du contenu textuel
-						// mxRectangle dimensions2 = graph.getPreferredSizeForCell(v2);
-
-						// Mettez à jour les dimensions du vertex
-						// graph.resizeCell(v2, dimensions2);
-
-						// graph.insertEdge(parent, null, "", v1, v2);
-
-						// });
+			
 
 						myRec(m.getEnfants(), myGraph.getGrapheNonTrie(), graph, parent, v1);
 					}
@@ -319,6 +319,10 @@ public class Parser {
 		// Trouver les méthodes déclaré
 		MethodDeclarationVisitor methodDeclarationVisitor = new MethodDeclarationVisitor();
 		parse.accept(methodDeclarationVisitor);
+		
+		
+		ImportDeclarationVisitor importDeclarationVisitor = new ImportDeclarationVisitor();
+		parse.accept(importDeclarationVisitor);
 
 		// Trouver la classe courant
 		ClassInterfaceVisitor classInterfaceVisitor = new ClassInterfaceVisitor();
@@ -341,6 +345,7 @@ public class Parser {
 			MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
 			methodDeclaration.accept(methodInvocationVisitor);
 			PetitArbre arbre;
+			
 			if (!myGraph
 					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName()
 							+ "." + methodDeclaration.getName().getFullyQualifiedName())) {
@@ -358,8 +363,9 @@ public class Parser {
 			// projet
 			for (MethodInvocation methodInvocation : methodInvocationVisitor.getMethods()) {
 
-				System.err.println(methodInvocation.getName().getFullyQualifiedName());
+
 				if (!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
+				
 					arbre.addEnfant(new Noeud(getDeclaringClassName(methodInvocation),
 							methodInvocation.getName().getFullyQualifiedName()));
 				}
@@ -370,12 +376,13 @@ public class Parser {
 			methodDeclaration.accept(constructorInvocationVisitor);
 
 			for (ClassInstanceCreation classInstanceCreation : constructorInvocationVisitor.getMethods()) {
-				System.err.println(classInstanceCreation.getType());
-				System.err.println(!getDeclaringClassName2(classInstanceCreation).contains("UnknownClass"));
-				if (!getDeclaringClassName2(classInstanceCreation).contains("UnknownClass")) {
-					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation),
+				
+				if (!getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor).contains("UnknownClass")) {
+					
+					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor),
 							classInstanceCreation.getType().toString()));
 				}
+				
 			}
 			myGraph.checkMainOrSommet(arbre);
 
@@ -385,7 +392,11 @@ public class Parser {
 	private static String getDeclaringClassName(MethodInvocation methodInvocation) {
 		if (methodInvocation.resolveMethodBinding()!= null) {
 			String fullyQualifiedName = methodInvocation.resolveMethodBinding().getDeclaringClass().getQualifiedName();
-			return fullyQualifiedName;
+			System.out.println(fullyQualifiedName);
+			
+		
+				return fullyQualifiedName;
+	
 		}
 		return "UnknownClass";
 	}
@@ -410,10 +421,23 @@ public class Parser {
 	 * }
 	 */
 
-	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation) {
+	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor) {
 
-		String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
-		return fullyQualifiedName;
+			String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
+			String pac = null;
+			
 
+			for (ImportDeclaration i :importDeclarationVisitor.getImports()) {
+				if(i.getName().getFullyQualifiedName().contains(fullyQualifiedName)) {
+					 pac = i.getName().getFullyQualifiedName();
+					System.out.println(pac);
+					return pac;
+					
+				}
+			}
+			
+		
+			return fullyQualifiedName;
+		
 	}
 }
