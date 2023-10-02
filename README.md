@@ -1,5 +1,5 @@
 ---
-Authors:
+Authors: CAZERES MATHIEU, MARTIN-CHANTEREAU ETIENNE, MOREAUX VICTOR, LOUM MANIANG
 Parcours: ICO
 Title: Calcul statistique pour une application OO
 ---
@@ -56,8 +56,40 @@ Ce package est dédié à la logique du parsing. Il contient les composants resp
 
 ## Processor
 
+Le processor gère le traitement des données une fois qu'elles sont extraites par le parser. Les calculs statistiques et la génération des résultats, la gestion des interactions de l'uitilisateur sont effectués dans ce package
 
+- **Processor**
+  - MyProcessor.java
+  - Processor.java
+  - TestProcessor.java
 
 ## Visitor
 
+Le package "Visitor" est chargé de parcourir la structure du projet, analysé et extraire les informations dont nous avons besoin pour les calculs statistiques. Il fonctionne de concert avec le parser pour obtenir les données souhaitées.
+
+- **Processor**
+  - ClassInterfaceVisitor.java
+  - EnumVisitor.java
+  - JavaFileVisitor.java
+  - MethodDeclarationVisitor.java
+  - MethodInvocationVisitor.java
+  - PackageDeclarationVisitor.java
+  - Parser.java
+  - TypeDeclarationVisitor.java
+  - VariableDeclarationFragmentVisitor.java
+
+
+
+
+# Contributeurs et divisions des tâches 
+
+| Contributeurs                      | Tâche 1                | Tâche 2                 | Tâche 3                        |
+|------------------------------------|------------------------|-------------------------|--------------------------------|
+| CAZERES MATHIEU                    | Interface utilisateur  | Calculs statistiques    | Présentation des résultats     |
+| MARTIN-CHANTEREAU ETIENNE          | Parsing du projet      |                         |                                |
+| MOREAUX VICTOR                     | visitors               |                         |                                |
+| LOUM MANIANG                       | Processor              |                         |                                |
+
+
+# Commentaire 
 
