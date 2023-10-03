@@ -1,31 +1,15 @@
 package visitor;
 
 import java.awt.Dimension;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.io.FileUtils;
-import org.eclipse.core.internal.utils.FileUtil;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ConstructorInvocation;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -39,15 +23,12 @@ import com.mxgraph.view.mxGraph;
 import graph.Graphe;
 import graph.Noeud;
 import graph.PetitArbre;
+import parsers.EclipseJDTParser;
 
 public class UIParser {
 
-//	public static final String projectPath = "C:\\Users\\manil\\Desktop\\Master_ico\\Master__2\\HAI913I - Evolution et restructuration des logiciels\\Dev\\org.anonbnr.design_patterns";
-	//public static final String projectPath = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
-	private String projectPath ;
 	
-	private  String projectSourcePath;
-	public String jrePath = System.getProperty("java.home");
+	public static EclipseJDTParser parserEclipse;
 	public int classCount = 0;
 	public int appLineCount = 0;
 	public int appMethodCount = 0;
@@ -55,55 +36,15 @@ public class UIParser {
 	private static Graphe myGraph = new Graphe();
 
 	public  void GraphPanel(String path) throws IOException {
-		this.projectPath = path;
-		this.projectSourcePath = path + "/src";
-		// read java files
-		final File folder = new File(projectSourcePath);
-		ArrayList<File> javaFiles = listJavaFilesForFolder(folder);
-		String previousPackageName = "";
-
-		for (File fileEntry : javaFiles) {
-			String content = FileUtils.readFileToString(fileEntry);
-			// System.out.println(content);
-//			System.out.println(content);
-
-			CompilationUnit parse = parse(content.toCharArray());
-			// String currentPackageName =
-			// parse.getPackage().getName().getFullyQualifiedName();
-
-			// print package info
-			/*
-			 * if (!currentPackageName.equals(previousPackageName)) {
-			 * printPackageInfo(parse); previousPackageName = currentPackageName;
-			 * System.out.println("Classes :\n"); }
-			 */
-
-			// print class info
-			// printClassInfo(parse);
-			// print class & interface info
-			// printClassInterfaceInfo(parse);
-
-			// print enum info
-			// printEnumInfo(parse);
-
-			// print methods info
-			// printMethodInfo(parse);
-
-			// print variables info
-			// printVariableInfo(parse);
-
-			// print method invocations
+		
+		parserEclipse = new EclipseJDTParser(path);
+		
+		List<File> javaFiles = parserEclipse.listJavaProjectFiles();
+		for (File content : javaFiles) {
+			parserEclipse.configure();
+			CompilationUnit parse = parserEclipse.parse(content);
 			printMethodInvocationInfo(parse);
-
-			System.out.println("\n");
-
 		}
-		// System.out.println(myGraph.toString());
-		
-		
-		//System.err.println(myGraph.getGrapheNonTrie().get("SelectProjectController.SelectProjectController").toString());
-
-		//myGraph.getListOfMain().forEach(e->System.err.println(e));
 
 		
 
@@ -128,11 +69,6 @@ public class UIParser {
 					
 					if(!m.getEnfants().isEmpty()) {
 						Object v1 = graph.insertVertex(parent, null, m.getParent().getMethodName(), 20, 20, 80, 30);
-						// Obtenez les dimensions préférées en fonction du contenu textuel
-						mxRectangle dimensions = graph.getPreferredSizeForCell(v1);
-
-			
-
 						myRec(m.getEnfants(), myGraph.getGrapheNonTrie(), graph, parent, v1);
 					}
 					
@@ -186,46 +122,7 @@ public class UIParser {
 			});
 		}
 	}
-
-	// read all java files from specific folder
-	public static ArrayList<File> listJavaFilesForFolder(final File folder) {
-		ArrayList<File> javaFiles = new ArrayList<File>();
-		for (File fileEntry : Objects.requireNonNull(folder.listFiles())) {
-			if (fileEntry.isDirectory()) {
-				javaFiles.addAll(listJavaFilesForFolder(fileEntry));
-			} else if (fileEntry.getName().contains(".java")) {
-				// System.out.println(fileEntry.getName());
-				javaFiles.add(fileEntry);
-
-			}
-		}
-
-		return javaFiles;
-	}
-
-	// create AST
-	private  CompilationUnit parse(char[] classSource) {
-		ASTParser parser = ASTParser.newParser(AST.JLS4); // java +1.6
-		parser.setResolveBindings(true);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-
-		parser.setBindingsRecovery(true);
-
-		Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
-		parser.setCompilerOptions(options);
-
-		parser.setUnitName("");
-
-		String[] sources = { projectSourcePath };
-		String[] classpath = { jrePath };
-
-		parser.setEnvironment(classpath, sources, new String[] { "UTF-8" }, true);
-		parser.setSource(classSource);
-
-		return (CompilationUnit) parser.createAST(null); // create and parse
-	}
-
+	
 	// package information
 	public static void printPackageInfo(CompilationUnit parse) {
 		PackageDeclarationVisitor visitor = new PackageDeclarationVisitor();
@@ -233,11 +130,6 @@ public class UIParser {
 
 		visitor.printPackageName();
 	}
-
-	// class information
-	public static void printClassInfo(CompilationUnit parse) {
-		ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
-	};
 
 	// class & interface information
 	public  void printClassInterfaceInfo(CompilationUnit parse) {
