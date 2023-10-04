@@ -88,7 +88,7 @@ public class GraphPanel {
 				myGraph.getListOfMain().forEach(m -> {
 					
 					if(!m.getEnfants().isEmpty()) {
-						Object v1 = graph.insertVertex(parent, null, m.getParent().getMethodName(), 20, 20, 80, 30);
+						Object v1 = graph.insertVertex(parent, null, m.getParent().toStringID(), 20, 20, 80, 30);
 						// Obtenez les dimensions préférées en fonction du contenu textuel
 						mxRectangle dimensions = graph.getPreferredSizeForCell(v1);
 

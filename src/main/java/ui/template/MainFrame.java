@@ -17,6 +17,7 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
@@ -57,6 +58,7 @@ public class MainFrame {
     public void initialize() {
         
         frame.setBounds(myParam.getxFenetre(), myParam.getyFenetre(), myParam.getLargeurFenetre(), myParam.getHauteurFenetre());
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Créez un JPanel contenant un CardLayout

@@ -57,6 +57,10 @@ public class GraphController {
 		}
 
 
+		/*
+		myGraph.getGrapheNonTrie().forEach((k,v)->{
+			System.err.println(v);
+		});*/
 
 		SwingUtilities.invokeLater(() -> {
 			JFrame frame = new JFrame("AST Graph Viewer");
@@ -80,7 +84,9 @@ public class GraphController {
 					Object v1 = null;
 					if(!pa.getEnfants().isEmpty()) {
 						if (!myCells.containsKey(pa.getParent().toStringID())){
-							v1 = graph.insertVertex(parent, null, pa.getParent().getMethodName(), 20, 20, 80, 30);
+							v1 = graph.insertVertex(parent, null, pa.getParent().toStringID(), 20, 20, 80, 30);
+							//myGraph.deleteMyPetitArbre(pa.getParent().toStringID());
+							
 							myCells.put(pa.getParent().toStringID(), v1);
 						} else {
 							v1 = myCells.get(pa.getParent().toStringID());
@@ -124,6 +130,7 @@ public class GraphController {
 				if(!myCells.containsKey(e.toStringID())) {
 	
 					ve = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
+					
 					myCells.put(e.toStringID(), ve);
 
 				} else {
@@ -149,7 +156,7 @@ public class GraphController {
 					
 				myArcs.put(e.toStringID()+"-"+ idP, a);
 				
-				if(petitArbre!=null) {
+				if(petitArbre!=null && !e.toStringID().equals(idP)) {
 					myRec(petitArbre.getEnfants(), grapheNonTrie, graph, parent, ve, e.toStringID());
 				}
 			});
@@ -158,7 +165,7 @@ public class GraphController {
 
 	// package information
 	public static void printPackageInfo(CompilationUnit parse) {
-		PackageDeclarationVisitor visitor = new PackageD	eclarationVisitor();
+		PackageDeclarationVisitor visitor = new PackageDeclarationVisitor();
 		parse.accept(visitor);
 
 		visitor.printPackageName();
@@ -274,10 +281,20 @@ public class GraphController {
 								+ methodDeclaration.getName().getFullyQualifiedName());
 			}
 
+		
+			if(methodDeclaration.getName().getFullyQualifiedName().equals("myRec")) {
+				System.out.println(arbre.toString());
+				System.err.println(methodInvocationVisitor.getMethods().toString());
+			}
 			// Pour chaque méthodes invoqué je regarde si c'est une class definit dans notre
 			// projet
 			for (MethodInvocation methodInvocation : methodInvocationVisitor.getMethods()) {
 
+				
+				if(methodDeclaration.getName().getFullyQualifiedName().equals("myRec")) {
+					System.out.println(methodInvocation.getName().getFullyQualifiedName());
+					System.out.println("--");
+				}
 
 				if (!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
 
@@ -292,11 +309,11 @@ public class GraphController {
 
 			for (ClassInstanceCreation classInstanceCreation : constructorInvocationVisitor.getMethods()) {
 
-				if (!getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor).contains("UnknownClass")) {
+				//if (!getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()).contains("UnknownClass")) {
 
-					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor),
+					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()),
 							classInstanceCreation.getType().toString()));
-				}
+				//}
 
 			}
 			myGraph.checkMainOrSommet(arbre);
@@ -336,7 +353,7 @@ public class GraphController {
 	 * }
 	 */
 
-	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor) {
+	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor,String p) {
 
 		String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
 		String pac = null;
@@ -350,9 +367,12 @@ public class GraphController {
 
 			}
 		}
+			
+				 pac = p+"."+fullyQualifiedName;
 
 
-		return fullyQualifiedName;
+
+		return pac;
 
 	}
 }

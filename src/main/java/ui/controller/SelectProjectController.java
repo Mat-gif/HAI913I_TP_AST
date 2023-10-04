@@ -1,5 +1,6 @@
 package ui.controller;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 
 import graph.Graphe;
 import processor.MenuProcessor;
@@ -96,23 +98,42 @@ public class SelectProjectController  {
         		 MenuProcessor menuProcessor = new MenuProcessor(my_path);
         		 if(!checkBoxPanelBasique.getMethodsForProcessor().isEmpty()) 
         		 {
-        			 methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
+        			 methodsForProcessor = checkBoxPanelBasique.getMethodsForProcessor();
         			 results = menuProcessor.selectBasicAnalytics(methodsForProcessor);
-        			// Récupérer la valeur actuelle du Spinner 
-           			 BasicResultsPanel  panel2 = new BasicResultsPanel(frame,results,"Analyse de base");
-           			 cardPanel.add(panel2, "Panel2");
-           			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
 
-        			 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
+        			 // Récupérer la valeur actuelle du Spinner
+        			 BasicResultsPanel panel2 = new BasicResultsPanel(frame, results, "Analyse de base");
+
+        			 // Créez un JScrollPane autour de panel2
+        			 JScrollPane scrollPane = new JScrollPane(panel2);
+        			 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        			 // Ajoutez le JScrollPane à cardPanel
+        			 cardPanel.add(scrollPane, "Panel2");
+
+        			 // Ajoutez un bouton Quitter à votre panel2
+        			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
+
+        			 // Affichez le panel2 avec le CardLayout
+        			 cardLayout.show(cardPanel, "Panel2");
+
         			 
         		 }
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
              			AdditionalResultsPanel  panel3 = new AdditionalResultsPanel(frame);
-             		    cardPanel.add(panel3, "Panel3");
              		    
              		    results2 = menuProcessor.selectComplAnalytics(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
+             		  
              		    panel3.printResults(results2, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
+             			 // Créez un JScrollPane autour de panel2
+             	
+              			 JScrollPane scrollPane = new JScrollPane(panel3);
+              			 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+       
+              			 // Ajoutez le JScrollPane à cardPanel
+              			 cardPanel.add(scrollPane, "Panel3");
+                		    
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
              			cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
              	 } else {
