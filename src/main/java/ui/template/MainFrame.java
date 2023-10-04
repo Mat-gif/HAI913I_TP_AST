@@ -20,10 +20,12 @@ import javax.swing.JRadioButton;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
+import org.eclipse.jdt.core.dom.Initializer;
+
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
-import ui.template.CustomJPanel.InitialPanel;
-import ui.template.CustomJPanel.ResultsPanel;
+import ui.template.CustomJPanel.MainPanel;
+import ui.template.CustomJPanel.BasicResultsPanel;
 
 
 public class MainFrame {
@@ -38,6 +40,9 @@ public class MainFrame {
                 try {
                     MainFrame window = new MainFrame();
                     window.frame.setVisible(true);
+                
+                    
+                    
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -49,7 +54,7 @@ public class MainFrame {
         initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         
         frame.setBounds(myParam.getxFenetre(), myParam.getyFenetre(), myParam.getLargeurFenetre(), myParam.getHauteurFenetre());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,7 +62,7 @@ public class MainFrame {
         // Créez un JPanel contenant un CardLayout
         JPanel cardPanel = new JPanel(new CardLayout());
         
-        InitialPanel  panel1 = new InitialPanel(frame);
+        MainPanel  panel1 = new MainPanel(frame);
         
        
         //Ajoutez les panneaux au conteneur principal avec des noms d'identification
@@ -73,6 +78,9 @@ public class MainFrame {
         cardLayout.show(cardPanel, "Panel1"); // Affichez initialement le panel1
         
         controller = new SelectProjectController(frame,panel1,cardLayout,cardPanel);
+        
+  
+       
         panel1.addAllListener(controller);
        
 

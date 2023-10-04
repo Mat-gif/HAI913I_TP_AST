@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import graph.Graphe;
+import ui.controller.Resultat;
+
 public class MenuProcessor {
 	
 	private MyProcessor myProcessor;
@@ -55,9 +58,9 @@ public class MenuProcessor {
 	
 	
 
-	public Map<String,Map<String, Integer>>  selectComplAnalytics(HashSet<String> methodsForProcessor,int n)
+	public Map<String,Resultat>  selectComplAnalytics(HashSet<String> methodsForProcessor,int n)
 	{		
-		 Map<String,Map<String, Integer>> results = new HashMap<>();
+		 Map<String,Resultat> results = new HashMap<>();
 		 methodsForProcessor.forEach(a->{
 			try {
 				switch (a) {
@@ -74,8 +77,10 @@ public class MenuProcessor {
 					results.put(a, myProcessor.getTopClassWithXGivenMethods(n));
 					break;
 				case "12":
+					results.put(a, myProcessor.getTopMethodsByLinesCode());
 					break;
 				case "13":
+					results.put(a, myProcessor.getTopMethodsByParameters());
 					break;					
 				}
 			} catch (IOException e) {
@@ -86,6 +91,10 @@ public class MenuProcessor {
 		return results;
 	};
 	
+	
+	public Graphe graphAnalytics() throws IOException {
+		return myProcessor.printMethodInvocationInfo();
+	}
 
 
 	

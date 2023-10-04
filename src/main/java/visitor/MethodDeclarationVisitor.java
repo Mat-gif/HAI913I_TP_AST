@@ -1,6 +1,7 @@
 package visitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -8,11 +9,18 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 public class MethodDeclarationVisitor extends ASTVisitor {
 	List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+	HashMap<String,Integer> methodsLines = new HashMap<String,Integer>();
+	HashMap<String,Integer> methodsParamaters = new HashMap<String,Integer>();
 	String methodCode = "";
 
 	public boolean visit(MethodDeclaration node) {
 		methods.add(node);
 		methodCode = node.toString();
+		
+		
+
+		setMethodsLines();
+		setMethodsParameters();
 		return super.visit(node);
 	}
 	
@@ -20,6 +28,27 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 		return methods;
 	}
 	
+	public void setMethodsLines() {
+		for (MethodDeclaration method : getMethods()) {
+            methodsLines.put(method.getName().toString(), countLinesOfMethod(method.toString()));//
+		}
+	}
+	
+	public HashMap<String, Integer> getMethodsLines() {
+		return methodsLines;
+	}
+	
+	public void setMethodsParameters() {
+		for (MethodDeclaration method : getMethods()) {
+            methodsParamaters.put(method.getName().toString(), method.parameters().size());//
+		}
+	}
+	
+	public HashMap<String, Integer> getMethodsParameters() {
+		return methodsParamaters;
+	}
+
+
 	public void printMethodsNames( ) {
 		System.out.println("NOM | NB PARAM| TYPE RETOUR | NB LINE");
 		for (MethodDeclaration method : getMethods()) {
