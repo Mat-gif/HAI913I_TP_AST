@@ -66,7 +66,7 @@ public class TestParser {
 			// System.out.println(content);
 //			System.out.println(content);
 			parserEclipse.configure();
-			CompilationUnit parse = 		parserEclipse.parse(fileEntry);
+			CompilationUnit parse = 		parserEclipse.parseWithVerify(fileEntry);
 			// String currentPackageName =
 			// parse.getPackage().getName().getFullyQualifiedName();
 
@@ -211,11 +211,7 @@ public class TestParser {
 		return javaFiles;
 	}
 
-	// create AST
-	private static CompilationUnit parse(File classSource) throws IOException {
-		parserEclipse.configure();
-		return parserEclipse.parse(classSource); // create and parse
-	}
+
 	
 	// package information
 	public static void printPackageInfo(CompilationUnit parse) {

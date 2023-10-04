@@ -50,7 +50,7 @@ public class GraphController {
 		List<File> javaFiles = parserEclipse.listJavaProjectFiles();
 		for (File content : javaFiles) {
 			parserEclipse.configure();
-			CompilationUnit parse = parserEclipse.parse(content);
+			CompilationUnit parse = parserEclipse.parseWithVerify(content);
 			printMethodInvocationInfo(parse);
 		}
 
