@@ -107,9 +107,7 @@ public class TestParser {
 		myGraph.getGrapheNonTrie().values().forEach(e->{
 			if(e.getParent().getClasseName().contains("SelectProjectController")) {
 				System.out.println(e);
-			}
-			
-			
+			}			
 		}
 		
 		
@@ -189,8 +187,6 @@ public class TestParser {
 				if(petitArbre!=null) {
 					myRec(petitArbre.getEnfants(), grapheNonTrie, graph, parent, ve);
 				}
-				
-
 			});
 		}
 	}

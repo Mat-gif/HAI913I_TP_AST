@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Graphe {
-	
+
 	private HashMap<String, PetitArbre> grapheNonTrie = new HashMap<String, PetitArbre>();
 	private ArrayList<PetitArbre> listOfMain = new ArrayList<PetitArbre>();
-	
+
 	public Graphe() {};
-	
+
 	public HashMap<String, PetitArbre> getGrapheNonTrie() {
 		return grapheNonTrie;
 	}
@@ -22,16 +22,16 @@ public class Graphe {
 	public void setListOfMain(ArrayList<PetitArbre> listOfMain) {
 		this.listOfMain = listOfMain;
 	}
-	
+
 	private void addMain(PetitArbre arbre) {
 		getListOfMain().add(arbre);
 	}
-	
+
 	private void addSommet(PetitArbre arbre) {
 		getGrapheNonTrie().put(arbre.getParent().toStringID(), arbre);
 	}
-	
-	
+
+
 	public void checkMainOrSommet (PetitArbre arbre) {
 		if (arbre.getParent().getMethodName().equals("main")) {
 			addMain(arbre);
@@ -39,12 +39,13 @@ public class Graphe {
 			addSommet(arbre);
 		}
 	}
-	
+
 	public boolean isExist(String val) {
 		return grapheNonTrie.containsKey(val);
 	}
-	
+
 	public PetitArbre getPetitArbreByKey(String val) {
+		
 		return grapheNonTrie.get(val);
 	}
 
@@ -53,6 +54,10 @@ public class Graphe {
 		return "Graphe [grapheNonTrie=" + grapheNonTrie + ", listOfMain=" + listOfMain + "]";
 	}
 	
-	
-	
+	public void deleteMyPetitArbre(String id) {
+		this.grapheNonTrie.remove(id);
+	}
+
+
+
 }

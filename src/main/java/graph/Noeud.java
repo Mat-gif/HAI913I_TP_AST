@@ -5,6 +5,7 @@ public class Noeud {
 	private String packageName;
 	private String classeName;
 	private String methodName;
+	private int nbAppel = 1;
 
 	
 	public Noeud( String classeName, String methodName) {
@@ -31,7 +32,16 @@ public class Noeud {
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
-
+	public int getNbAppel() {
+		return nbAppel;
+	}
+	public void setNbAppel(int nbAppel) {
+		this.nbAppel = nbAppel;
+	}
+	
+	public void ajoutAppel() {
+		this.nbAppel+= 1;
+	}
 	
 	public String toStringID() {
 		return  classeName + "." + methodName;
@@ -40,6 +50,9 @@ public class Noeud {
 	public String toString() {
 		return "Noeud [classeName=" + classeName + ", methodName=" + methodName + "]";
 	}
+
+
+
 	
 
 	

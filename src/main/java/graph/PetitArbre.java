@@ -35,6 +35,7 @@ public class PetitArbre {
 			for(Noeud e : enfants) {
 				if(e.toStringID().equals(enfant.toStringID())) {
 					existe=true;
+					e.ajoutAppel();
 					break;
 				}
 			}
