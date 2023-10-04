@@ -109,12 +109,13 @@ public class SelectProjectController  {
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
              			AdditionalResultsPanel  panel3 = new AdditionalResultsPanel(frame);
-             		    cardPanel.add(panel3, "Panel3");
+              		    cardPanel.add(panel3, "Panel3");
              		    
              		    results2 = menuProcessor.selectComplAnalytics(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
              		    panel3.printResults(results2, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
              			cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
+
              	 } else {
              		 GraphController graph =  new GraphController();
              		 try {
