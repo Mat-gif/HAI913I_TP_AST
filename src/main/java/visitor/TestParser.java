@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 
 import javax.swing.JFrame;
@@ -39,15 +40,17 @@ import com.mxgraph.view.mxGraph;
 import graph.Graphe;
 import graph.Noeud;
 import graph.PetitArbre;
+import parsers.EclipseJDTParser;
 
-public class Parser {
+public class TestParser {
 
 //	public static final String projectPath = "C:\\Users\\manil\\Desktop\\Master_ico\\Master__2\\HAI913I - Evolution et restructuration des logiciels\\Dev\\org.anonbnr.design_patterns";
 	//public static final String projectPath = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
-	public static final String projectPath = "C:\\\\Users\\\\victo\\\\Documents\\GitHub\\\\\\HAI913I_TP_AST";
+	public static final String projectPath = "C:\\Users\\33683\\Desktop\\Master_ICO_M1\\S8\\Structure_De_Donnee\\TP3";
 	
 	public static final String projectSourcePath = projectPath + "/src";
 	public static final String jrePath = System.getProperty("java.home");
+	public static EclipseJDTParser parserEclipse; 
 	public static int classCount = 0;
 	public static int appLineCount = 0;
 	public static int appMethodCount = 0;
@@ -56,17 +59,14 @@ public class Parser {
 
 	public static void main(String[] args) throws IOException {
 
-		// read java files
-		final File folder = new File(projectSourcePath);
-		ArrayList<File> javaFiles = listJavaFilesForFolder(folder);
-		String previousPackageName = "";
+		parserEclipse = new EclipseJDTParser(projectPath);
 
+		List<File> javaFiles = parserEclipse.listJavaProjectFiles();		
 		for (File fileEntry : javaFiles) {
-			String content = FileUtils.readFileToString(fileEntry);
 			// System.out.println(content);
 //			System.out.println(content);
-
-			CompilationUnit parse = parse(content.toCharArray());
+			parserEclipse.configure();
+			CompilationUnit parse = 		parserEclipse.parse(fileEntry);
 			// String currentPackageName =
 			// parse.getPackage().getName().getFullyQualifiedName();
 
@@ -212,28 +212,11 @@ public class Parser {
 	}
 
 	// create AST
-	private static CompilationUnit parse(char[] classSource) {
-		ASTParser parser = ASTParser.newParser(AST.JLS4); // java +1.6
-		parser.setResolveBindings(true);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-
-		parser.setBindingsRecovery(true);
-
-		Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
-		parser.setCompilerOptions(options);
-
-		parser.setUnitName("");
-
-		String[] sources = { projectSourcePath };
-		String[] classpath = { jrePath };
-
-		parser.setEnvironment(classpath, sources, new String[] { "UTF-8" }, true);
-		parser.setSource(classSource);
-
-		return (CompilationUnit) parser.createAST(null); // create and parse
+	private static CompilationUnit parse(File classSource) throws IOException {
+		parserEclipse.configure();
+		return parserEclipse.parse(classSource); // create and parse
 	}
-
+	
 	// package information
 	public static void printPackageInfo(CompilationUnit parse) {
 		PackageDeclarationVisitor visitor = new PackageDeclarationVisitor();
@@ -252,7 +235,7 @@ public class Parser {
 		ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
 		parse.accept(visitor);
 
-		if (visitor.isClass) {
+		if (visitor.getIsClass()) {
 			System.out.println("NOM | line count | attr count");
 			System.out.println(visitor.printClassName() + " | " + visitor.getLinesOfCode() + " | "
 					+ visitor.getAttributeCount() + "\n");
@@ -262,7 +245,7 @@ public class Parser {
 			System.out.println("\n");
 			classCount++;
 		}
-		if (visitor.isInterface) {
+		if (visitor.getIsInterface()) {
 			System.out.println("INTERFACE : " + visitor.getClassName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
 //			System.out.println("code : " + visitor.javaCode);

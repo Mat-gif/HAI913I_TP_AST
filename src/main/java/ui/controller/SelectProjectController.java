@@ -22,7 +22,6 @@ import processor.MyProcessor;
 import ui.template.CheckBoxPanelTemplate;
 import ui.template.FolderChooserTemplate;
 import ui.template.CustomJPanel.MainPanel;
-import visitor.UIParser;
 import ui.template.CustomJPanel.AdditionalResultsPanel;
 import ui.template.CustomJPanel.BasicResultsPanel;
 import ui.template.CustomJPanel.GraphPanel;
@@ -117,7 +116,7 @@ public class SelectProjectController  {
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
              			cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
              	 } else {
-             		 UIParser graph =  new UIParser();
+             		 GraphController graph =  new GraphController();
              		 try {
 						graph.GraphPanel(my_path);
 					} catch (FileNotFoundException e1) {

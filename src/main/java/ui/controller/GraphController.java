@@ -1,4 +1,4 @@
-package visitor;
+package ui.controller;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -24,8 +24,16 @@ import graph.Graphe;
 import graph.Noeud;
 import graph.PetitArbre;
 import parsers.EclipseJDTParser;
+import visitor.ClassInterfaceVisitor;
+import visitor.ConstructorInvocationVisitor;
+import visitor.EnumVisitor;
+import visitor.ImportDeclarationVisitor;
+import visitor.MethodDeclarationVisitor;
+import visitor.MethodInvocationVisitor;
+import visitor.PackageDeclarationVisitor;
+import visitor.VariableDeclarationFragmentVisitor;
 
-public class UIParser {
+public class GraphController {
 
 	
 	public static EclipseJDTParser parserEclipse;
@@ -136,7 +144,7 @@ public class UIParser {
 		ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
 		parse.accept(visitor);
 
-		if (visitor.isClass) {
+		if (visitor.getIsClass()) {
 			System.out.println("NOM | line count | attr count");
 			System.out.println(visitor.printClassName() + " | " + visitor.getLinesOfCode() + " | "
 					+ visitor.getAttributeCount() + "\n");
@@ -146,14 +154,14 @@ public class UIParser {
 			System.out.println("\n");
 			classCount++;
 		}
-		if (visitor.isInterface) {
+		if (visitor.getIsInterface()) {
 			System.out.println("INTERFACE : " + visitor.getClassName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
 //			System.out.println("code : " + visitor.javaCode);
 			System.out.println("\n");
 		}
 
-		appLineCount += visitor.linesOfCode;
+		appLineCount += visitor.getLinesOfCode();
 
 	}
 
@@ -162,7 +170,7 @@ public class UIParser {
 		EnumVisitor visitor = new EnumVisitor();
 		parse.accept(visitor);
 
-		if (visitor.enumName != null) {
+		if (visitor.getEnumName() != null) {
 			System.out.println("ENUMERATION : " + visitor.getEnumName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
 			System.out.println("\n");

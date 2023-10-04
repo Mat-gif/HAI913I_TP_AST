@@ -8,20 +8,20 @@ public class ClassInterfaceVisitor extends ASTVisitor {
 	int linesOfCode = 0;
 	int attributeCount = 0;
 	String javaCode = "";
-	boolean isClass = false;
-	boolean isInterface = false;
+	private boolean isClass = false;
+	private boolean isInterface = false;
 	
 	public boolean visit(TypeDeclaration node) {
         if(!node.isInterface()){
         	className = node.getName().getFullyQualifiedName();
         	javaCode = node.toString();
         	linesOfCode = countLinesOfCode(javaCode);
-        	isClass = true;
+        	setClass(true);
         }
         if(node.isInterface()) {
         	javaCode = node.toString();
         	linesOfCode = countLinesOfCode(javaCode);
-        	isInterface = true;
+        	setInterface(true);
         }
 		return super.visit(node);
 	}
@@ -60,6 +60,22 @@ public class ClassInterfaceVisitor extends ASTVisitor {
     
 	public String printClassName() {
 		return getClassName();
+	}
+
+	public boolean getIsClass() {
+		return isClass;
+	}
+
+	public void setClass(boolean isClass) {
+		this.isClass = isClass;
+	}
+
+	public boolean getIsInterface() {
+		return isInterface;
+	}
+
+	public void setInterface(boolean isInterface) {
+		this.isInterface = isInterface;
 	}
 
 }
