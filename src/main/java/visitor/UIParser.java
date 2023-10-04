@@ -112,7 +112,7 @@ public class UIParser {
 				// Mettez à jour les dimensions du vertex
 				graph.resizeCell(ve, dimensions2);
 
-				graph.insertEdge(parent, null, "", vp, ve);
+				graph.insertEdge(parent, null, "", vp, ve); //pondération e.getPonderation
 
 				if(petitArbre!=null) {
 					myRec(petitArbre.getEnfants(), grapheNonTrie, graph, parent, ve);
