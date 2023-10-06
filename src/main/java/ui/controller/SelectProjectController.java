@@ -27,7 +27,7 @@ import ui.template.FolderChooserTemplate;
 import ui.template.CustomJPanel.MainPanel;
 import ui.template.CustomJPanel.AdditionalResultsPanel;
 import ui.template.CustomJPanel.BasicResultsPanel;
-import ui.template.CustomJPanel.GraphPanel;
+
 
 public class SelectProjectController  {
 	

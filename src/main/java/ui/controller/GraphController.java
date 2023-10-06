@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.swing.JFrame;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
@@ -86,12 +87,16 @@ public class GraphController {
 					if(!pa.getEnfants().isEmpty()) {
 						if (!myCells.containsKey(pa.getParent().toStringID())){
 							v1 = graph.insertVertex(parent, null, pa.getParent().toStringID(), 20, 20, 80, 30);
-							//myGraph.deleteMyPetitArbre(pa.getParent().toStringID());
 							
 							myCells.put(pa.getParent().toStringID(), v1);
 						} else {
 							v1 = myCells.get(pa.getParent().toStringID());
 						}
+						
+						mxRectangle dimensions = graph.getPreferredSizeForCell(v1);
+
+						// Msj à jour les dimensions du vertex
+						graph.resizeCell(v1, dimensions);
 						myRec(pa.getEnfants(), myGraph.getGrapheNonTrie(), graph, parent, v1, pa.getParent().toStringID());
 					}
 				};
@@ -99,6 +104,12 @@ public class GraphController {
 
 				// Utilisez l'algorithme hierarchique pour organiser les vertex
 				mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
+				// orientation verticale
+				layout.setOrientation(SwingConstants.NORTH);
+
+		
+				layout.setIntraCellSpacing(100); // Espacement entre les nœuds dans la même couche
+				layout.setInterRankCellSpacing(150); // Espacement entre les couches
 				layout.execute(parent);
 
 			} finally {
@@ -106,11 +117,11 @@ public class GraphController {
 			}
 
 			mxGraphComponent graphComponent = new mxGraphComponent(graph);
-			graphComponent.setPreferredSize(new Dimension(500, 500)); // Modifiez la taille selon vos besoins
+			graphComponent.setPreferredSize(new Dimension(800, 800)); 
 
-			frame.getContentPane().add(graphComponent); // Ajoutez le composant au contenu de la fenêtre
+			frame.getContentPane().add(graphComponent);
 
-			frame.pack(); // Ajustez la taille de la fenêtre pour contenir le composant
+			frame.pack(); 
 			frame.setVisible(true);
 		});
 
@@ -137,10 +148,10 @@ public class GraphController {
 				}
 				
 
-				// Obtenez les dimensions préférées en fonction du contenu textuel
+	
 				mxRectangle dimensions2 = graph.getPreferredSizeForCell(ve);
 
-				// Mettez à jour les dimensions du vertex
+				// Msj à jour les dimensions du vertex
 				graph.resizeCell(ve, dimensions2);
 
 
@@ -149,6 +160,7 @@ public class GraphController {
 				
 				if(!myArcs.containsKey(e.toStringID()+"-"+ idP)) {
 					a = graph.insertEdge(parent, null, e.getNbAppel(), vp, ve);
+
 				} else {
 					a = myArcs.get(e.toStringID()+"-"+ idP);
 
