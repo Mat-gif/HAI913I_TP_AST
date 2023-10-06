@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import graph.Graphe;
 import ui.controller.Resultat;
 
 public class MenuProcessor {
@@ -90,6 +91,10 @@ public class MenuProcessor {
 		return results;
 	};
 	
+	
+	public Graphe graphAnalytics() throws IOException {
+		return myProcessor.printMethodInvocationInfo();
+	}
 
 
 	

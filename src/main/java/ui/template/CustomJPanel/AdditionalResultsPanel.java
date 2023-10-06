@@ -19,6 +19,8 @@ import ui.paramater.MyViewParameter;
 
 
 public class AdditionalResultsPanel extends JPanel{
+    private JScrollPane scrollPane;
+
 	   private MyViewParameter myParam = new MyViewParameter();
 	   private JButton btnTerminer;
 	   private LabelMap labels = new LabelMap();
@@ -38,9 +40,9 @@ public class AdditionalResultsPanel extends JPanel{
 
 
 	public AdditionalResultsPanel( JFrame frame ) {
-		
-		frame.getContentPane().add(this, BorderLayout.CENTER);
-		this.setLayout(null);
+		 frame.getContentPane().add(this, BorderLayout.CENTER);
+
+	     		this.setLayout(null);
 
 
 	    JLabel titleLabel = new JLabel( "--> Resultats :");
@@ -88,6 +90,8 @@ public class AdditionalResultsPanel extends JPanel{
 	    	   this.add(keyLabel);
 	    	   i++;
 	       });
+	   
+	 	  
 	    	   
 	    	   
 	

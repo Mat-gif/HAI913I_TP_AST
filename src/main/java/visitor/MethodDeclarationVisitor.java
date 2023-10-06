@@ -16,6 +16,9 @@ public class MethodDeclarationVisitor extends ASTVisitor {
 	public boolean visit(MethodDeclaration node) {
 		methods.add(node);
 		methodCode = node.toString();
+		
+		
+
 		setMethodsLines();
 		setMethodsParameters();
 		return super.visit(node);

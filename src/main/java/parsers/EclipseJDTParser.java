@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -39,7 +40,7 @@ public class EclipseJDTParser extends Parser<ASTParser> {
 	}
 
 	//
-	protected CompilationUnit parse(File file) throws IOException {
+	public CompilationUnit parse(File file) throws IOException {
 		parserType.setSource(FileUtils.readFileToString(file, Charset.defaultCharset()).toCharArray());
 		return (CompilationUnit) parserType.createAST(null);
 	}

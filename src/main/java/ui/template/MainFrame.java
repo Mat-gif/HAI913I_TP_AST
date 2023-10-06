@@ -17,8 +17,11 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+
+import org.eclipse.jdt.core.dom.Initializer;
 
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
@@ -38,6 +41,9 @@ public class MainFrame {
                 try {
                     MainFrame window = new MainFrame();
                     window.frame.setVisible(true);
+                
+                    
+                    
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -49,9 +55,10 @@ public class MainFrame {
         initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         
         frame.setBounds(myParam.getxFenetre(), myParam.getyFenetre(), myParam.getLargeurFenetre(), myParam.getHauteurFenetre());
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Créez un JPanel contenant un CardLayout
@@ -73,6 +80,9 @@ public class MainFrame {
         cardLayout.show(cardPanel, "Panel1"); // Affichez initialement le panel1
         
         controller = new SelectProjectController(frame,panel1,cardLayout,cardPanel);
+        
+  
+       
         panel1.addAllListener(controller);
        
 
