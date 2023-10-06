@@ -242,7 +242,7 @@ public class TestParser {
 
 		if (visitor.getIsClass()) {
 			System.out.println("NOM | line count | attr count");
-			System.out.println(visitor.printClassName() + " | " + visitor.getLinesOfCode() + " | "
+			System.out.println(visitor.getClassName() + " | " + visitor.getLinesOfCode() + " | "
 					+ visitor.getAttributeCount() + "\n");
 			System.out.println("nom : " + visitor.getClassName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
@@ -335,15 +335,15 @@ public class TestParser {
 			PetitArbre arbre;
 			
 			if (!myGraph
-					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName()
+					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName()
 							+ "." + methodDeclaration.getName().getFullyQualifiedName())) {
 				arbre = new PetitArbre(new Noeud(
-						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName(),
+						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName(),
 						methodDeclaration.getName().getFullyQualifiedName()));
 
 			} else {
 				arbre = myGraph.getPetitArbreByKey(
-						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName() + "."
+						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName() + "."
 								+ methodDeclaration.getName().getFullyQualifiedName());
 			}
 

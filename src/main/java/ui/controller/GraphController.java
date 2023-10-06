@@ -41,11 +41,13 @@ public class GraphController {
 	public int appMethodCount = 0;
 
 
+
 	private static Map<String,Object> myCells = new HashMap<>();
 	private static Map<String,Object> myArcs = new HashMap<>();
 	private static Graphe myGraph = new Graphe();
 
 	public  void GraphPanel(String path) throws IOException {
+
 
 		parserEclipse = new EclipseJDTParser(path);
 
@@ -56,11 +58,6 @@ public class GraphController {
 			printMethodInvocationInfo(parse);
 		}
 
-
-		/*
-		myGraph.getGrapheNonTrie().forEach((k,v)->{
-			System.err.println(v);
-		});*/
 
 
 		SwingUtilities.invokeLater(() -> {
@@ -79,6 +76,8 @@ public class GraphController {
 			graph.getModel().beginUpdate();
 
 			try {
+
+
 
 
 				for(PetitArbre pa : myGraph.getGrapheNonTrie().values()) {
@@ -115,11 +114,6 @@ public class GraphController {
 			frame.setVisible(true);
 		});
 
-		/*
-		 * System.out.println("nb de ligne de l'app : " + appLineCount);
-		 * System.out.println("nb de classe de l'app : " + classCount);
-		 * System.out.println("nb de methode de l'app : " + appMethodCount);
-		 */
 	}
 
 	public static void myRec(Set<Noeud> enfants, HashMap<String, PetitArbre> grapheNonTrie, mxGraph graph,
@@ -150,14 +144,15 @@ public class GraphController {
 				graph.resizeCell(ve, dimensions2);
 
 
+
 				Object a = null;
 				
 				if(!myArcs.containsKey(e.toStringID()+"-"+ idP)) {
 					a = graph.insertEdge(parent, null, e.getNbAppel(), vp, ve);
 				} else {
 					a = myArcs.get(e.toStringID()+"-"+ idP);
+
 				}
-				
 
 					
 				myArcs.put(e.toStringID()+"-"+ idP, a);
@@ -179,13 +174,13 @@ public class GraphController {
 	}
 
 	// class & interface information
-	public  void printClassInterfaceInfo(CompilationUnit parse) {
+	public void printClassInterfaceInfo(CompilationUnit parse) {
 		ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
 		parse.accept(visitor);
 
 		if (visitor.getIsClass()) {
 			System.out.println("NOM | line count | attr count");
-			System.out.println(visitor.printClassName() + " | " + visitor.getLinesOfCode() + " | "
+			System.out.println(visitor.getClassName() + " | " + visitor.getLinesOfCode() + " | "
 					+ visitor.getAttributeCount() + "\n");
 			System.out.println("nom : " + visitor.getClassName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
@@ -217,7 +212,7 @@ public class GraphController {
 	}
 
 	// navigate method information
-	public  void printMethodInfo(CompilationUnit parse) {
+	public void printMethodInfo(CompilationUnit parse) {
 		MethodDeclarationVisitor visitor = new MethodDeclarationVisitor();
 		parse.accept(visitor);
 
@@ -266,6 +261,7 @@ public class GraphController {
 		for (MethodDeclaration methodDeclaration : methodDeclarationVisitor.getMethods()) {
 
 
+
 			// Trouver les méthodes invoqués
 			MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
 			methodDeclaration.accept(methodInvocationVisitor);
@@ -273,16 +269,16 @@ public class GraphController {
 
 
 			if (!myGraph
-					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName()
+					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName()
 					+ "." + methodDeclaration.getName().getFullyQualifiedName())) {
 
 				arbre = new PetitArbre(new Noeud(
-						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName(),
+						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName(),
 						methodDeclaration.getName().getFullyQualifiedName()));
 
 			} else {
 				arbre = myGraph.getPetitArbreByKey(
-						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName() + "."
+						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName() + "."
 								+ methodDeclaration.getName().getFullyQualifiedName());
 			}
 
@@ -291,6 +287,7 @@ public class GraphController {
 			// Pour chaque méthodes invoqué je regarde si c'est une class definit dans notre
 			// projet
 			for (MethodInvocation methodInvocation : methodInvocationVisitor.getMethods()) {
+
 
 
 				
@@ -311,8 +308,10 @@ public class GraphController {
 
 
 
+
 					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()),
 							classInstanceCreation.getType().toString()));
+
 
 
 
@@ -323,13 +322,15 @@ public class GraphController {
 	}
 
 	private static String getDeclaringClassName(MethodInvocation methodInvocation) {
-		if (methodInvocation.resolveMethodBinding()!= null) {
+		if (methodInvocation.resolveMethodBinding() != null) {
 			String fullyQualifiedName = methodInvocation.resolveMethodBinding().getDeclaringClass().getQualifiedName();
+
 			//System.out.println(fullyQualifiedName);
 
 
 
 			return fullyQualifiedName;
+
 
 
 		}
@@ -371,6 +372,7 @@ public class GraphController {
 
 			}
 		}
+
 			
 				 pac = p+"."+fullyQualifiedName;
 

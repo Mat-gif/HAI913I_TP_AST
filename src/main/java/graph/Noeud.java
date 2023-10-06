@@ -3,6 +3,7 @@ package graph;
 public class Noeud {
 
 
+
 	/**
 	 * Attribut
 	 * 
@@ -28,24 +29,31 @@ public class Noeud {
 
 	
 
+
 	public String getPackageName() {
 		return packageName;
 	}
+
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
+
 	public String getClasseName() {
 		return classeName;
 	}
+
 	public void setClasseName(String classeName) {
 		this.classeName = classeName;
 	}
+
 	public String getMethodName() {
 		return methodName;
 	}
+
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
 	}
+
 	public int getNbAppel() {
 		return nbAppel;
 	}
@@ -57,9 +65,11 @@ public class Noeud {
 		this.nbAppel+= 1;
 	}
 	
+
 	public String toStringID() {
-		return  classeName + "." + methodName;
+		return classeName + "." + methodName;
 	}
+
 	@Override
 
 	public String toString() {

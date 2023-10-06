@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class Graphe {
 
+
 	
 	/**
 	 * Attribut
@@ -35,17 +36,19 @@ public class Graphe {
 	/**
 	 * Setter
 	 */
+
 	public void setListOfMain(ArrayList<PetitArbre> listOfMain) {
 		this.listOfMain = listOfMain;
 	}
-	
+
 	private void addMain(PetitArbre arbre) {
 		getListOfMain().add(arbre);
 	}
-	
+
 	private void addSommet(PetitArbre arbre) {
 		getGrapheNonTrie().put(arbre.getParent().toStringID(), arbre);
 	}
+
 	
 	
 	
@@ -60,11 +63,13 @@ public class Graphe {
 
 	public void checkMainOrSommet (PetitArbre arbre) {
 		if (arbre.getParent().getMethodName().equals("main")) {
+
 			addMain(arbre);
-		}else {
+		} else {
 			addSommet(arbre);
 		}
 	}
+
 
 	
 	/**
@@ -83,6 +88,7 @@ public class Graphe {
 	 * @param val La clé pour laquelle récupérer le PetitArbre.
 	 * @return Le PetitArbre associé à la clé, ou {@code null} si la clé n'existe pas.
 	 */
+
 	public PetitArbre getPetitArbreByKey(String val) {
 		return grapheNonTrie.get(val);
 	}
@@ -95,9 +101,11 @@ public class Graphe {
 		return "Graphe [grapheNonTrie=" + grapheNonTrie + ", listOfMain=" + listOfMain + "]";
 	}
 
+
 	public void deleteMyPetitArbre(String id) {
 		this.grapheNonTrie.remove(id);
 	}
+
 
 
 

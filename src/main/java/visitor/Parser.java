@@ -146,7 +146,7 @@ public class Parser {
 				
 		if (visitor.isClass) {
 			System.out.println("NOM | line count | attr count");
-			System.out.println(visitor.printClassName() +" | "
+			System.out.println(visitor.getClassName() +" | "
 					+ visitor.getLinesOfCode() + " | "
 					+ visitor.getAttributeCount()
 					+ "\n");

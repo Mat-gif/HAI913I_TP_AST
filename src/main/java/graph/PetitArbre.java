@@ -1,15 +1,18 @@
 package graph;
 
 
+
 import java.util.HashSet;
 
 import java.util.ArrayList;
 
 import java.util.Iterator;
 
+
 import java.util.Set;
 
 public class PetitArbre {
+
 
 
 	private Noeud parent;
@@ -17,18 +20,19 @@ public class PetitArbre {
 	
 	
 
+
 	public PetitArbre(Noeud parent) {
 		this.parent = parent;
 	}
-	
 
-	
 	public Noeud getParent() {
 		return parent;
 	}
+
 	public void setParent(Noeud parent) {
 		this.parent = parent;
 	}
+
 	public Set<Noeud> getEnfants() {
 		return enfants;
 	}
@@ -36,7 +40,7 @@ public class PetitArbre {
 	public void setEnfants(Set<Noeud> enfants) {
 		this.enfants = enfants;
 	}
-	
+
 
 	/**
 	 * Vérifie si un Noeud enfant n'existe pas déjà 
@@ -70,11 +74,11 @@ public class PetitArbre {
 	}
 
 
+
+
 	@Override
 	public String toString() {
 		return "PetitArbre [parent=" + parent + ", enfants=" + enfants + "]";
 	}
-	
 
-	
 }
