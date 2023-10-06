@@ -286,10 +286,7 @@ public class GraphController {
 								+ methodDeclaration.getName().getFullyQualifiedName());
 			}
 
-			if(methodDeclaration.getName().getFullyQualifiedName().equals("myRec")) {
-				System.out.println(arbre.toString());
-				System.err.println(methodInvocationVisitor.getMethods().toString());
-			}
+		
 
 			// Pour chaque méthodes invoqué je regarde si c'est une class definit dans notre
 			// projet
@@ -297,11 +294,7 @@ public class GraphController {
 
 
 				
-				if(methodDeclaration.getName().getFullyQualifiedName().equals("myRec")) {
-					System.out.println(methodInvocation.getName().getFullyQualifiedName());
-					System.out.println("--");
-				}
-
+			
 				if (!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
 
 
