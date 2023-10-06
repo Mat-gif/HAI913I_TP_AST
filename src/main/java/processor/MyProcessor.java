@@ -427,15 +427,15 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
 
                 if (!myGraph
                         .isExist(packageDeclarationVisitor.getPackageName() + "."
-                                + classInterfaceVisitor.printClassName()
+                                + classInterfaceVisitor.getClassName()
                                 + "." + methodDeclaration.getName().getFullyQualifiedName())) {
                     arbre = new PetitArbre(new Noeud(
-                            packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName(),
+                            packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName(),
                             methodDeclaration.getName().getFullyQualifiedName()));
 
                 } else {
                     arbre = myGraph.getPetitArbreByKey(
-                            packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName()
+                            packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName()
                                     + "."
                                     + methodDeclaration.getName().getFullyQualifiedName());
                 }
