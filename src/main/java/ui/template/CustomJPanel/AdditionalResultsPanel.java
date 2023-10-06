@@ -2,8 +2,13 @@ package ui.template.CustomJPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
 import java.util.HashMap;
 import java.util.HashSet;
+
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -18,88 +23,87 @@ import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 
 
-public class AdditionalResultsPanel extends JPanel{
-	   private MyViewParameter myParam = new MyViewParameter();
-	   private JButton btnTerminer;
-	   private LabelMap labels = new LabelMap();
-	   private JLabel valueLabel;
-	   private int i = 2;
-	   private int j = 0;
-	   private int myY =myParam.getyBouton()*i;
-	   
-	public JButton getBtnTerminer() {
-		return btnTerminer;
-	}
+public class AdditionalResultsPanel extends JPanel {
+    private MyViewParameter myParam = new MyViewParameter();
+    private JButton btnTerminer;
+    private LabelMap labels = new LabelMap();
+    private JPanel contentPanel; // Panel pour le contenu
+    private int i = 2;
+    private int j = 0;
+    private int myY = myParam.getyBouton() * i;
+    private JLabel valueLabel;
+
+    public JButton getBtnTerminer() {
+        return btnTerminer;
+    }
+
+    public AdditionalResultsPanel(JFrame frame) {
+        frame.getContentPane().add(this, BorderLayout.CENTER);
+        this.setLayout(new BorderLayout());
+        
+        valueLabel = new JLabel();
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel titleLabel = new JLabel("--> Resultats :");
+        titleLabel.setFont(MyViewParameter.getMyFontStyleTitle());
+        topPanel.add(titleLabel);
+        btnTerminer = new JButton("Terminer");
+        btnTerminer.setFont(MyViewParameter.getMyFontStyle());
+        btnTerminer.setBackground(Color.lightGray);
+        topPanel.add(btnTerminer);
+
+        contentPanel = new JPanel();
+        contentPanel.setLayout(null);
+
+  
+        JScrollPane scrollPane = new JScrollPane(contentPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); 
 
 
-	public void setBtnTerminer(JButton btnTerminer) {
-		this.btnTerminer = btnTerminer;
-	}
+        this.add(topPanel, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
+    }
 
+    public void printResults(Map<String, Resultat> results, String myType, int n) {
+        labels.setAdditionalAnalysis11(n);
 
-	public AdditionalResultsPanel( JFrame frame ) {
-		
-		frame.getContentPane().add(this, BorderLayout.CENTER);
-		this.setLayout(null);
+        results.forEach((k, res) -> {
+            JLabel keyLabel = new JLabel(labels.getAdditionalAnalysisByID(k) + " : ");
+            keyLabel.setBounds(myParam.getxBouton(), (int) Math.round(myY), myParam.getLargeurBouton() * 2,
+                    myParam.getHauteurBouton());
+            keyLabel.setFont(MyViewParameter.getMyFontStyle());
 
+     
+            int valueLabelX = keyLabel.getX() + keyLabel.getWidth();
 
-	    JLabel titleLabel = new JLabel( "--> Resultats :");
-	    titleLabel.setBounds(myParam.getxBouton(), (int) Math.round((myParam.getyBouton()/2)), myParam.getLargeurBouton(), myParam.getHauteurBouton());
-	    titleLabel.setFont(MyViewParameter.getMyFontStyleTitle());
-	    this.add(titleLabel);
-	       
-	    btnTerminer = new JButton("Terminer");
-	    btnTerminer.setBounds(myParam.getLargeurFenetre()-myParam.getxBouton()-myParam.getLargeurBouton(), (int) Math.round((myParam.getyBouton()/2)), myParam.getLargeurBouton(), myParam.getHauteurBouton());
-	    btnTerminer.setFont(MyViewParameter.getMyFontStyle());
-	    btnTerminer.setBackground(Color.lightGray);
-	       this.add(btnTerminer);
-	       
+            j = 0;
+            res.getResultats().forEach((kk, vv) -> {
+                System.out.println(kk);
+                if (vv != 0) {
+                    valueLabel = new JLabel(kk + " -> " + vv);
+                } else {
+                    valueLabel = new JLabel(kk);
+                }
 
+                valueLabel.setBounds(valueLabelX, keyLabel.getY() + j, myParam.getLargeurBouton(),
+                        myParam.getHauteurBouton());
+                // valueLabel.setFont(MyViewParameter.getMyFontStyle());
 
-	}
-	
-	public void printResults(Map<String,Resultat> results, String myType, int n)
-	{
-		
-	       labels.setAdditionalAnalysis11(n);
+                contentPanel.add(valueLabel);
+                myY = valueLabel.getY() + 40;
+                j += 20;
+            });
+            contentPanel.add(keyLabel);
+            i++;
+        });
 
-	       results.forEach((k,res) ->{
-	    	   JLabel keyLabel = new JLabel(labels.getAdditionalAnalysisByID(k)+ " : ");
-	           keyLabel.setBounds(myParam.getxBouton(), (int) Math.round(myY), myParam.getLargeurBouton()*2, myParam.getHauteurBouton());
-	           keyLabel.setFont(MyViewParameter.getMyFontStyle());
-	           
-	        // Calcul de la position x pour valueLabel en fonction de keyLabel
-	           int valueLabelX = keyLabel.getX() + keyLabel.getWidth();
+        int width = myParam.getLargeurFenetre(); 
+        int height = myY + myParam.getHauteurBouton(); 
+        contentPanel.setPreferredSize(new Dimension(width, height));
+    }
 
-	           
-	           j=0;
-	    	   res.getResultats().forEach((kk,vv)->{
-	    		   System.out.println(kk);
-	    		   if(vv!=0)  {valueLabel = new JLabel(kk + " -> " + vv);}
-	    		   else  {valueLabel = new JLabel(kk);}
-	    		   
-		           valueLabel.setBounds(valueLabelX, keyLabel.getY()+j, myParam.getLargeurBouton(), myParam.getHauteurBouton());
-		           //valueLabel.setFont(MyViewParameter.getMyFontStyle());
-		           
-		           this.add(valueLabel);
-	    		   myY=valueLabel.getY()+40;
-		           j+=20;
-	    	   });
-	    	   this.add(keyLabel);
-	    	   i++;
-	       });
-	    	   
-	    	   
-	
-	       }
-	
-	
-	
-	
-   	
-   	public void addAllListener(SelectProjectController myController) 
-   	{
+    public void addAllListener(SelectProjectController myController) {
         btnTerminer.addActionListener(myController.buttonQuitListener);
-   	}
-
+    }
 }

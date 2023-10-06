@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class Parser<T> {
 
-	//Attributes 
+
 	private static final String sourcePathForJava = File.separator + "src";
 	protected String projectPath;
 	protected String jrePath;
@@ -19,7 +19,8 @@ public abstract class Parser<T> {
 	protected T parserType; 
 
 
-	/*Constructor 
+
+	/*	Constructor
 	 * 
 	 * Appelle des setters dans le Constructeur afin de respecter 
 	 * les principes solides tout en gérant les exceptions de ces derniers. 
@@ -40,6 +41,7 @@ public abstract class Parser<T> {
 	public String getJrePath() {
 		return jrePath;
 	}
+
 
 
 	/**
@@ -83,6 +85,18 @@ public abstract class Parser<T> {
 		}
 	} 
 
+
+	/**
+	 * Récupère la liste des fichiers Java à partir d'un chemin de dossier spécifié.
+	 * Si le fichier n'est pas un fichier Java il n'est pas ajouté
+	 * 
+	 * Si le fichier en question est un dossier, cette méthode est appelée récursivement pour
+	 * ajouter la liste de fichiers Java au sein de ce dossier.
+	 * 
+	 * @param filePath le path du dossier où les éléments java sont à récupérer
+	 * 
+	 * @return javaFiles une liste de fichier Java {@code List<File>}
+	 */
 	private List<File> listJavaFiles(String filePath){
 		File folder = new File(filePath);
 		List<File> javaFiles = new ArrayList<>();
@@ -97,12 +111,22 @@ public abstract class Parser<T> {
 		return javaFiles;
 	}
 
+
+	/**
+	 * Appel la fonction listJavaFiles avec le path du projet spécifier par l'utilisateur
+	 * 
+	 * @throws FileNotFoundException Si aucun fichier Java n'a été trouvé dans le répertoire spécifiée
+	 * @return Une liste de fichiers Java {@code List<File>}.
+	 */
+
 	public List<File> listJavaProjectFiles() throws FileNotFoundException{
 		List<File> listJavaFiles =  listJavaFiles(getProjectPath());
 		if (listJavaFiles.isEmpty()) {
 			throw new FileNotFoundException("Il n'existe aucun fichier java dans le répertoire source spécifiée"); 
 		}
-		return listJavaFiles(getProjectPath());
+
+		return listJavaFiles;
+
 	}
 
 	/**
@@ -121,6 +145,13 @@ public abstract class Parser<T> {
 		}else {return false;}
 	}
 
+
+	/**
+	 * Configure la fonctionnalité ou le comportement du Parser.
+	 * 
+	 * Cette méthode doit être implémentée par les sous-classes pour définir
+	 * la configuration spécifique à chaque type de Parser utilisé. 
+	 */
 	public abstract void configure(); 
 
 }

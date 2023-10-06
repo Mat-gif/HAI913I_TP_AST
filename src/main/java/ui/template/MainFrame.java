@@ -1,31 +1,14 @@
 package ui.template;
 
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-
-import org.eclipse.jdt.core.dom.Initializer;
-
 import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 import ui.template.CustomJPanel.MainPanel;
-import ui.template.CustomJPanel.BasicResultsPanel;
+
 
 
 public class MainFrame {
@@ -57,6 +40,7 @@ public class MainFrame {
     public void initialize() {
         
         frame.setBounds(myParam.getxFenetre(), myParam.getyFenetre(), myParam.getLargeurFenetre(), myParam.getHauteurFenetre());
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Créez un JPanel contenant un CardLayout

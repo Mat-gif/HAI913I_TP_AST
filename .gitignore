@@ -93,3 +93,6 @@ MANIFEST.MF
 #Classpath
 .classpath
 /target/
+
+.idea
+

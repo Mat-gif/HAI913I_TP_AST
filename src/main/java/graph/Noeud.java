@@ -2,15 +2,33 @@ package graph;
 
 public class Noeud {
 
-	private String packageName; // package name
-	private String classeName; // class name
-	private String methodName; // method name
-	private int nbMethod;
 
-	public Noeud(String classeName, String methodName) {
+
+	/**
+	 * Attribut
+	 * 
+	 * {@code private int nbAppel = 1} 
+	 * nbAppel représente le nombre de fois que la méthode est appelée 
+	 * dans une autre méthode 
+	 */
+
+	private String packageName;
+	private String classeName;
+	private String methodName;
+	private int nbAppel = 1;
+
+
+	/**
+	 * Constructeur 
+	 */
+
+	public Noeud( String classeName, String methodName) {
 		this.classeName = classeName;
 		this.methodName = methodName;
 	}
+
+	
+
 
 	public String getPackageName() {
 		return packageName;
@@ -36,13 +54,27 @@ public class Noeud {
 		this.methodName = methodName;
 	}
 
+	public int getNbAppel() {
+		return nbAppel;
+	}
+	public void setNbAppel(int nbAppel) {
+		this.nbAppel = nbAppel;
+	}
+	
+	public void ajoutAppel() {
+		this.nbAppel+= 1;
+	}
+	
+
 	public String toStringID() {
 		return classeName + "." + methodName;
 	}
 
 	@Override
+
 	public String toString() {
 		return "Noeud [classeName=" + classeName + ", methodName=" + methodName + "]";
 	}
+
 
 }

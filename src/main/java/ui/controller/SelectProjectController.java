@@ -1,5 +1,8 @@
 package ui.controller;
 
+
+import java.awt.BorderLayout;
+
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +25,6 @@ import processor.MyProcessor;
 import ui.template.CheckBoxPanelTemplate;
 import ui.template.FolderChooserTemplate;
 import ui.template.CustomJPanel.MainPanel;
-import visitor.UIParser;
 import ui.template.CustomJPanel.AdditionalResultsPanel;
 import ui.template.CustomJPanel.BasicResultsPanel;
 import ui.template.CustomJPanel.GraphPanel;
@@ -97,6 +99,7 @@ public class SelectProjectController  {
         		 MenuProcessor menuProcessor = new MenuProcessor(my_path);
         		 if(!checkBoxPanelBasique.getMethodsForProcessor().isEmpty()) 
         		 {
+
         			 methodsForProcessor=checkBoxPanelBasique.getMethodsForProcessor();
         			 results = menuProcessor.selectBasicAnalytics(methodsForProcessor);
         			// Récupérer la valeur actuelle du Spinner 
@@ -105,19 +108,23 @@ public class SelectProjectController  {
            			 panel2.getBtnTerminer().addActionListener(buttonQuitListener);
 
         			 cardLayout.show(cardPanel, "Panel2"); // Affichez  le panel2
+
         			 
         		 }
              	 else if(!checkBoxPanelComplementaire.getMethodsForProcessor().isEmpty()) {
              			methodsForProcessor=checkBoxPanelComplementaire.getMethodsForProcessor();
              			AdditionalResultsPanel  panel3 = new AdditionalResultsPanel(frame);
-             		    cardPanel.add(panel3, "Panel3");
+
+              		    cardPanel.add(panel3, "Panel3");
              		    
              		    results2 = menuProcessor.selectComplAnalytics(methodsForProcessor,checkBoxPanelComplementaire.getSpinnerValue());
              		    panel3.printResults(results2, "Analyse complémentaire",checkBoxPanelComplementaire.getSpinnerValue());
              			panel3.getBtnTerminer().addActionListener(buttonQuitListener);
              			cardLayout.show(cardPanel, "Panel3"); // Affichez  le panel2
+
+
              	 } else {
-             		 UIParser graph =  new UIParser();
+             		 GraphController graph =  new GraphController();
              		 try {
 						graph.GraphPanel(my_path);
 					} catch (FileNotFoundException e1) {

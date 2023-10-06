@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
  * Cette classe est un visiteur qui visite les déclarations de type  classe et interface: compte le nombre de lignes de code, le nombre d'attribut, verifie si le node est une classe ou une interface et le recupere son nom et son code source.
  */
 public class ClassInterfaceVisitor extends ASTVisitor {
+
     String className = null;
     int linesOfCode = 0;
     int attributeCount = 0;
@@ -33,6 +34,7 @@ public class ClassInterfaceVisitor extends ASTVisitor {
             javaCode = node.toString();
             linesOfCode = countLinesOfCode(javaCode);
             isInterface = true;
+
         }
         return super.visit(node);
     }
@@ -89,5 +91,21 @@ public class ClassInterfaceVisitor extends ASTVisitor {
         }
         return lineCount;
     }
+
+	public boolean getIsClass() {
+		return isClass;
+	}
+
+	public void setClass(boolean isClass) {
+		this.isClass = isClass;
+	}
+
+	public boolean getIsInterface() {
+		return isInterface;
+	}
+
+	public void setInterface(boolean isInterface) {
+		this.isInterface = isInterface;
+	}
 
 }

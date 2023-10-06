@@ -1,4 +1,4 @@
-package visitor;
+package ui.controller;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -24,16 +24,30 @@ import graph.Graphe;
 import graph.Noeud;
 import graph.PetitArbre;
 import parsers.EclipseJDTParser;
+import visitor.ClassInterfaceVisitor;
+import visitor.ConstructorInvocationVisitor;
+import visitor.EnumVisitor;
+import visitor.ImportDeclarationVisitor;
+import visitor.MethodDeclarationVisitor;
+import visitor.MethodInvocationVisitor;
+import visitor.PackageDeclarationVisitor;
+import visitor.VariableDeclarationFragmentVisitor;
 
-public class UIParser {
+public class GraphController {
 
 	public static EclipseJDTParser parserEclipse;
 	public int classCount = 0;
 	public int appLineCount = 0;
 	public int appMethodCount = 0;
+
+
+
+	private static Map<String,Object> myCells = new HashMap<>();
+	private static Map<String,Object> myArcs = new HashMap<>();
 	private static Graphe myGraph = new Graphe();
 
-	public void GraphPanel(String path) throws IOException {
+	public  void GraphPanel(String path) throws IOException {
+
 
 		parserEclipse = new EclipseJDTParser(path);
 
@@ -43,6 +57,8 @@ public class UIParser {
 			CompilationUnit parse = parserEclipse.parse(content);
 			printMethodInvocationInfo(parse);
 		}
+
+
 
 		SwingUtilities.invokeLater(() -> {
 			JFrame frame = new JFrame("AST Graph Viewer");
@@ -61,15 +77,25 @@ public class UIParser {
 
 			try {
 
-				myGraph.getListOfMain().forEach(m -> {
 
-					if (!m.getEnfants().isEmpty()) {
-						// la on commence le traçage du graphe
-						Object v1 = graph.insertVertex(parent, null, m.getParent().getMethodName(), 20, 20, 80, 30);
-						myRec(m.getEnfants(), myGraph.getGrapheNonTrie(), graph, parent, v1);
+
+
+				for(PetitArbre pa : myGraph.getGrapheNonTrie().values()) {
+					
+					Object v1 = null;
+					if(!pa.getEnfants().isEmpty()) {
+						if (!myCells.containsKey(pa.getParent().toStringID())){
+							v1 = graph.insertVertex(parent, null, pa.getParent().toStringID(), 20, 20, 80, 30);
+							//myGraph.deleteMyPetitArbre(pa.getParent().toStringID());
+							
+							myCells.put(pa.getParent().toStringID(), v1);
+						} else {
+							v1 = myCells.get(pa.getParent().toStringID());
+						}
+						myRec(pa.getEnfants(), myGraph.getGrapheNonTrie(), graph, parent, v1, pa.getParent().toStringID());
 					}
+				};
 
-				});
 
 				// Utilisez l'algorithme hierarchique pour organiser les vertex
 				mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
@@ -91,27 +117,53 @@ public class UIParser {
 	}
 
 	public static void myRec(Set<Noeud> enfants, HashMap<String, PetitArbre> grapheNonTrie, mxGraph graph,
-			Object parent, Object vp) {
+
+			Object parent, Object vp, String idP) {
 		if (!enfants.isEmpty()) {
 			enfants.forEach(e -> {
+				
+				Object ve = null;
 				PetitArbre petitArbre = grapheNonTrie.get(e.toStringID());
+				
+				if(!myCells.containsKey(e.toStringID())) {
+	
+					ve = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
+					
+					myCells.put(e.toStringID(), ve);
 
-				Object ve = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
+				} else {
+					ve = myCells.get(e.toStringID());
+					
+				}
+				
+
 				// Obtenez les dimensions préférées en fonction du contenu textuel
 				mxRectangle dimensions2 = graph.getPreferredSizeForCell(ve);
 
 				// Mettez à jour les dimensions du vertex
 				graph.resizeCell(ve, dimensions2);
 
-				graph.insertEdge(parent, null, "", vp, ve);
 
-				if (petitArbre != null) {
-					myRec(petitArbre.getEnfants(), grapheNonTrie, graph, parent, ve);
+
+				Object a = null;
+				
+				if(!myArcs.containsKey(e.toStringID()+"-"+ idP)) {
+					a = graph.insertEdge(parent, null, e.getNbAppel(), vp, ve);
+				} else {
+					a = myArcs.get(e.toStringID()+"-"+ idP);
+
 				}
 
+					
+				myArcs.put(e.toStringID()+"-"+ idP, a);
+				
+				if(petitArbre!=null && !e.toStringID().equals(idP)) {
+					myRec(petitArbre.getEnfants(), grapheNonTrie, graph, parent, ve, e.toStringID());
+				}
 			});
 		}
 	}
+
 
 	// package information
 	public static void printPackageInfo(CompilationUnit parse) {
@@ -126,9 +178,9 @@ public class UIParser {
 		ClassInterfaceVisitor visitor = new ClassInterfaceVisitor();
 		parse.accept(visitor);
 
-		if (visitor.isClass) {
+		if (visitor.getIsClass()) {
 			System.out.println("NOM | line count | attr count");
-			System.out.println(visitor.printClassName() + " | " + visitor.getLinesOfCode() + " | "
+			System.out.println(visitor.getClassName() + " | " + visitor.getLinesOfCode() + " | "
 					+ visitor.getAttributeCount() + "\n");
 			System.out.println("nom : " + visitor.getClassName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
@@ -136,14 +188,14 @@ public class UIParser {
 			System.out.println("\n");
 			classCount++;
 		}
-		if (visitor.isInterface) {
+		if (visitor.getIsInterface()) {
 			System.out.println("INTERFACE : " + visitor.getClassName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
-			// System.out.println("code : " + visitor.javaCode);
+
 			System.out.println("\n");
 		}
 
-		appLineCount += visitor.linesOfCode;
+		appLineCount += visitor.getLinesOfCode();
 
 	}
 
@@ -152,7 +204,7 @@ public class UIParser {
 		EnumVisitor visitor = new EnumVisitor();
 		parse.accept(visitor);
 
-		if (visitor.enumName != null) {
+		if (visitor.getEnumName() != null) {
 			System.out.println("ENUMERATION : " + visitor.getEnumName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
 			System.out.println("\n");
@@ -208,34 +260,40 @@ public class UIParser {
 		// Pour tout les méthodes déclarées je cherche les méthodes quil invoque
 		for (MethodDeclaration methodDeclaration : methodDeclarationVisitor.getMethods()) {
 
-			/*
-			 * ce connard n'ajoute pas le nom du package si il est different pour les
-			 * enfants (invocation)
-			 */
+
 
 			// Trouver les méthodes invoqués
 			MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
 			methodDeclaration.accept(methodInvocationVisitor);
 			PetitArbre arbre;
 
+
 			if (!myGraph
-					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName()
-							+ "." + methodDeclaration.getName().getFullyQualifiedName())) {
+					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName()
+					+ "." + methodDeclaration.getName().getFullyQualifiedName())) {
+
 				arbre = new PetitArbre(new Noeud(
-						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName(),
+						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName(),
 						methodDeclaration.getName().getFullyQualifiedName()));
 
 			} else {
 				arbre = myGraph.getPetitArbreByKey(
-						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName() + "."
+						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName() + "."
 								+ methodDeclaration.getName().getFullyQualifiedName());
 			}
+
+		
 
 			// Pour chaque méthodes invoqué je regarde si c'est une class definit dans notre
 			// projet
 			for (MethodInvocation methodInvocation : methodInvocationVisitor.getMethods()) {
 
+
+
+				
+			
 				if (!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
+
 
 					arbre.addEnfant(new Noeud(getDeclaringClassName(methodInvocation),
 							methodInvocation.getName().getFullyQualifiedName()));
@@ -248,11 +306,14 @@ public class UIParser {
 
 			for (ClassInstanceCreation classInstanceCreation : constructorInvocationVisitor.getMethods()) {
 
-				if (!getDeclaringClassName2(classInstanceCreation, importDeclarationVisitor).contains("UnknownClass")) {
 
-					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation, importDeclarationVisitor),
+
+
+					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()),
 							classInstanceCreation.getType().toString()));
-				}
+
+
+
 
 			}
 			myGraph.checkMainOrSommet(arbre);
@@ -263,9 +324,14 @@ public class UIParser {
 	private static String getDeclaringClassName(MethodInvocation methodInvocation) {
 		if (methodInvocation.resolveMethodBinding() != null) {
 			String fullyQualifiedName = methodInvocation.resolveMethodBinding().getDeclaringClass().getQualifiedName();
-			// System.out.println(fullyQualifiedName);
+
+			//System.out.println(fullyQualifiedName);
+
+
 
 			return fullyQualifiedName;
+
+
 
 		}
 		return "UnknownClass";
@@ -291,22 +357,29 @@ public class UIParser {
 	 * }
 	 */
 
-	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation,
-			ImportDeclarationVisitor importDeclarationVisitor) {
+
+	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor,String p) {
 
 		String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
 		String pac = null;
 
-		for (ImportDeclaration i : importDeclarationVisitor.getImports()) {
-			if (i.getName().getFullyQualifiedName().contains(fullyQualifiedName)) {
+
+		for (ImportDeclaration i :importDeclarationVisitor.getImports()) {
+			if(i.getName().getFullyQualifiedName().contains(fullyQualifiedName)) {
 				pac = i.getName().getFullyQualifiedName();
-				// System.out.println(pac);
+				//System.out.println(pac);
 				return pac;
 
 			}
 		}
 
-		return fullyQualifiedName;
+			
+				 pac = p+"."+fullyQualifiedName;
+
+
+
+		return pac;
+
 
 	}
 }

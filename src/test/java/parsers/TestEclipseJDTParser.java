@@ -117,6 +117,32 @@ class TestEclipseJDTParser {
     	
     }
 
+    
+    @Test
+    void testInvalidFile() throws NullPointerException, FileNotFoundException {
+    	File fileNull = null;
+    	File Directory = new File(TEMP_DIRECTORY_PATH);
+    	File NotEndWithJava = new File(TEMP_DIRECTORY_PATH+File.separator+"srcWithoutJavaFile"+
+    	File.separator+"src"+File.separator+".gitkeep");
+    	EclipseJDTParser parser = new EclipseJDTParser(SRC_TEMP_DIRECT_PATH);
+    	
+    	assertFalse(parser.isValidJavaFile(fileNull));
+    	assertFalse(parser.isValidJavaFile(Directory));
+    	assertFalse(parser.isValidJavaFile(NotEndWithJava)); 
+    }
+    
+
+    @Test
+    void testValidFile() throws NullPointerException, FileNotFoundException {
+    	File javaFile = new File(TEMP_DIRECTORY_PATH+File.separator+"src"+
+    	    	File.separator+"A.java");
+    	EclipseJDTParser parser = new EclipseJDTParser(SRC_TEMP_DIRECT_PATH);
+    	assertTrue(parser.isValidJavaFile(javaFile));
+    }
+    
+
+
+
     // Méthode d'aide pour accéder aux champs privés via la réflexion
     private <T> T getPrivateField(Object obj, String fieldName) {
         try {
