@@ -8,8 +8,11 @@ public class ClassInterfaceVisitor extends ASTVisitor {
 	int linesOfCode = 0;
 	int attributeCount = 0;
 	String javaCode = "";
-	boolean isClass = false;
-	boolean isInterface = false;
+
+	private boolean isClass = false;
+	private boolean isInterface = false;
+
+
 	
 	public boolean visit(TypeDeclaration node) {
         if(!node.isInterface()){

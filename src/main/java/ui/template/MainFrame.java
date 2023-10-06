@@ -1,6 +1,14 @@
 package ui.template;
 
 import java.awt.EventQueue;
+<<<<<<< HEAD
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.CardLayout;
+import ui.controller.SelectProjectController;
+import ui.paramater.MyViewParameter;
+import ui.template.CustomJPanel.MainPanel;
+=======
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -27,6 +35,7 @@ import ui.controller.SelectProjectController;
 import ui.paramater.MyViewParameter;
 import ui.template.CustomJPanel.MainPanel;
 import ui.template.CustomJPanel.BasicResultsPanel;
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 
 
 public class MainFrame {
@@ -58,7 +67,10 @@ public class MainFrame {
     public void initialize() {
         
         frame.setBounds(myParam.getxFenetre(), myParam.getyFenetre(), myParam.getLargeurFenetre(), myParam.getHauteurFenetre());
+<<<<<<< HEAD
+=======
         
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Créez un JPanel contenant un CardLayout
