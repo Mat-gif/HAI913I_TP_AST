@@ -1,3 +1,4 @@
+
 package visitor;
 
 import java.awt.Dimension;
@@ -66,7 +67,9 @@ public class TestParser {
 			// System.out.println(content);
 //			System.out.println(content);
 			parserEclipse.configure();
+
 			CompilationUnit parse = 		parserEclipse.parseWithVerify(fileEntry);
+
 			// String currentPackageName =
 			// parse.getPackage().getName().getFullyQualifiedName();
 
@@ -107,9 +110,10 @@ public class TestParser {
 		myGraph.getGrapheNonTrie().values().forEach(e->{
 			if(e.getParent().getClasseName().contains("SelectProjectController")) {
 				System.out.println(e);
+
 			}
 			
-			
+
 		}
 		
 		
@@ -189,7 +193,6 @@ public class TestParser {
 				if(petitArbre!=null) {
 					myRec(petitArbre.getEnfants(), grapheNonTrie, graph, parent, ve);
 				}
-				
 
 			});
 		}
@@ -211,6 +214,12 @@ public class TestParser {
 		return javaFiles;
 	}
 
+
+	// create AST
+	private static CompilationUnit parse(File classSource) throws IOException {
+		parserEclipse.configure();
+		return parserEclipse.parse(classSource); // create and parse
+	}
 
 	
 	// package information
@@ -356,9 +365,11 @@ public class TestParser {
 
 			for (ClassInstanceCreation classInstanceCreation : constructorInvocationVisitor.getMethods()) {
 				
-				if (!getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor).contains("UnknownClass")) {
+
+				if (!getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()).contains("UnknownClass")) {
 					
-					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor),
+					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()),
+
 							classInstanceCreation.getType().toString()));
 				}
 				
@@ -400,7 +411,9 @@ public class TestParser {
 	 * }
 	 */
 
-	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor) {
+
+	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor, String p) {
+
 
 			String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
 			String pac = null;
@@ -412,11 +425,17 @@ public class TestParser {
 					System.out.println(pac);
 					return pac;
 					
-				}
+
+				} 
 			}
 			
 		
-			return fullyQualifiedName;
+				 pac = p+"."+fullyQualifiedName;
+
+			
+		
+			return pac;
+
 		
 	}
 }

@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -17,6 +18,7 @@ import org.apache.commons.io.FileUtils;
 public class EclipseJDTParser extends Parser<ASTParser> {
 
 
+
 	/**
 	 * Constructeur
 	 * 	
@@ -24,9 +26,11 @@ public class EclipseJDTParser extends Parser<ASTParser> {
 	 * @throws NullPointerException @see Parser#getJrePath()
 	 * @throws FileNotFoundException @see Parser#setProjectPath()
 	 */
+
 	public EclipseJDTParser(String projectPath) throws NullPointerException, FileNotFoundException {
 		super(projectPath);
 	}
+
 
 	/**
 	 * 
@@ -43,6 +47,7 @@ public class EclipseJDTParser extends Parser<ASTParser> {
 	 * @param encoding Le type d'encodage du parser (par exemple, "UTF8", "ACSSI", etc.).
 	 */
 
+
 	public void defaultSetterParser(int level, int kind, boolean resolveBindings, boolean bindingsRecovery,
 			String encoding) {
 		parserType = ASTParser.newParser(level);
@@ -56,15 +61,18 @@ public class EclipseJDTParser extends Parser<ASTParser> {
 		parserType.setBindingsRecovery(bindingsRecovery);
 	}
 
+
 	/**
 	 * Implémentation de la méthode configure de la classe mère parser pour configure EclipseJDTParser
 	 * @see Parser#configure() 
 	 * Elle appelle la configuration par défaut de l'AST Parser défini dans la méthode defaultSetterParser.
 	 */
+
 	@Override
 	public void configure() {
 		defaultSetterParser(AST.JLS4, ASTParser.K_COMPILATION_UNIT, true, true, "UTF-8");
 	}
+
 
 	/**
 	 * Méthode pour analyser un fichier Java spécifié en tant que source d'analyse dans l'AST Parser.
@@ -87,10 +95,12 @@ public class EclipseJDTParser extends Parser<ASTParser> {
 	 */
 	public List<CompilationUnit> parseProject() throws IOException, FileNotFoundException {
 
+
 		List<CompilationUnit> cUnits = new ArrayList<>();
 
 		for (File sourceFile : listJavaProjectFiles())
 			cUnits.add(parse(sourceFile));
+
 		return cUnits;
 	}
 
@@ -114,5 +124,6 @@ public class EclipseJDTParser extends Parser<ASTParser> {
 	public boolean isValidJavaFile(File file) {
 	    return file != null && file.isFile() && file.getName().endsWith(".java");
 	}
+
 
 }

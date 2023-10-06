@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Graphe {
+
 	
 	/**
 	 * Attribut
@@ -56,6 +57,7 @@ public class Graphe {
 	 * 
 	 * @param arbre l'instance de PetitArbre à tester
 	 */
+
 	public void checkMainOrSommet (PetitArbre arbre) {
 		if (arbre.getParent().getMethodName().equals("main")) {
 			addMain(arbre);
@@ -63,6 +65,7 @@ public class Graphe {
 			addSommet(arbre);
 		}
 	}
+
 	
 	/**
 	 * Vérifie si une clé existe dans le graph non trié.
@@ -87,10 +90,16 @@ public class Graphe {
 	/**
 	 * ToString
 	 */
+
 	public String toString() {
 		return "Graphe [grapheNonTrie=" + grapheNonTrie + ", listOfMain=" + listOfMain + "]";
 	}
-	
-	
-	
+
+	public void deleteMyPetitArbre(String id) {
+		this.grapheNonTrie.remove(id);
+	}
+
+
+
+
 }

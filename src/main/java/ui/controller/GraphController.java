@@ -35,12 +35,17 @@ import visitor.VariableDeclarationFragmentVisitor;
 
 public class GraphController {
 
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 	public static EclipseJDTParser parserEclipse;
 	public int classCount = 0;
 	public int appLineCount = 0;
 	public int appMethodCount = 0;
 
+<<<<<<< HEAD
 	private static Graphe myGraph = new Graphe();
 
 	public  void GraphPanel(String path) throws IOException {
@@ -55,6 +60,28 @@ public class GraphController {
 		}
 
 		
+=======
+	private static Map<String,Object> myCells = new HashMap<>();
+	private static Map<String,Object> myArcs = new HashMap<>();
+	private static Graphe myGraph = new Graphe();
+
+	public  void GraphPanel(String path) throws IOException {
+
+		parserEclipse = new EclipseJDTParser(path);
+
+		List<File> javaFiles = parserEclipse.listJavaProjectFiles();
+		for (File content : javaFiles) {
+			parserEclipse.configure();
+			CompilationUnit parse = parserEclipse.parse(content);
+			printMethodInvocationInfo(parse);
+		}
+
+
+		/*
+		myGraph.getGrapheNonTrie().forEach((k,v)->{
+			System.err.println(v);
+		});*/
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 
 		SwingUtilities.invokeLater(() -> {
 			JFrame frame = new JFrame("AST Graph Viewer");
@@ -73,6 +100,7 @@ public class GraphController {
 
 			try {
 
+<<<<<<< HEAD
 				myGraph.getListOfMain().forEach(m -> {
 					
 					if(!m.getEnfants().isEmpty()) {
@@ -82,6 +110,23 @@ public class GraphController {
 					
 
 				});
+=======
+				for(PetitArbre pa : myGraph.getGrapheNonTrie().values()) {
+					
+					Object v1 = null;
+					if(!pa.getEnfants().isEmpty()) {
+						if (!myCells.containsKey(pa.getParent().toStringID())){
+							v1 = graph.insertVertex(parent, null, pa.getParent().toStringID(), 20, 20, 80, 30);
+							//myGraph.deleteMyPetitArbre(pa.getParent().toStringID());
+							
+							myCells.put(pa.getParent().toStringID(), v1);
+						} else {
+							v1 = myCells.get(pa.getParent().toStringID());
+						}
+						myRec(pa.getEnfants(), myGraph.getGrapheNonTrie(), graph, parent, v1, pa.getParent().toStringID());
+					}
+				};
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 
 				// Utilisez l'algorithme hierarchique pour organiser les vertex
 				mxHierarchicalLayout layout = new mxHierarchicalLayout(graph);
@@ -108,18 +153,40 @@ public class GraphController {
 	}
 
 	public static void myRec(Set<Noeud> enfants, HashMap<String, PetitArbre> grapheNonTrie, mxGraph graph,
+<<<<<<< HEAD
 			Object parent, Object vp) {
 		if (!enfants.isEmpty()) {
 			enfants.forEach(e -> {
 				PetitArbre petitArbre = grapheNonTrie.get(e.toStringID());
 
 				Object ve = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
+=======
+			Object parent, Object vp, String idP) {
+		if (!enfants.isEmpty()) {
+			enfants.forEach(e -> {
+				
+				Object ve = null;
+				PetitArbre petitArbre = grapheNonTrie.get(e.toStringID());
+				
+				if(!myCells.containsKey(e.toStringID())) {
+	
+					ve = graph.insertVertex(parent, null, e.toStringID(), 20, 20, 80, 30);
+					
+					myCells.put(e.toStringID(), ve);
+
+				} else {
+					ve = myCells.get(e.toStringID());
+					
+				}
+				
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 				// Obtenez les dimensions préférées en fonction du contenu textuel
 				mxRectangle dimensions2 = graph.getPreferredSizeForCell(ve);
 
 				// Mettez à jour les dimensions du vertex
 				graph.resizeCell(ve, dimensions2);
 
+<<<<<<< HEAD
 				graph.insertEdge(parent, null, "", vp, ve); //pondération e.getPonderation
 
 				if(petitArbre!=null) {
@@ -131,6 +198,27 @@ public class GraphController {
 		}
 	}
 	
+=======
+				Object a = null;
+				
+				if(!myArcs.containsKey(e.toStringID()+"-"+ idP)) {
+					a = graph.insertEdge(parent, null, e.getNbAppel(), vp, ve);
+				} else {
+					a = myArcs.get(e.toStringID()+"-"+ idP);
+				}
+				
+
+					
+				myArcs.put(e.toStringID()+"-"+ idP, a);
+				
+				if(petitArbre!=null && !e.toStringID().equals(idP)) {
+					myRec(petitArbre.getEnfants(), grapheNonTrie, graph, parent, ve, e.toStringID());
+				}
+			});
+		}
+	}
+
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 	// package information
 	public static void printPackageInfo(CompilationUnit parse) {
 		PackageDeclarationVisitor visitor = new PackageDeclarationVisitor();
@@ -157,7 +245,11 @@ public class GraphController {
 		if (visitor.getIsInterface()) {
 			System.out.println("INTERFACE : " + visitor.getClassName());
 			System.out.println("line count : " + visitor.getLinesOfCode());
+<<<<<<< HEAD
 //			System.out.println("code : " + visitor.javaCode);
+=======
+			//			System.out.println("code : " + visitor.javaCode);
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 			System.out.println("\n");
 		}
 
@@ -211,8 +303,13 @@ public class GraphController {
 		// Trouver les méthodes déclaré
 		MethodDeclarationVisitor methodDeclarationVisitor = new MethodDeclarationVisitor();
 		parse.accept(methodDeclarationVisitor);
+<<<<<<< HEAD
 		
 		
+=======
+
+
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 		ImportDeclarationVisitor importDeclarationVisitor = new ImportDeclarationVisitor();
 		parse.accept(importDeclarationVisitor);
 
@@ -226,21 +323,35 @@ public class GraphController {
 
 		// Pour tout les méthodes déclarées je cherche les méthodes quil invoque
 		for (MethodDeclaration methodDeclaration : methodDeclarationVisitor.getMethods()) {
+<<<<<<< HEAD
 			
 			
 			
 			/*
 			 * ce connard n'ajoute pas le nom du package si il est different pour les enfants (invocation)
 			 */
+=======
+
+
+
+		
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 
 			// Trouver les méthodes invoqués
 			MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
 			methodDeclaration.accept(methodInvocationVisitor);
 			PetitArbre arbre;
+<<<<<<< HEAD
 			
 			if (!myGraph
 					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName()
 							+ "." + methodDeclaration.getName().getFullyQualifiedName())) {
+=======
+
+			if (!myGraph
+					.isExist(packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName()
+					+ "." + methodDeclaration.getName().getFullyQualifiedName())) {
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 				arbre = new PetitArbre(new Noeud(
 						packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.printClassName(),
 						methodDeclaration.getName().getFullyQualifiedName()));
@@ -251,13 +362,32 @@ public class GraphController {
 								+ methodDeclaration.getName().getFullyQualifiedName());
 			}
 
+<<<<<<< HEAD
+=======
+		
+			if(methodDeclaration.getName().getFullyQualifiedName().equals("myRec")) {
+				System.out.println(arbre.toString());
+				System.err.println(methodInvocationVisitor.getMethods().toString());
+			}
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 			// Pour chaque méthodes invoqué je regarde si c'est une class definit dans notre
 			// projet
 			for (MethodInvocation methodInvocation : methodInvocationVisitor.getMethods()) {
 
+<<<<<<< HEAD
 
 				if (!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
 				
+=======
+				
+				if(methodDeclaration.getName().getFullyQualifiedName().equals("myRec")) {
+					System.out.println(methodInvocation.getName().getFullyQualifiedName());
+					System.out.println("--");
+				}
+
+				if (!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
+
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 					arbre.addEnfant(new Noeud(getDeclaringClassName(methodInvocation),
 							methodInvocation.getName().getFullyQualifiedName()));
 				}
@@ -268,6 +398,7 @@ public class GraphController {
 			methodDeclaration.accept(constructorInvocationVisitor);
 
 			for (ClassInstanceCreation classInstanceCreation : constructorInvocationVisitor.getMethods()) {
+<<<<<<< HEAD
 				
 				if (!getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor).contains("UnknownClass")) {
 					
@@ -275,6 +406,15 @@ public class GraphController {
 							classInstanceCreation.getType().toString()));
 				}
 				
+=======
+
+				//if (!getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()).contains("UnknownClass")) {
+
+					arbre.addEnfant(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName()),
+							classInstanceCreation.getType().toString()));
+				//}
+
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 			}
 			myGraph.checkMainOrSommet(arbre);
 
@@ -285,10 +425,17 @@ public class GraphController {
 		if (methodInvocation.resolveMethodBinding()!= null) {
 			String fullyQualifiedName = methodInvocation.resolveMethodBinding().getDeclaringClass().getQualifiedName();
 			//System.out.println(fullyQualifiedName);
+<<<<<<< HEAD
 			
 		
 				return fullyQualifiedName;
 	
+=======
+
+
+			return fullyQualifiedName;
+
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 		}
 		return "UnknownClass";
 	}
@@ -313,6 +460,7 @@ public class GraphController {
 	 * }
 	 */
 
+<<<<<<< HEAD
 	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor) {
 
 			String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
@@ -331,5 +479,28 @@ public class GraphController {
 		
 			return fullyQualifiedName;
 		
+=======
+	private static String getDeclaringClassName2(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor,String p) {
+
+		String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
+		String pac = null;
+
+
+		for (ImportDeclaration i :importDeclarationVisitor.getImports()) {
+			if(i.getName().getFullyQualifiedName().contains(fullyQualifiedName)) {
+				pac = i.getName().getFullyQualifiedName();
+				//System.out.println(pac);
+				return pac;
+
+			}
+		}
+			
+				 pac = p+"."+fullyQualifiedName;
+
+
+
+		return pac;
+
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 	}
 }

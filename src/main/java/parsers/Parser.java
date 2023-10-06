@@ -10,9 +10,7 @@ import java.util.List;
 
 public abstract class Parser<T> {
 
-	/*
-	 * Attribut
-	 */
+
 	private static final String sourcePathForJava = File.separator + "src";
 	protected String projectPath;
 	protected String jrePath;
@@ -21,7 +19,8 @@ public abstract class Parser<T> {
 	protected T parserType; 
 
 
-	/*	Constructor 
+
+	/*	Constructor
 	 * 
 	 * Appelle des setters dans le Constructeur afin de respecter 
 	 * les principes solides tout en gérant les exceptions de ces derniers. 
@@ -34,9 +33,7 @@ public abstract class Parser<T> {
 		this.configure();
 	}
 
-	/**
-	 * Getter
-	 */
+
 	public String getProjectPath() {
 		return projectPath;
 	}
@@ -45,9 +42,7 @@ public abstract class Parser<T> {
 		return jrePath;
 	}
 
-	/**
-	 * Setter
-	 */
+
 
 	/**
 	 * Définit le chemin d'accès au répertoire du projet manuellement à l'aide d'un objet
@@ -90,6 +85,7 @@ public abstract class Parser<T> {
 		}
 	} 
 
+
 	/**
 	 * Récupère la liste des fichiers Java à partir d'un chemin de dossier spécifié.
 	 * Si le fichier n'est pas un fichier Java il n'est pas ajouté
@@ -115,18 +111,22 @@ public abstract class Parser<T> {
 		return javaFiles;
 	}
 
+
 	/**
 	 * Appel la fonction listJavaFiles avec le path du projet spécifier par l'utilisateur
 	 * 
 	 * @throws FileNotFoundException Si aucun fichier Java n'a été trouvé dans le répertoire spécifiée
 	 * @return Une liste de fichiers Java {@code List<File>}.
 	 */
+
 	public List<File> listJavaProjectFiles() throws FileNotFoundException{
 		List<File> listJavaFiles =  listJavaFiles(getProjectPath());
 		if (listJavaFiles.isEmpty()) {
 			throw new FileNotFoundException("Il n'existe aucun fichier java dans le répertoire source spécifiée"); 
 		}
+
 		return listJavaFiles;
+
 	}
 
 	/**
@@ -144,6 +144,7 @@ public abstract class Parser<T> {
 			return true;
 		}else {return false;}
 	}
+
 
 	/**
 	 * Configure la fonctionnalité ou le comportement du Parser.

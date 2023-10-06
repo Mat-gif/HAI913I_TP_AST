@@ -116,6 +116,7 @@ class TestEclipseJDTParser {
 		} 
     	
     }
+<<<<<<< HEAD
     
     @Test
     void testInvalidFile() throws NullPointerException, FileNotFoundException {
@@ -140,6 +141,8 @@ class TestEclipseJDTParser {
     }
     
 
+=======
+>>>>>>> 478daac54191a0aeb79806e8215aa1ab863e6164
 
     // Méthode d'aide pour accéder aux champs privés via la réflexion
     private <T> T getPrivateField(Object obj, String fieldName) {
