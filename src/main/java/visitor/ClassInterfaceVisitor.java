@@ -9,8 +9,8 @@ public class ClassInterfaceVisitor extends ASTVisitor {
 	int attributeCount = 0;
 	String javaCode = "";
 
-	private boolean isClass = false;
-	private boolean isInterface = false;
+	boolean isClass = false;
+	boolean isInterface = false;
 
 
 	

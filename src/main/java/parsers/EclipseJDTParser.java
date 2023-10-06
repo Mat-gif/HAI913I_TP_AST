@@ -81,7 +81,7 @@ public class EclipseJDTParser extends Parser<ASTParser> {
 	 * @return L'objet CompilationUnit représentant la structure de l'AST (Abstract Syntax Tree) résultant de l'analyse du fichier.
 	 * @throws IOException Si une erreur d'entrée/sortie se produit lors de la lecture du fichier.
 	 */
-	private CompilationUnit parse(File file) throws IOException {
+	public CompilationUnit parse(File file) throws IOException {
 		parserType.setSource(FileUtils.readFileToString(file, Charset.defaultCharset()).toCharArray());
 		return (CompilationUnit) parserType.createAST(null);
 	}
