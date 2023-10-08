@@ -16,80 +16,11 @@ Une interface utilisateur sous forme d'exécutable (.exe) est disponible en tél
 
    - **2.1 Analyse de Base :** Vous permet de spécifier ce que vous souhaitez obtenir en répondant aux questions de 1.1 à 7 du TP.
    - **2.2 Analyse Complémentaire :** Utilisez cette option pour les questions de 8 jusqu'à la fin, avec une saisie du nombre de méthodes pour la question 11.
-   - **2.3 Le Graphe :** ...
+   - **2.3 Le Graphe :** Permet d'afficher le graphe d'appel complet du projet a analyser.
 
 3. **Résultats**
 
    - Les résultats de l'analyse choisie s'affichent dans la fenêtre des résultats. Pour revenir à la page d'accueil, cliquez sur le bouton "Terminer".
 
-# Structure de la solution
 
-Nous avons divisé la solution en 4 packages pour une organisation claire et modulaire :
-
-- **parsers**
-- **processor**
-- **ui**
-- **visitor**
-
-## Ui
-
-Dans ce package, vous trouverez les éléments liés à l'interface graphique de l'application ainsi que les composants d'interaction avec l'utilisateur.
-
-- **controller**
-  - LabelMap.java
-  - SelectProjetController.java
-- **parameter**
-  - MyViewParameter.java
-- **template**
-  - CustomPanel :
-    - CheckBoxPanelTemplate.java
-    - FolderChooserTemplate.java
-  - MainFrame.java
-
-## Parser
-
-Ce package est dédié à la logique du parsing. Il contient les composants responsables de l'extraction et de la transformation des données d'entrée, notamment le chemin du projet.
-
-- **Parser**
-  - EclipseJDTParser.java
-  - Parser.java
-
-## Processor
-
-Le processor gère le traitement des données une fois qu'elles sont extraites par le parser. Les calculs statistiques et la génération des résultats, la gestion des interactions de l'uitilisateur sont effectués dans ce package
-
-- **Processor**
-  - MyProcessor.java
-  - Processor.java
-  - TestProcessor.java
-
-## Visitor
-
-Le package "Visitor" est chargé de parcourir la structure du projet, analysé et extraire les informations dont nous avons besoin pour les calculs statistiques. Il fonctionne de concert avec le parser pour obtenir les données souhaitées.
-
-- **Processor**
-  - ClassInterfaceVisitor.java
-  - EnumVisitor.java
-  - JavaFileVisitor.java
-  - MethodDeclarationVisitor.java
-  - MethodInvocationVisitor.java
-  - PackageDeclarationVisitor.java
-  - Parser.java
-  - TypeDeclarationVisitor.java
-  - VariableDeclarationFragmentVisitor.java
-
-
-
-
-# Contributeurs et divisions des tâches 
-
-| Contributeurs                      | Tâche 1                | Tâche 2                 | Tâche 3                        |
-|------------------------------------|------------------------|-------------------------|--------------------------------|
-| CAZERES MATHIEU                    | Interface utilisateur  | Calculs statistiques    | Présentation des résultats     |
-| MARTIN-CHANTEREAU ETIENNE          | Parsing du projet      |                         |                                |
-| MOREAUX VICTOR                     | visitors               |                         |                                |
-| LOUM MANIANG                       | Processor              |                         |                                |
-
-
-# Commentaire 
 
