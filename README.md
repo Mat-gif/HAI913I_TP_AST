@@ -4,13 +4,16 @@ Parcours: ICO
 Title: Calcul statistique pour une application OO
 ---
 
-# Utilisation de l'application via le .exe
+# Executer l'application via le .exe
 
 Une interface utilisateur sous forme d'exécutable (.exe) est disponible en téléchargement via ce lien. L'exécutable ne contient aucun programme malveillant et est développé dans le cadre de ce TP. Vous y trouverez toutes les fonctionnalités requises pour l'exercice.
 
-# Utilisation de l'application via le .jar
+# Executer l'application via le .jar
 
-Télécharger le fichier .jar et exécuter cette commande pour exécuter le programme (Remplacer  > par le chemin ou du repertoir ou se situe votre fichier .jar) : ```java -cp <<chemin>>/TP-AST-PARTIE-2-0.0.1-SNAPSHOT.jar ui.template.MainFrame
+Télécharger le fichier .jar et exécuter cette commande pour exécuter le programme (Remplacer  "chemin"  celui du repertoir ou se situe votre fichier .jar) : 
+```java -cp "chemin"/TP-AST-PARTIE-2-0.0.1-SNAPSHOT.jar ui.template.MainFrame```
+
+# Utilisation de l'application 
 
 1. **Sélection du Projet à Analyser**
 
