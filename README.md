@@ -11,7 +11,7 @@ Une interface utilisateur sous forme d'exécutable (.exe) est disponible en tél
 # Executer l'application via le .jar sous linux
 
 Télécharger le fichier .jar et exécuter cette commande pour exécuter le programme (Remplacer  "chemin"  celui du repertoir ou se situe votre fichier .jar) : 
-```java -cp "chemin"/TP-AST-PARTIE-2-0.0.1-SNAPSHOT.jar ui.template.MainFrame```
+```java -cp "chemin"/ProjetAST.jar ui.template.MainFrame```
 
 # Utilisation de l'application 
 
