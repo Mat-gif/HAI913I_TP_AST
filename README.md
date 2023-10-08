@@ -8,7 +8,7 @@ Title: Calcul statistique pour une application OO
 
 Une interface utilisateur sous forme d'exécutable (.exe) est disponible en téléchargement via ce lien. L'exécutable ne contient aucun programme malveillant et est développé dans le cadre de ce TP. Vous y trouverez toutes les fonctionnalités requises pour l'exercice.
 
-# Executer l'application via le .jar
+# Executer l'application via le .jar sous linux
 
 Télécharger le fichier .jar et exécuter cette commande pour exécuter le programme (Remplacer  "chemin"  celui du repertoir ou se situe votre fichier .jar) : 
 ```java -cp "chemin"/TP-AST-PARTIE-2-0.0.1-SNAPSHOT.jar ui.template.MainFrame```
