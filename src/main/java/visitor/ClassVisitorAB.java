@@ -8,6 +8,9 @@ public class ClassVisitorAB extends ASTVisitor {
     private String A;
     private String B;
 
+    private boolean isClass = false;
+    
+    
     public ClassVisitorAB(String A, String B) {
         this.A = A;
         this.B = B;
@@ -27,5 +30,9 @@ public class ClassVisitorAB extends ASTVisitor {
 
     public String getB() {
         return B;
+    }
+
+    public boolean isClass() {
+        return isClass;
     }
 }
