@@ -43,9 +43,11 @@ public class GraphController {
 
 
 
+
 	private static Map<String,Object> myCells = new HashMap<>();
 	private static Map<String,Object> myArcs = new HashMap<>();
 	private static Graphe myGraph = new Graphe();
+	private static Graphe myGraph2 = new Graphe();
 
 	public  void GraphPanel(String path) throws IOException {
 
@@ -57,8 +59,14 @@ public class GraphController {
 			parserEclipse.configure();
 			CompilationUnit parse = parserEclipse.parse(content);
 			printMethodInvocationInfo(parse);
+			printMethodInvocationInfo2(parse);
 		}
 
+		myGraph2.getGrapheNonTrie().forEach((k,v)->{
+			System.err.println(v.toString());
+		});
+		System.out.println(myGraph2.getCountTotalCall());
+	
 
 
 		SwingUtilities.invokeLater(() -> {
@@ -392,6 +400,77 @@ public class GraphController {
 
 		return pac;
 
+
+	}
+	
+	
+	
+	
+
+	// navigate method invocations inside method
+	public static void printMethodInvocationInfo2(CompilationUnit parse) {
+		// Trouver les méthodes déclaré
+		MethodDeclarationVisitor methodDeclarationVisitor = new MethodDeclarationVisitor();
+		parse.accept(methodDeclarationVisitor);
+
+		ImportDeclarationVisitor importDeclarationVisitor = new ImportDeclarationVisitor();
+		parse.accept(importDeclarationVisitor);
+
+		// Trouver la classe courant
+		ClassInterfaceVisitor classInterfaceVisitor = new ClassInterfaceVisitor();
+		parse.accept(classInterfaceVisitor);
+
+		// Trouver le package courant
+		PackageDeclarationVisitor packageDeclarationVisitor = new PackageDeclarationVisitor();
+		parse.accept(packageDeclarationVisitor);
+
+		
+
+		PetitArbre arbre = new PetitArbre(new Noeud(
+				packageDeclarationVisitor.getPackageName() + "." + classInterfaceVisitor.getClassName()));
+		
+		
+		// Pour tout les méthodes déclarées je cherche les méthodes quil invoque
+		for (MethodDeclaration methodDeclaration : methodDeclarationVisitor.getMethods()) {
+
+
+
+			// Trouver les méthodes invoqués
+			MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
+			methodDeclaration.accept(methodInvocationVisitor);
+		
+
+		
+
+			// Pour chaque méthodes invoqué je regarde si c'est une class definit dans notre
+			// projet
+			for (MethodInvocation methodInvocation : methodInvocationVisitor.getMethods()) {
+
+			
+				if (!getDeclaringClassName(methodInvocation).contains("UnknownClass")) {
+
+					arbre.addEnfant2(new Noeud(getDeclaringClassName(methodInvocation)));
+				}
+			}
+
+			// Trouver les constructors invoqués
+			ConstructorInvocationVisitor constructorInvocationVisitor = new ConstructorInvocationVisitor();
+			methodDeclaration.accept(constructorInvocationVisitor);
+
+			for (ClassInstanceCreation classInstanceCreation : constructorInvocationVisitor.getMethods()) {
+
+
+
+
+					arbre.addEnfant2(new Noeud(getDeclaringClassName2(classInstanceCreation,importDeclarationVisitor,packageDeclarationVisitor.getPackageName())));
+
+
+
+
+			}
+
+		}
+		myGraph2.checkMainOrSommet(arbre);
 
 	}
 }

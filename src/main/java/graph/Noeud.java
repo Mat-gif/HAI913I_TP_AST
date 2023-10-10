@@ -14,7 +14,7 @@ public class Noeud {
 
 	private String packageName;
 	private String classeName;
-	private String methodName;
+	private String methodName = null;
 	private int nbAppel = 1;
 
 
@@ -27,6 +27,12 @@ public class Noeud {
 		this.methodName = methodName;
 	}
 
+	public Noeud( String classeName) {
+		this.classeName = classeName;
+
+	}
+
+	
 	
 
 
@@ -71,10 +77,12 @@ public class Noeud {
 	}
 
 	@Override
-
 	public String toString() {
-		return "Noeud [classeName=" + classeName + ", methodName=" + methodName + "]";
+		return "Noeud [packageName=" + packageName + ", classeName=" + classeName + ", methodName=" + methodName
+				+ ", nbAppel=" + nbAppel + "]";
 	}
+	
+
 
 
 }

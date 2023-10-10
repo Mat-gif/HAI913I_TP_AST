@@ -17,7 +17,7 @@ public class PetitArbre {
 
 	private Noeud parent;
 	private Set<Noeud> enfants = new HashSet<Noeud>();
-	
+	private int countTotalByClass=0;
 	
 
 
@@ -68,17 +68,45 @@ public class PetitArbre {
 				getEnfants().add(enfant);
 			}
 
+			
 	
 			
 		
 	}
+	
+	public void addEnfant2(Noeud enfant) {
+		
+		boolean existe = false;
+		for(Noeud e : enfants) {
+			if(e.getClasseName().equals(enfant.getClasseName())) {
+				existe=true;
+				e.ajoutAppel();
+				break;
+			}
+		}
+		if(!existe) {
+			getEnfants().add(enfant);
+		}
+
+		countTotalByClass = getCountTotalByClass()+1;
+
+		
+}
 
 
 
 
 	@Override
 	public String toString() {
-		return "PetitArbre [parent=" + parent + ", enfants=" + enfants + "]";
+		return "PetitArbre [parent=" + parent + ", enfants=" + enfants + ", countTotalByClass=" + countTotalByClass
+				+ "]";
 	}
+
+	public int getCountTotalByClass() {
+		return countTotalByClass;
+	}
+
+
+
 
 }

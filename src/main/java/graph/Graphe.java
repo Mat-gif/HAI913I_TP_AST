@@ -12,7 +12,7 @@ public class Graphe {
 	 */
 	private HashMap<String, PetitArbre> grapheNonTrie = new HashMap<String, PetitArbre>();
 	private ArrayList<PetitArbre> listOfMain = new ArrayList<PetitArbre>();
-	
+	private int countTotalCall = 0;
 	/**
 	 * Constructeur vide
 	 */
@@ -62,12 +62,16 @@ public class Graphe {
 	 */
 
 	public void checkMainOrSommet (PetitArbre arbre) {
-		if (arbre.getParent().getMethodName().equals("main")) {
+		
+		if (arbre.getParent().getMethodName() != null && arbre.getParent().getMethodName().equals("main")) {
 
 			addMain(arbre);
 		} else {
 			addSommet(arbre);
 		}
+		
+		
+		countTotalCall = getCountTotalCall() + arbre.getCountTotalByClass();
 	}
 
 
@@ -104,6 +108,10 @@ public class Graphe {
 
 	public void deleteMyPetitArbre(String id) {
 		this.grapheNonTrie.remove(id);
+	}
+
+	public int getCountTotalCall() {
+		return countTotalCall;
 	}
 
 
