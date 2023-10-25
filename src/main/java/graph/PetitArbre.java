@@ -77,18 +77,20 @@ public class PetitArbre {
 	public void addEnfant2(Noeud enfant) {
 		
 		boolean existe = false;
-		for(Noeud e : enfants) {
-			if(e.getClasseName().equals(enfant.getClasseName())) {
-				existe=true;
-				e.ajoutAppel();
-				break;
+		if(!enfant.getClasseName().equals(getParent().getClasseName())) {
+			for (Noeud e : enfants) {
+				if (e.getClasseName().equals(enfant.getClasseName())) {
+					existe = true;
+					e.ajoutAppel();
+					break;
+				}
 			}
-		}
-		if(!existe) {
-			getEnfants().add(enfant);
-		}
+			if (!existe) {
+				getEnfants().add(enfant);
+			}
 
-		countTotalByClass = getCountTotalByClass()+1;
+			countTotalByClass = getCountTotalByClass() + 1;
+		}
 
 		
 }

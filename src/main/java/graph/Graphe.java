@@ -45,8 +45,11 @@ public class Graphe {
 		getListOfMain().add(arbre);
 	}
 
-	private void addSommet(PetitArbre arbre) {
+	private void addSommetMethod(PetitArbre arbre) {
 		getGrapheNonTrie().put(arbre.getParent().toStringID(), arbre);
+	}
+	private void addSommetClass(PetitArbre arbre) {
+		getGrapheNonTrie().put(arbre.getParent().getClasseName(), arbre);
 	}
 
 	
@@ -61,19 +64,14 @@ public class Graphe {
 	 * @param arbre l'instance de PetitArbre à tester
 	 */
 
-	public void add(PetitArbre arbre) {
-		
-//		if (arbre.getParent().getMethodName() != null && arbre.getParent().getMethodName().equals("main")) {
-//
-//			addMain(arbre);
-//		} else {
-			addSommet(arbre);
-//		}
-		
-		
-		countTotalCall = getCountTotalCall() + arbre.getCountTotalByClass();
+	public void addMethod(PetitArbre arbre) {
+			addSommetMethod(arbre);
 	}
 
+	public void addClass(PetitArbre arbre) {
+		addSommetClass(arbre);
+		countTotalCall = getCountTotalCall() + arbre.getCountTotalByClass();
+	}
 
 	
 	/**

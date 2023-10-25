@@ -35,13 +35,17 @@ public class ExtractInfoForCallGraph implements ExtractInformations{
             PetitArbre arbre;
 
             //format => Package.Class.Method
-            String methodFullName = String.format("%s.%s.%s",
+            String methodFullName = getFullMethodName(
                     packageDeclarationVisitor.getPackageName(),
                     classInterfaceVisitor.getClassName(),
-                    methodDeclaration.getName().getFullyQualifiedName());
-            String classFullName = String.format("%s.%s",
+                    methodDeclaration.getName().getFullyQualifiedName()
+            );
+
+            String classFullName = getFullClassName(
                     packageDeclarationVisitor.getPackageName(),
-                    classInterfaceVisitor.getClassName());
+                    classInterfaceVisitor.getClassName()
+            );
+
             if (!myGraph.isExist(methodFullName))
             {
                 arbre = new PetitArbre(new Noeud(classFullName,methodDeclaration.getName().getFullyQualifiedName()));
@@ -72,30 +76,12 @@ public class ExtractInfoForCallGraph implements ExtractInformations{
                 arbre.addEnfant(new Noeud(classNameForConstruct,
                         classInstanceCreation.getType().toString()));
             }
-            myGraph.add(arbre);
+            myGraph.addMethod(arbre);
         }
         return myGraph;
     }
 
-    @Override
-    public String getDeclaringClassNameForMethod(MethodInvocation methodInvocation) {
-        if (methodInvocation.resolveMethodBinding() != null)
-        {
-            return methodInvocation.resolveMethodBinding().getDeclaringClass().getQualifiedName();
-        }
-        return "UnknownClass";
-    }
 
-    @Override
-    public String getDeclaringClassNameForConstruct(ClassInstanceCreation classInstanceCreation, ImportDeclarationVisitor importDeclarationVisitor, String p) {
-        String fullyQualifiedName = classInstanceCreation.getType().resolveBinding().getQualifiedName();
-        for (ImportDeclaration i :importDeclarationVisitor.getImports())
-        {
-            if(i.getName().getFullyQualifiedName().contains(fullyQualifiedName))
-            {
-                return i.getName().getFullyQualifiedName();
-            }
-        }
-        return p+"."+fullyQualifiedName;
-    }
+
+
 }

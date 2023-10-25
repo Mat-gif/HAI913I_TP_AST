@@ -465,7 +465,7 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
                     }
 
                 }
-                myGraph.add(arbre);
+                myGraph.addMethod(arbre);
 
             }
         }
