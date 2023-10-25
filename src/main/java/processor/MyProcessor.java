@@ -10,7 +10,6 @@ import visitor.MethodDeclarationVisitor;
 import visitor.MethodInvocationVisitor;
 import visitor.PackageDeclarationVisitor;
 
-import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
@@ -466,7 +465,7 @@ public class MyProcessor extends Processor<EclipseJDTParser> {
                     }
 
                 }
-                myGraph.checkMainOrSommet(arbre);
+                myGraph.add(arbre);
 
             }
         }

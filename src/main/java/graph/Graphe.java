@@ -61,14 +61,14 @@ public class Graphe {
 	 * @param arbre l'instance de PetitArbre à tester
 	 */
 
-	public void checkMainOrSommet (PetitArbre arbre) {
+	public void add(PetitArbre arbre) {
 		
-		if (arbre.getParent().getMethodName() != null && arbre.getParent().getMethodName().equals("main")) {
-
-			addMain(arbre);
-		} else {
+//		if (arbre.getParent().getMethodName() != null && arbre.getParent().getMethodName().equals("main")) {
+//
+//			addMain(arbre);
+//		} else {
 			addSommet(arbre);
-		}
+//		}
 		
 		
 		countTotalCall = getCountTotalCall() + arbre.getCountTotalByClass();

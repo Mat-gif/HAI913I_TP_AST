@@ -31,7 +31,7 @@ import ui.template.CustomJPanel.BasicResultsPanel;
 
 public class SelectProjectController  {
 	
-	private String my_path = "/home/mathieu/Documents/Projet/HAI913I_TP_AST";
+	private String my_path = "/home/mathieu/Téléchargements/promotions";
 	private JFrame frame;
 	private MainPanel panel1;
 	private JPanel cardPanel;
@@ -134,25 +134,6 @@ public class SelectProjectController  {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-             		 //GraphPanel panel4 = new GraphPanel(frame);
-          		    //cardPanel.add(panel4, "Panel4");
-          		    //try {
-						//Graphe results3 = menuProcessor.graphAnalytics();
-						
-             				 
-						//System.err.println(results3.toString());
-						
-						//panel4.printResults( results3);
-             			//panel4.getBtnTerminer().addActionListener(buttonQuitListener);
-             			//cardLayout.show(cardPanel, "Panel4"); // Affichez  le panel2
-
-						
-						
-					//} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						//e1.printStackTrace();
-					//} 
-             		 
              	 }
         	}
         	 else {

@@ -78,11 +78,10 @@ public class Noeud {
 
 	@Override
 	public String toString() {
-		return "Noeud [packageName=" + packageName + ", classeName=" + classeName + ", methodName=" + methodName
-				+ ", nbAppel=" + nbAppel + "]";
+		return "Noeud{" +
+				"classeName='" + classeName + '\'' +
+				", methodName='" + methodName + '\'' +
+				", nbAppel=" + nbAppel +
+				'}';
 	}
-	
-
-
-
 }

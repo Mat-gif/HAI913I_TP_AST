@@ -1,4 +1,4 @@
-package ui.template;
+package ui;
 
 import java.awt.EventQueue;
 
