@@ -50,7 +50,8 @@ public class GraphController {
 		);
 
 
-
+//		infoForCouplingGraph.couplingAnalysis(couplingGraph).keySet().forEach(System.out::println);
+//		infoForCouplingGraph.couplingAnalysis(couplingGraph).values().forEach(System.out::println);
 //		System.out.println(infoForCouplingGraph.totCoup);
 	}
 }
