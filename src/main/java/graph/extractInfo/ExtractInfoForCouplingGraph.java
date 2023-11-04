@@ -4,8 +4,10 @@ package graph.extractInfo;
 import graph.Graphe;
 import graph.Noeud;
 import graph.PetitArbre;
+import graph.extractInfo.utils.Couplage;
 import graph.extractInfo.utils.CouplingCalculator;
 
+import graph.extractInfo.utils.Resultats;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -72,8 +74,8 @@ public class ExtractInfoForCouplingGraph implements ExtractInformations{
     }
 
 
-    public Map<String,Float> couplingAnalysis(Graphe myGraph) {
-        Map<String,Float> results = new HashMap<>();
+    public Resultats couplingAnalysis(Graphe myGraph) {
+        Resultats out = new Resultats();
         HashMap<String, PetitArbre> copyMap = new HashMap<>(myGraph.getGrapheNonTrie());
         CouplingCalculator calculator = new CouplingCalculator(myGraph.getCountTotalCall());
         for (PetitArbre A : copyMap.values())
@@ -81,6 +83,10 @@ public class ExtractInfoForCouplingGraph implements ExtractInformations{
             for(Noeud B : A.getEnfants() )
             {
                 String AB = String.format("(%s-%s)", A.getParent().getClasseName(), B.getClasseName());
+                Couplage couplageAB = new Couplage();
+                couplageAB.getClasses().add(A.getParent().getClasseName());
+                couplageAB.getClasses().add(B.getClasseName());
+
 
 
                 if (copyMap.get(B.getClasseName())!=null) {
@@ -91,27 +97,34 @@ public class ExtractInfoForCouplingGraph implements ExtractInformations{
 
 
                     if (ATrouve != null) {
-                        results.put(AB, calculator.couplingBetweenTwoClasses(
+                        out.getForCouplingG().put(AB, calculator.couplingBetweenTwoClasses(
                                 B.getNbAppel(),
                                 ATrouve.getNbAppel()));
 
+                        couplageAB.setValue(calculator.couplingBetweenTwoClasses(
+                                B.getNbAppel(),
+                                ATrouve.getNbAppel()));
                         tot+=(B.getNbAppel()+ATrouve.getNbAppel());
                     } else {
-                        results.put(AB, calculator.couplingBetweenTwoClasses(
+                        out.getForCouplingG().put(AB, calculator.couplingBetweenTwoClasses(
+                                B.getNbAppel(),
+                                0));
+
+                        couplageAB.setValue(calculator.couplingBetweenTwoClasses(
                                 B.getNbAppel(),
                                 0));
                         tot+=(B.getNbAppel());
 
                     }
-                    totCoup+=results.get(AB);
-
+                    totCoup+=out.getForCouplingG().get(AB);
+                    out.getForDendo().add(couplageAB);
                 }
 
             }
 
 
         }
-        return results;
+        return out;
     };
 
 

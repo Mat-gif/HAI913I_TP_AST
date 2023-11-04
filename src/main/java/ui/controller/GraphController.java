@@ -46,7 +46,7 @@ public class GraphController {
 				myCells,
 				myArcs,
 				couplingGraph,
-				infoForCouplingGraph.couplingAnalysis(couplingGraph)
+				infoForCouplingGraph.couplingAnalysis(couplingGraph).getForCouplingG()
 		);
 
 
