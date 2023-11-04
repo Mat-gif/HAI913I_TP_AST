@@ -6,6 +6,7 @@ import java.util.*;
 
 import graph.draw.DrawCallGraph;
 import graph.draw.DrawCouplingGraph;
+import graph.draw.DrawDendroGraph;
 import graph.extractInfo.ExtractInfoForCallGraph;
 import graph.extractInfo.ExtractInfoForCouplingGraph;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -37,16 +38,22 @@ public class GraphController {
 
 //		couplingGraph.getGrapheNonTrie().values().forEach(System.out::println);
 
-		DrawCallGraph drawCallGraph = new DrawCallGraph(
-				myCells,
-				myArcs,
-				callGraph
-		);
-		DrawCouplingGraph drawCouplingGraph = new DrawCouplingGraph(
+//		DrawCallGraph drawCallGraph = new DrawCallGraph(
+//				myCells,
+//				myArcs,
+//				callGraph
+//		);
+//		DrawCouplingGraph drawCouplingGraph = new DrawCouplingGraph(
+//				myCells,
+//				myArcs,
+//				couplingGraph,
+//				infoForCouplingGraph.couplingAnalysis(couplingGraph).getForCouplingG()
+//		);
+		DrawDendroGraph drawDendroGraph = new DrawDendroGraph(
 				myCells,
 				myArcs,
 				couplingGraph,
-				infoForCouplingGraph.couplingAnalysis(couplingGraph).getForCouplingG()
+				infoForCouplingGraph.couplingAnalysis(couplingGraph).getForDendo()
 		);
 
 
