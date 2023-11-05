@@ -16,6 +16,7 @@ public class GraphController {
 
 	public static EclipseJDTParser parserEclipse;
 	private static final Map<String,Object> myCells = new HashMap<>();
+	private static final Map<Set,Object> myCells2 = new HashMap<>();
 	private static final Map<String,Object> myArcs = new HashMap<>();
 	private static  Graphe callGraph = new Graphe();
 	private static  Graphe couplingGraph = new Graphe();
@@ -50,7 +51,7 @@ public class GraphController {
 //				infoForCouplingGraph.couplingAnalysis(couplingGraph).getForCouplingG()
 //		);
 		DrawDendroGraph drawDendroGraph = new DrawDendroGraph(
-				myCells,
+				myCells2,
 				myArcs,
 				couplingGraph,
 				infoForCouplingGraph.couplingAnalysis(couplingGraph).getForDendo()

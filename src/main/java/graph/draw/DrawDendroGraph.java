@@ -13,20 +13,22 @@ import graph.extractInfo.utils.Resultats;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 public class DrawDendroGraph implements DrawGraph{
-    private Map<String,Object> myCells = new HashMap<>();
+    private Map<Set,Object> myCells = new HashMap<>();
     private Map<String,Object> myArcs = new HashMap<>();
     private Graphe myGraph = new Graphe();
     private ArrayList<Couplage> resultsCoupling ;
 
     public DrawDendroGraph(
-            Map<String, Object> myCells,
+            Map<Set, Object> myCells,
             Map<String, Object> myArcs,
             Graphe myGraph,
             ArrayList<Couplage> listDendro
@@ -63,18 +65,43 @@ public class DrawDendroGraph implements DrawGraph{
             ArrayList<Couplage> copyOfResultsCoupling = new ArrayList<>(resultsCoupling);
             
             for (Couplage couplage : copyOfResultsCoupling) {
-                System.out.println(couplage.getClasses() + " - " + couplage.getValue());
+//                System.out.println(couplage.getClasses() + " - " + couplage.getValue());
+            	
                 for(String classe : couplage.getClasses()) {
                 	if(!listClasses.contains(classe)) {
                 		listClasses.add(classe);
                 	}
                 }
             }
-            System.out.println(listClasses.toString());
             
+            for (String classe : listClasses) {
+                myCells.put(new HashSet<>(Collections.singleton(classe)), null);
+            }
+            System.out.println("\nCellules (" + myCells.size()+ ") :\n" + myCells.toString() + "\n");
+
             
+            System.out.println("Liste des classes :\n" + listClasses.toString() + "\n");
             
-//            while(!copyOfResultsCoupling.isEmpty()) {
+            while(copyOfResultsCoupling.size()>1) {
+            	System.out.println(">>>>>>\nCouplage d'entrée : \n");
+                for (Couplage couplage : copyOfResultsCoupling) {
+                    System.out.println(couplage.getClasses() + " - " + couplage.getValue());
+                }
+                
+            	dendro(copyOfResultsCoupling);
+            	
+            	System.out.println("<<<<<<\nCouplage de sortie : \n");
+                for (Couplage couplage : copyOfResultsCoupling) {
+                    System.out.println(couplage.getClasses() + " - " + couplage.getValue());
+                }
+            }
+            
+            System.out.println("\nCellules (" + myCells.size()+ ") :\n" + myCells.toString());
+            
+        });
+    }
+            
+    public void dendro(ArrayList<Couplage> copyOfResultsCoupling) {
             	Set<String> maxKey = null;
             	float maxValue = 0;
             	
@@ -103,69 +130,43 @@ public class DrawDendroGraph implements DrawGraph{
             	
             	/////lier cellule filles et la "cellule" parent
             	
+            	myCells.put(maxKey, null);
+            	/////
+            	/////
+            	/////
+            	/////
+            	/////
+            	
             	//remove de copyOfResultsCoupling le couplage maxKey,maxValue
-            	//Si deux set ont les meemes classes, suppr tous sauf 1 et additionner les couplages
-            	//Affichage
-                for (Couplage couplage : copyOfResultsCoupling) {
-                    System.out.println(couplage.getClasses() + " - " + couplage.getValue());
-                }
-//            }
-            
-//            while(!copyCoupling.isEmpty()) {
-//            	
-//            	String maxKey = null;
-//                float maxValue = 0;
-//                
-//            	for (Entry<String, Float> entry : copyCoupling.entrySet()) {
-//                    if (entry.getValue() > maxValue) {
-//                    	maxValue = entry.getValue();
-//                        maxKey = entry.getKey();
-//                    }
+            	for (Couplage couple :  copyOfResultsCoupling) {
+            		if(couple.getClasses() == maxKey && couple.getValue() == maxValue) {
+            			copyOfResultsCoupling.remove(couple);
+            			break;
+            		}
+            	}
+            	//Si deux set ont les memes classes, suppr tous sauf 1 et additionner les couplages
+            	
+                ArrayList<Couplage> copyOfResultsCouplingTempo = new ArrayList<>();
+
+            	for (Couplage couple : copyOfResultsCoupling) {
+            		Set<String> key = couple.getClasses();
+                	float value = 0;
+                	for (Couplage coupleATester : copyOfResultsCoupling) {
+                		
+                		if(coupleATester.getClasses()== key) {
+                			value += coupleATester.getValue();
+                		}
+                	}
+                	copyOfResultsCouplingTempo.add(new Couplage(key,value));
+            	}
+            	copyOfResultsCoupling = copyOfResultsCouplingTempo;
+            	
+//            	//Affichage
+//                for (Couplage couplage : copyOfResultsCoupling) {
+//                    System.out.println(couplage.getClasses() + " - " + couplage.getValue());
 //                }
-//            	String[] classNames = maxKey.split("-");
-//            	for (String className : classNames) {
-//            	    System.out.println(className);
-//            	}
-//            	
-//            	for (Entry<String, Float> entry : copyCoupling.entrySet()) {
-//        			String originalKey = entry.getKey();
-//        			
-//        			if(originalKey != maxKey) {
-//	        			Float originalValue = entry.getValue();
-//	            		for(String className : classNames) {
-//	            			if(originalKey.contains(className)) {
-//	            				String replacedKey = originalKey.replaceAll(Pattern.quote(className), maxKey);  
-////	            				+ value de className et originalKey
-////	            				String key1 = String.format("%s-%s",className, originalKey);
-////	                            String key2 = String.format("%s-%s", originalKey, className);
-////	                            String valueOfCoupling = copyCoupling.get(key1).toString();
-////	                            if (valueOfCoupling.isEmpty()){
-////	                                valueOfCoupling = copyCoupling.get(key2).toString();
-////	                            }
-////	                            
-//	            				dendroMap.put(replacedKey, originalValue	);
-//	                            break;
-//	                            //######################## value à ajouter à maxkey ? max couplage ?
-//	            			} else {
-//	            				dendroMap.put(originalKey, originalValue);
-//	            				dendroMap.remove(maxKey);
-//	            			}
-//	                	}
-//	            	}
-//            	}
-//                dendroMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
-//                float sum = 0;
-//            	for (Entry<String, Float> entry : dendroMap.entrySet()) {
-//            		sum+=entry.getValue();
-//            	}
-//            	System.out.println("total :" + sum);
-//
-//                System.out.println("\n");
-//                copyCoupling.remove(maxKey);
-//            }
-            
-            
-            
+    }
+                
             
 //            try {
 //
@@ -213,8 +214,7 @@ public class DrawDendroGraph implements DrawGraph{
 //            frame.setVisible(true);
 //            // Centrer le graphe dans le composant
 //            graphComponent.setCenterPage(true);
-        });
-    }
+
 
     
     

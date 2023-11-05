@@ -11,7 +11,16 @@ public class Couplage {
     private Float value;
 
 
-    public Set<String> getClasses() {
+    public Couplage(Set<String> classes, Float value) {
+		super();
+		this.classes = classes;
+		this.value = value;
+	}
+    
+    public Couplage() {}
+    
+
+	public Set<String> getClasses() {
         return classes;
     }
 
