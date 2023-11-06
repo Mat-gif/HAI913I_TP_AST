@@ -2,6 +2,7 @@ package graph.extractInfo.utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Couplage {
@@ -34,5 +35,27 @@ public class Couplage {
 
     public void setValue(Float value) {
         this.value = value;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Couplage{" +
+                "classes=" + classes +
+                ", value=" + value +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Couplage)) return false;
+        Couplage couplage = (Couplage) o;
+        return Objects.equals(getClasses(), couplage.getClasses()) && Objects.equals(getValue(), couplage.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClasses(), getValue());
     }
 }
