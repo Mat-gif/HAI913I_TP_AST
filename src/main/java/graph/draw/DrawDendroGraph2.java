@@ -18,13 +18,15 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-public class DrawDendroGraph implements DrawGraph{
+public class DrawDendroGraph2 implements DrawGraph{
     private Map<Set,Object> myCells = new HashMap<>();
     private Map<String,Object> myArcs = new HashMap<>();
     private Map<Set<String>, List<Set<String>>> inter = new HashMap<>();
 
     private ArrayList<Couplage> copyOfResultsCoupling;
     private Map<String,Object> cells = new HashMap<>();
+    
+    private List<Object> listClassesDendro = new LinkedList<>();
 
 
     private mxGraph graph = new mxGraph();
@@ -32,7 +34,7 @@ public class DrawDendroGraph implements DrawGraph{
     private Object parent = graph.getDefaultParent();
     private ArrayList<Couplage> resultsCoupling ;
 
-    public DrawDendroGraph(
+    public DrawDendroGraph2(
             Map<Set, Object> myCells,
             Map<String, Object> myArcs,
             Graphe myGraph,
@@ -67,7 +69,7 @@ public class DrawDendroGraph implements DrawGraph{
             
             
             ArrayList<String> listClasses = new ArrayList<>();
-             copyOfResultsCoupling = new ArrayList<>(resultsCoupling);
+            copyOfResultsCoupling = new ArrayList<>(resultsCoupling);
             
             for (Couplage couplage : copyOfResultsCoupling) {
 //                System.out.println(couplage.getClasses() + " - " + couplage.getValue());
@@ -97,22 +99,30 @@ public class DrawDendroGraph implements DrawGraph{
             
             System.out.println("Liste des classes :\n" + listClasses.toString() + "\n");
 
+            
+            
+            listClassesDendro = new LinkedList<>(listClasses);
 
 
             while(copyOfResultsCoupling.size()>=1) {
-
+            	
+            	System.out.println("ListClassesDendro#############");
+            	for(Object classe : listClassesDendro) {
+            		System.out.println(classe);
+            	}
+            	
             	System.out.println(">>>>>>\nCouplage d'entrée : \n");
                 for (Couplage couplage : copyOfResultsCoupling) {
                     System.out.println(couplage.getClasses() + " - " + couplage.getValue());
-
-
-
                 }
 
 
 
                 copyOfResultsCoupling = dendro(copyOfResultsCoupling);
             	
+                
+                
+                
             	System.out.println("<<<<<<\nCouplage de sortie : \n");
                 for (Couplage couplage : copyOfResultsCoupling) {
                     System.out.println(couplage.getClasses() + " - " + couplage.getValue());
@@ -147,7 +157,7 @@ public class DrawDendroGraph implements DrawGraph{
                 if (linkedElementCount == 1) {
                     mxGeometry geometry = graph.getModel().getGeometry(cell);
                     if (geometry != null) {
-//                        geometry.setY(0);
+                        geometry.setY(0);
                     }
                 }
             }
@@ -175,89 +185,14 @@ public class DrawDendroGraph implements DrawGraph{
             	Set<String> maxKey = null;
             	float maxValue = 0;
             	
+            	
             	//recup de la plus gde valeur de couplage
             	for(Couplage couple : copyOfResultsCoupling) {
             		if(couple.getValue() > maxValue) {
             			maxValue = couple.getValue();
             			maxKey = couple.getClasses();
-
             		}
             	}
-
-        if(maxKey.size()==2)
-        {
-
-            Object  v2 = graph.insertVertex(parent, null, maxValue, 50,50, 80, 30);  //#################
-
-            mxRectangle dimensions = graph.getPreferredSizeForCell(v2);
-
-            // Msj à jour les dimensions du vertex
-            graph.resizeCell(v2, dimensions);
-
-            for (String key : maxKey)
-            {
-                Object  v1 = cells.get(key);
-                Object a = graph.insertEdge(
-                        parent,
-                        null,
-                        "",
-                        v1,
-                        v2
-                );
-            }
-
-
-            cells.put(maxKey.toString(),v2);
-
-
-        }
-        else {
-
-
-            Object  v2 = graph.insertVertex(parent, null, maxValue, 50,50, 80, 30);
-
-            mxRectangle dimensions = graph.getPreferredSizeForCell(v2);
-
-            // Msj à jour les dimensions du vertex
-            graph.resizeCell(v2, dimensions);
-
-
-            List<Set<String>> yeah = inter.get(maxKey);
-            System.err.println(yeah);
-
-            for (Set<String> set : yeah){
-//            System.err.println("********");
-
-                if (set.size()==1){
-                    for (String kk : set) {
-                        Object v1 = cells.get(kk);
-                        cells.put(maxKey.toString(),v2);
-                        Object a = graph.insertEdge(
-                                parent,
-                                null,
-                                "",
-                                v1,
-                                v2
-                        );
-                    }
-                }
-                else {
-                    Object v1 = cells.get(set.toString());
-                    cells.put(maxKey.toString(),v2);
-                    Object a = graph.insertEdge(
-                            parent,
-                            null,
-                            "",
-                            v1,
-                            v2
-                    );
-                }
-            }
-//
-//            cells.put(maxKey.toString(),v2);
-//
-//            System.err.println(inter);
-        }
 
 
             	//fusion des noms de clés nécessaires
@@ -282,12 +217,6 @@ public class DrawDendroGraph implements DrawGraph{
                             List<Set<String>> l = new ArrayList<>();
 
 
-
-//                            System.err.println("maxKey");
-//                            System.err.println(maxKey);
-//                            System.err.println(couple.getClasses());
-//                            System.err.println(olalala);
-
                             Set<String> testest = new HashSet<>();
 
                             for (String k :couple.getClasses())
@@ -302,37 +231,78 @@ public class DrawDendroGraph implements DrawGraph{
                             l.add(maxKey);
                             l.add(testest);
 
-
                             inter.put(olalala, l);
-
-
-
                         }
                         couple.getClasses().addAll(maxKey);
             	    }
             	}
             	
-            	/////lier cellule filles et la "cellule" parent
-
-//                System.err.println(maxKey);
-//                System.err.println(maxValue);
-
-//                cells.put(classe,v1);
-
             	myCells.put(maxKey, null);
-//                for (String t : maxKey)
-//                {
-//                    Set<String> test = new HashSet<>();
-//                    test.add(t);
-//                    myCells.remove(test);
-//                }
+            	
+                
+            	List<Object> list = new LinkedList<>();
+                for(String s : maxKey) {
+                	list.add(s);
+                }
+                listClassesDendro.add(list);
+                List<Object> listClassesDendroCopy = new LinkedList<>(listClassesDendro);
+                
+                for(Object a : listClassesDendro) {
+                	String one = null;
+                	LinkedList two = null;
+                	
+                	for(String c : maxKey) {
+                		if(a instanceof String) {
+                			if(a == c) {
+                				one = a.toString();
+                		}
+                		} else {
+                			LinkedList<String> listeClasse = (LinkedList<String>) a;
+                			for( String b : listeClasse) {
+                				if(b == c) {
+                					two = listeClasse;
+                				}
+                			}
+                		}
+                	}
+                	if((one!=null && two!=null)) {
+                		System.out.println("ONE TWO");
+                		System.out.println(one);
+                		System.out.println(two);
+	    				List<Object> nouvelleListe = new LinkedList<>();
+	    				nouvelleListe.add(one);
+	    	        	nouvelleListe.add(two);
+	    	        	listClassesDendroCopy.add(nouvelleListe);
+                	}
+                }
+                
+                
+//            	for(String classesNewCouplage : maxKey){
+//            		for(Object a : listClassesDendro) {
+//            			if (!(a instanceof String)) {
+//            	            LinkedList<String> listeClasse = (LinkedList<String>) a;
+//            	            System.out.println("LISTE DE A");
+//            	            listeClasse.toString();
+//            	            
+//            	           if(!listeClasse.contains(classesNewCouplage)){
+//	            				System.out.println("DIIIIIIIIIIIIIIIIIIIIINNNNNNNNNNNNNGGGGGGG");
+//	            				List<Object> nouvelleListe = new LinkedList<>();
+//	            				nouvelleListe.add(classesNewCouplage);
+//	            	        	nouvelleListe.add(a);
+//	            	        	listClassesDendroCopy.add(nouvelleListe);
+//	
+//	            	        }
+//	            		}
+//	            		listClassesDendroCopy.remove(classesNewCouplage);
+//
+//            		}
+//            	}
+            	
+                listClassesDendro = new LinkedList<>(listClassesDendroCopy);
+                System.out.println(listClassesDendro.toString());
 
-//                System.err.println(myCells.toString());
-            	/////
-            	/////
-            	/////
-            	/////
-            	/////
+            	
+            	
             	
             	//remove de copyOfResultsCoupling le couplage maxKey,maxValue
             	for (Couplage couple :  copyOfResultsCoupling) {
@@ -341,6 +311,7 @@ public class DrawDendroGraph implements DrawGraph{
             			break;
             		}
             	}
+            	
             	//Si deux set ont les memes classes, suppr tous sauf 1 et additionner les couplages
             	
                 ArrayList<Couplage> copyOfResultsCouplingTempo = new ArrayList<>();
